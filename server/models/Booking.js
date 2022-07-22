@@ -1,8 +1,7 @@
 const { Schema, model } = require('mongoose');
-const Patient = require('./Patient');
 
 const bookingSchema = new Schema({
-  date: {
+  booking_date: {
     type: Date,
     required: true,
   },
@@ -14,13 +13,25 @@ const bookingSchema = new Schema({
     type: Date,
     required: true,
   },
-  patient: Patient,
+  patient: {
+    type: Schema.Types.ObjectId, 
+    ref: 'Patient'
+  },
   booking_note: {
     type: String
   },
   booking_type: {
     type: String,
     required: true,
+  },
+  date_created: {
+    type: Date,
+    required: true,
+    default: Date.now()
+  },
+  created_by: {
+    type: Schema.Types.ObjectId, 
+    ref: 'User'
   }
 });
 

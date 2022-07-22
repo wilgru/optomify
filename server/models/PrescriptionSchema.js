@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema } = require('mongoose');
 
 const prescriptionSet = new Schema({
     sphere: {
@@ -22,7 +22,5 @@ const prescriptionSchema = new Schema({
         type: Number
     }
 });
-
-const PrescriptionSchema = model('PrescriptionSchema', prescriptionSchema);
   
-module.exports = PrescriptionSchema;
+module.exports = prescriptionSchema;

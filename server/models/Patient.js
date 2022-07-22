@@ -1,6 +1,4 @@
 const { Schema, model } = require('mongoose');
-const ClinicalFile = require('./ClinicalFile');
-const Note = require('./Note');
 
 const patient = new Schema({
   first_name: {
@@ -35,8 +33,27 @@ const patient = new Schema({
   medicare_exp: {
     type: Date
   },
-  clinical_files: [ClinicalFile],
-  notes: [Note]
+  bookings: [{
+    type: Schema.Types.ObjectId, 
+    ref: 'Booking'
+  }],
+  clinical_files: [{
+    type: Schema.Types.ObjectId, 
+    ref: 'ClinicalFile'
+  }],
+  notes: [{
+    type: Schema.Types.ObjectId, 
+    ref: 'Note'
+  }],
+  date_created: {
+    type: Date,
+    required: true,
+    default: Date.now()
+  },
+  created_by: {
+    type: Schema.Types.ObjectId, 
+    ref: 'User'
+  }
 });
   
 const Patient = model('Patient', patient);

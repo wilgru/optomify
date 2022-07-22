@@ -1,5 +1,4 @@
 const { Schema, model } = require('mongoose');
-const PrescriptionSchema = require('./PrescriptionSchema');
 
 const note = new Schema({
   title: {
@@ -9,11 +8,15 @@ const note = new Schema({
   date_created: {
     type: Date,
     required: true,
-    default: () => (Date.now())
+    default: Date.now()
   },
   text_field: {
     type: String,
     required: true
+  },
+  created_by: {
+    type: Schema.Types.ObjectId, 
+    ref: 'User'
   }
 });
 

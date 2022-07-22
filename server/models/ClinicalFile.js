@@ -15,7 +15,7 @@ const clinicalFile = new Schema({
   date_created: {
     type: Date,
     required: true,
-    default: () => (Date.now())
+    default: Date.now()
   },
   text_field: {
     type: String,
@@ -27,6 +27,10 @@ const clinicalFile = new Schema({
   },
   recall: {
     type: Date
+  },
+  created_by: {
+    type: Schema.Types.ObjectId, 
+    ref: 'User'
   },
   prev_prescription: PrescriptionSchema,
   given_prescription: PrescriptionSchema,
