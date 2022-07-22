@@ -6,7 +6,7 @@ const expiration = '2h';
 module.exports = {
   authMiddleware({ req }) {
     // Allows token to be sent via req.body, req.query, or headers
-    // there are lots of different ways to send tokenn to backend
+    // there are lots of different ways to send token to backend
     let token = req.body.token || req.query.token || req.headers.authorization;
 
     // if came from header, then it would have the word bearer with a space and then the actual token.
@@ -15,19 +15,20 @@ module.exports = {
       token = token.split(' ').pop().trim();
     }
 
+    // if no token anywhere in the req, return the req with no user (which would have auth info)
     if (!token) {
       return req;
     }
 
     try {
-      const { data } = jwt.verify(token, secret, { maxAge: expiration });
-      req.user = data;
+      const { data } = jwt.verify(token, secret, { maxAge: expiration }); // verify the token and ge thte data from it if is verified
+      req.user = data; // put data as user in the req
     } catch (err) {
       console.error(err);
       console.log('Invalid token');
     }
 
-    return req;
+    return req; // return the rq with the new user attached
   },
   signToken({ firstName, email, _id }) {
     const payload = { firstName, email, _id };
