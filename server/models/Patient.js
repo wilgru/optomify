@@ -52,7 +52,8 @@ const patient = new Schema({
   },
   created_by: {
     type: Schema.Types.ObjectId, 
-    ref: 'User'
+    ref: 'User',
+    required: true,
   }
 });
   

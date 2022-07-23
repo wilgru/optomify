@@ -21,7 +21,7 @@ const clinicalFile = new Schema({
     type: String,
     required: true
   },
-  medicare_item: {
+  medicare_item_code: {
     type: String,
     required: true
   },
@@ -30,7 +30,8 @@ const clinicalFile = new Schema({
   },
   created_by: {
     type: Schema.Types.ObjectId, 
-    ref: 'User'
+    ref: 'User',
+    required: true,
   },
   prev_prescription: PrescriptionSchema,
   given_prescription: PrescriptionSchema,
