@@ -14,7 +14,9 @@
     "apollo-server-express": "^3.6.2",
     "express": "^4.17.2",
     "graphql": "^16.3.0",
-    "mongoose": "^6.1.8"
+    "mongoose": "^6.1.8",
+    "bcrypt": "^5.0.1",
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
