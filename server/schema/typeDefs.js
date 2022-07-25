@@ -11,16 +11,16 @@ module.exports = gql`
     }
 
     type PrescriptionSet {
-        sphere: Int
-        cylinder: Int
-        axis: Int
+        sphere: Float
+        cylinder: Float
+        axis: Float
     }
 
     type Prescription {
-        right_od: PrescriptionSet!
-        left_os: PrescriptionSet!
-        inter_add: Int
-        near_add: Int
+        right_od: PrescriptionSet
+        left_os: PrescriptionSet
+        inter_add: Float
+        near_add: Float
     }
 
     type ClinicalFile {
@@ -29,7 +29,7 @@ module.exports = gql`
         title: String!
         date_created: String!
         text_field: String!
-        medicare_item_code: String!
+        medicare_item_code: String
         recall: String
         created_by: User!
         prev_prescription: Prescription
@@ -79,9 +79,9 @@ module.exports = gql`
         _id: ID!
         first_name: String!
         last_name: String!
+        username: String!
         password: String!
         email: String!
-        
     }
 
     type Auth {
@@ -90,11 +90,15 @@ module.exports = gql`
     }
 
     type Query {
-        createNewPatient(first_name: String, last_name: String, dob: String, mobile_number: String, email: String, has_medicare: Boolean, medicare_ref: String, medicare_exp: String, created_by: ID): Patient
-        createNewUser(first_name: String!, last_name: String!, username: String!, email: String!, password: String!): User
+        getPatient(_id: ID!): Patient
     }
 
-    # type Mutation {
-        
-    # }
+    type Mutation {
+        createNewUser(first_name: String!, last_name: String!, username: String!, email: String!, password: String!): Auth
+        login(email: String!, password: String!): Auth
+        createNewPatient(first_name: String!, last_name: String!, dob: String!, mobile_number: String, email: String!, has_medicare: Boolean!, medicare_ref: String, medicare_exp: String): Patient
+        createNewNote(title: String!, text_field: String!, on_patient_id: ID!): Patient
+        createNewClinicalFile(on_patient_id: ID!, file_type: String!, title: String!, text_field: String!, medicare_item_code: String, recall: String, ppr_sphere: Float, ppr_cylinder: Float, ppr_axis: Float, ppl_sphere: Float, ppl_cylinder: Float, ppl_axis: Float, pp_inter_add: Float, pp_near_add: Float, gpr_sphere: Float, gpr_cylinder: Float, gpr_axis: Float, gpl_sphere: Float, gpl_cylinder: Float, gpl_axis: Float, gp_inter_add: Float, gp_near_add: Float): Patient
+    }
 `
+
