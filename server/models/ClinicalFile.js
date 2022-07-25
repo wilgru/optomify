@@ -3,10 +3,14 @@ const PrescriptionSchema = require('./PrescriptionSchema');
 
 ["precription", "health check", "report"];
 
-const clinicalFile = new Schema({
+const clinicalFileSchema = new Schema({
   file_type: {
     type: String,
-    required: true
+    required: true,
+    validate: {
+      validator: value => ["prescription", "clinical note", "report"].includes(value),
+      message: props => `${props.value} is invalid for slider_value`,
+    },
   },
   title: {
     type: String,
@@ -23,7 +27,7 @@ const clinicalFile = new Schema({
   },
   medicare_item_code: {
     type: String,
-    required: true
+    required: () => this.type === "prescription"
   },
   recall: {
     type: Date
@@ -37,6 +41,6 @@ const clinicalFile = new Schema({
   given_prescription: PrescriptionSchema,
 });
 
-const ClinicalFile = model('ClinicalFile', clinicalFile);
+const ClinicalFile = model('ClinicalFile', clinicalFileSchema);
 
 module.exports = ClinicalFile;

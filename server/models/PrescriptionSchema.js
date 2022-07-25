@@ -5,10 +5,19 @@ const prescriptionSet = new Schema({
         type: Number     
     },
     cylinder: {
-        type: Number
+        type: Number,
+        validate: {
+            validator: (value) => value <= 0,
+            message: "Cylinder must be less then 0"
+        }
     },
     axis: {
-        type: Number
+        type: Number,
+        required: () => this.cylinder,
+        validate: { 
+            validator: (value) => value >= 0 && value <= 180,
+            message: "axis must be between 0 - 180"
+        }
     }
 });
 

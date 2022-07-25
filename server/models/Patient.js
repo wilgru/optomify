@@ -1,6 +1,6 @@
 const { Schema, model } = require('mongoose');
 
-const patient = new Schema({
+const patientSchema = new Schema({
   first_name: {
     type: String,
     required: true
@@ -25,13 +25,20 @@ const patient = new Schema({
     required: true
   },
   medicare_number: {
-    type: String
+    type: String,
+    required: () => this.has_medicare
   },
   medicare_ref: {
-    type: String
+    type: String,
+    required: function () {
+      return this.has_medicare;
+    }
   },
   medicare_exp: {
-    type: Date
+    type: Date,
+    required: function () {
+      return this.has_medicare;
+    }
   },
   bookings: [{
     type: Schema.Types.ObjectId, 
@@ -56,7 +63,16 @@ const patient = new Schema({
     required: true,
   }
 });
+
+// // hash user password
+// patientSchema.pre('save', async function (next) {
+//   // if this user is new or if this user's password field is being modified then...
+//   if (this.isNew || this.isModified('dob')) {
+
+//   }
+//   next();
+// });
   
-const Patient = model('Patient', patient);
+const Patient = model('Patient', patientSchema);
 
 module.exports = Patient;
