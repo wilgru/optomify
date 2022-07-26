@@ -1,5 +1,5 @@
 const { Schema, model } = require('mongoose');
-const { validateBookingType, validateBookSettedUp, validate30MinBlock } = require('../utils/Validators');
+const { validateBookingType, validateBookSettedUp, validate30MinBlock, validateBookingStatus } = require('../utils/Validators');
 const BookSetup = require('./BookSetup');
 
 const bookingSchema = new Schema({
@@ -11,15 +11,18 @@ const bookingSchema = new Schema({
   booking_start: {
     type: Date,
     required: true,
+    unique: true,
     validate: validate30MinBlock
   },
   booking_end: {
     type: Date,
     required: true,
+    unique: true,
     validate: validate30MinBlock
   },
   patient: {
     type: Schema.Types.ObjectId, 
+    required: true,
     ref: 'Patient'
   },
   booking_note: {
@@ -28,6 +31,12 @@ const bookingSchema = new Schema({
   booking_type: {
     type: String,
     validate: validateBookingType,
+    required: true,
+  },
+  booking_status: {
+    type: String,
+    default: "Booked",
+    validate: validateBookingStatus,
     required: true,
   },
   date_created: {
