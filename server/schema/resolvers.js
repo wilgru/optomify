@@ -7,13 +7,30 @@ const resolvers = {
         getPatient: async (parent, { _id }, context) => {
             if (context.user) {
                 try {
-                    const patient = await User.findOne({_id});
+                    const patient = await Patient.findOne({_id});
 
                     if (!patient) {
                         throw new Error("No Patient was found with this ID.");
                     }
 
                     return patient; // return Patient
+                } catch(e) {
+                    throw new Error(`something went wrong! Details: ${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
+        },
+        getBookings: async (parent, { date }, context) => {
+            if (context.user) {
+                try {
+                    const bookings = await Booking.find({date: new Date(date)});
+
+                    if (!bookings) {
+                        throw new Error("No Bookings were found with on this date.");
+                    }
+
+                    return bookings; // return Booking
                 } catch(e) {
                     throw new Error(`something went wrong! Details: ${e.message}`);
                 }
@@ -179,6 +196,32 @@ const resolvers = {
                 throw new AuthenticationError('You must be signed in!');
             }
         },
+        setupBook: async (parent, { date, open_time, closing_time, optom_break_start, optom_break_end }, context) => {
+            if (context.user) {
+                try {
+                    const convBookSetupDate = new Date(date);
+                    const convBookSetupOpen = new Date(open_time);
+                    const convBookSetupClosing = new Date(closing_time);
+                    const convBreakStart = new Date(optom_break_start);
+                    const convBreakEnd = new Date(optom_break_end);
+
+                    const newBookSetup = await BookSetup.create({ 
+                        date: convBookSetupDate,
+                        open_time: convBookSetupOpen,
+                        closing_time: convBookSetupClosing,
+                        optom_break_start: convBreakStart,
+                        optom_break_end: convBreakEnd
+                    });
+
+                    return newBookSetup;
+
+                } catch(e) {
+                    throw new Error(`something went wrong! Details: ${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
+        },
         createNewBooking: async (parent, { booking_date, booking_start, booking_end, on_patient_id, booking_note, booking_type }, context) => {
             if (context.user) {
                 try {
@@ -188,11 +231,15 @@ const resolvers = {
                         throw new Error("could not find patient");
                     }
 
-                    const bookSetup = await BookSetup.find({
+                    const convBookingDate = new Date(booking_date);
+                    const convBookingStart = new Date(booking_start);
+                    const convBookingEnd = new Date(booking_end);
+
+                    const bookSetup = await BookSetup.findOne({
                         $and: [
-                            { $expr: {$eq: [{$dayOfMonth: "$date"}, value.getDate()]} },
-                            { $expr: {$eq: [{$month: "$date"}, value.getMonth() + 1]} },
-                            { $expr: {$eq: [{$year: "$date"}, value.getFullYear()]} }
+                            { $expr: {$eq: [{$dayOfMonth: "$date"}, convBookingDate.getDate()]} },
+                            { $expr: {$eq: [{$month: "$date"}, convBookingDate.getMonth() + 1]} },
+                            { $expr: {$eq: [{$year: "$date"}, convBookingDate.getFullYear()]} }
                         ]
                     })
 
@@ -202,10 +249,10 @@ const resolvers = {
 
                     const created_by = context.user._id;
                     const newBooking = await Booking.create({ 
-                        booking_date: new Date(booking_date), 
-                        booking_start: new Date(booking_start), 
-                        booking_end: new Date(booking_end), 
-                        on_patient_id, 
+                        booking_date: convBookingDate, 
+                        booking_start: convBookingStart, 
+                        booking_end: convBookingEnd, 
+                        patient: on_patient_id, 
                         booking_note, 
                         booking_type,
                         created_by
@@ -218,26 +265,6 @@ const resolvers = {
                     await bookSetup.save();
 
                     return patient.populate('bookings');
-
-                } catch(e) {
-                    throw new Error(`something went wrong! Details: ${e.message}`);
-                }
-            } else {
-                throw new AuthenticationError('You must be signed in!');
-            }
-        },
-        setupBook: async (parent, { date, open_time, closing_time, optom_break_start }, context) => {
-            if (context.user) {
-                try {
-
-                    const newBookSetup = await BookSetup.create({ 
-                        date: new Date(date),
-                        open_time: new Date(open_time),
-                        closing_time: new Date(closing_time),
-                        optom_break_start
-                    });
-
-                    return newBookSetup;
 
                 } catch(e) {
                     throw new Error(`something went wrong! Details: ${e.message}`);
