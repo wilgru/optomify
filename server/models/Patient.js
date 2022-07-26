@@ -18,7 +18,8 @@ const patientSchema = new Schema({
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   has_medicare: {
     type: Boolean,
