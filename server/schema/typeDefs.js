@@ -72,6 +72,7 @@ module.exports = gql`
         open_time: String!
         closing_time: String!
         optom_break_start: String!
+        optom_break_end: String!
         bookings: [Booking]
     }
 
@@ -91,6 +92,7 @@ module.exports = gql`
 
     type Query {
         getPatient(_id: ID!): Patient
+        getBookings(date: String!): Booking
     }
 
     type Mutation {
@@ -100,7 +102,7 @@ module.exports = gql`
         createNewNote(title: String!, text_field: String!, on_patient_id: ID!): Patient
         createNewClinicalFile(on_patient_id: ID!, file_type: String!, title: String!, text_field: String!, medicare_item_code: String, recall: String, ppr_sphere: Float, ppr_cylinder: Float, ppr_axis: Float, ppl_sphere: Float, ppl_cylinder: Float, ppl_axis: Float, pp_inter_add: Float, pp_near_add: Float, gpr_sphere: Float, gpr_cylinder: Float, gpr_axis: Float, gpl_sphere: Float, gpl_cylinder: Float, gpl_axis: Float, gp_inter_add: Float, gp_near_add: Float): Patient
         createNewBooking(booking_date: String!, booking_start: String!, booking_end: String!, on_patient_id: ID!, booking_note: String, booking_type: String!): Patient
-        setupBook(date: String!, open_time: String!, closing_time: String!, optom_break_start: String!): BookSetup
+        setupBook(date: String!, open_time: String!, closing_time: String!, optom_break_start: String!, optom_break_end: String!): BookSetup
     }
 `
 
