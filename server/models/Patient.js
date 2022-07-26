@@ -30,15 +30,11 @@ const patientSchema = new Schema({
   },
   medicare_ref: {
     type: String,
-    required: function () {
-      return this.has_medicare;
-    }
+    required: () => this.has_medicare
   },
   medicare_exp: {
     type: Date,
-    required: function () {
-      return this.has_medicare;
-    }
+    required: () => this.has_medicare
   },
   bookings: [{
     type: Schema.Types.ObjectId, 
@@ -63,15 +59,6 @@ const patientSchema = new Schema({
     required: true,
   }
 });
-
-// // hash user password
-// patientSchema.pre('save', async function (next) {
-//   // if this user is new or if this user's password field is being modified then...
-//   if (this.isNew || this.isModified('dob')) {
-
-//   }
-//   next();
-// });
   
 const Patient = model('Patient', patientSchema);
 
