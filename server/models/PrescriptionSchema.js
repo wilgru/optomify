@@ -1,23 +1,22 @@
 const { Schema } = require('mongoose');
+const { validateAxisDegree, validateCylinder, validateDioptres } = require('../utils/Validators');
 
 const prescriptionSet = new Schema({
     sphere: {
-        type: Number     
+        type: Number,
+        validate: validateDioptres   
     },
     cylinder: {
         type: Number,
-        validate: {
-            validator: (value) => value <= 0,
-            message: "Cylinder must be less then 0"
-        }
+        validate: [
+            validateDioptres,
+            validateCylinder
+        ]
     },
     axis: {
         type: Number,
         required: () => this.cylinder,
-        validate: { 
-            validator: (value) => value >= 0 && value <= 180,
-            message: "axis must be between 0 - 180"
-        }
+        validate: validateAxisDegree
     }
 });
 

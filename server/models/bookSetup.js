@@ -5,6 +5,7 @@ const bookSetupSchema = new Schema({
   date: {
     type: Date,
     required: true,
+    unique: true,
     validate: validate30MinBlock
   },
   open_time: {
@@ -18,6 +19,11 @@ const bookSetupSchema = new Schema({
     validate: validate30MinBlock
   },
   optom_break_start: {
+    type: Date,
+    required: true,
+    validate: validate30MinBlock
+  },
+  optom_break_end: {
     type: Date,
     required: true,
     validate: validate30MinBlock

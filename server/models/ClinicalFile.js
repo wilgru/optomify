@@ -1,5 +1,6 @@
 const { Schema, model } = require('mongoose');
 const PrescriptionSchema = require('./PrescriptionSchema');
+const { validateClinicalFileType } = require('../utils/Validators');
 
 ["precription", "health check", "report"];
 
@@ -7,10 +8,7 @@ const clinicalFileSchema = new Schema({
   file_type: {
     type: String,
     required: true,
-    validate: {
-      validator: value => ["prescription", "clinical note", "report"].includes(value),
-      message: props => `${props.value} is invalid for slider_value`,
-    },
+    validate: validateClinicalFileType
   },
   title: {
     type: String,
@@ -27,7 +25,7 @@ const clinicalFileSchema = new Schema({
   },
   medicare_item_code: {
     type: String,
-    required: () => this.type === "prescription"
+    required: () => this.type === "Prescription" || this.type === "Clinical note"
   },
   recall: {
     type: Date
