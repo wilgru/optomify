@@ -66,7 +66,7 @@ const resolvers = {
             if (context.user) {
                 try {
                     const created_by = context.user._id;
-                    const data = await Patient.create({ 
+                    const patient = await Patient.create({ 
                         first_name, 
                         last_name, 
                         dob, 
@@ -78,11 +78,11 @@ const resolvers = {
                         created_by
                     });
     
-                    if (!data) {
+                    if (!patient) {
                         throw new Error(`something went wrong! Details: ${e.message}`)
                     }
 
-                    return data.populate('created_by'); // return User
+                    return patient.populate('created_by'); // return User
                 } catch(e) {
                     throw new Error(`something went wrong! Details: ${e.message}`);
                 }
@@ -172,6 +172,73 @@ const resolvers = {
                     await patient.save();
 
                     return patient.populate('clinical_notes').populate('prev_prescription').populate('given_prescription');
+                } catch(e) {
+                    throw new Error(`something went wrong! Details: ${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
+        },
+        createNewBooking: async (parent, { booking_date, booking_start, booking_end, on_patient_id, booking_note, booking_type }, context) => {
+            if (context.user) {
+                try {
+                    const patient = await Patient.findById(on_patient_id);
+
+                    if (!patient) {
+                        throw new Error("could not find patient");
+                    }
+
+                    const bookSetup = await BookSetup.find({
+                        $and: [
+                            { $expr: {$eq: [{$dayOfMonth: "$date"}, value.getDate()]} },
+                            { $expr: {$eq: [{$month: "$date"}, value.getMonth() + 1]} },
+                            { $expr: {$eq: [{$year: "$date"}, value.getFullYear()]} }
+                        ]
+                    })
+
+                    if (!bookSetup) {
+                        throw new Error("could not day to book on");
+                    }
+
+                    const created_by = context.user._id;
+                    const newBooking = await Booking.create({ 
+                        booking_date: new Date(booking_date), 
+                        booking_start: new Date(booking_start), 
+                        booking_end: new Date(booking_end), 
+                        on_patient_id, 
+                        booking_note, 
+                        booking_type,
+                        created_by
+                    })
+
+                    patient.bookings.push(newBooking);
+                    await patient.save();
+
+                    bookSetup.bookings.push(newBooking);
+                    await bookSetup.save();
+
+                    return patient.populate('bookings');
+
+                } catch(e) {
+                    throw new Error(`something went wrong! Details: ${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
+        },
+        setupBook: async (parent, { date, open_time, closing_time, optom_break_start }, context) => {
+            if (context.user) {
+                try {
+
+                    const newBookSetup = await BookSetup.create({ 
+                        date: new Date(date),
+                        open_time: new Date(open_time),
+                        closing_time: new Date(closing_time),
+                        optom_break_start
+                    });
+
+                    return newBookSetup;
+
                 } catch(e) {
                     throw new Error(`something went wrong! Details: ${e.message}`);
                 }
