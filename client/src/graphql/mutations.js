@@ -68,3 +68,11 @@ export const CREATE_NEW_PATIENT_AND_BOOKING = gql`
         }
     }
 }`
+
+export const LOGIN = gql`
+  mutation Login($email: String!, $password: String!) {
+  login(email: $email, password: $password) {
+    token
+  }
+}
+`
