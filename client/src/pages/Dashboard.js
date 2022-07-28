@@ -46,7 +46,7 @@ const Dashboard = () => {
         // </Content>
         <Content style={{padding: '20px'}}>
             <Layout>
-                <Sider width={260} className="site-layout-background">
+                <Sider width={220} className="site-layout-background">
                     <Menu mode="inline" defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} style={{height: '100%'}} items={items2} />
                 </Sider>
                 <Layout style={{padding: '0 24px 24px'}}>
