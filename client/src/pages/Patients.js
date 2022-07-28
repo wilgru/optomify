@@ -18,6 +18,7 @@ import moment from 'moment';
 // grpahQL
 import { GET_ALL_PATIENTS } from '../graphql/queries';
 import { useMutation, useQuery } from '@apollo/client';
+import { Link } from 'react-router-dom';
 
 // Ant Design from components
 const { Content, Sider } = Layout;
@@ -74,12 +75,12 @@ const Patients = () => {
                                 dataSource={patientData}
                                 renderItem={(item) => (
                                 <List.Item>
-                                    <div style={{display:"flex"}}> 
+                                    <Link to={{ pathname: `/patients/${item._id}` }} style={{display:"flex"}}> 
                                         <div className='booking'>
                                             {<h4>{`${item.first_name} ${item.last_name}`}</h4>}
                                             {item.email} 
                                         </div>
-                                    </div>
+                                    </Link>
                                 </List.Item>
                                 )}
                             />
