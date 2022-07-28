@@ -1,5 +1,33 @@
 import { gql } from '@apollo/client';
 
+export const GET_PATIENT = gql`
+query GetAllPatients($id: ID!) {
+  getPatient(_id: $id) {
+    _id
+    first_name
+    last_name
+    mobile_number
+    email
+    has_medicare
+    medicare_number
+    medicare_ref
+    medicare_exp
+    bookings {
+      _id
+      booking_date
+      booking_start
+    }
+    clinical_files {
+      _id
+    }
+    notes {
+      _id
+    }
+    date_created 
+    created_by
+  }
+}`
+
 export const GET_ALL_PATIENTS = gql`
 query GetAllPatients {
   getAllPatients {
