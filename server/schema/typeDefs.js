@@ -93,6 +93,7 @@ module.exports = gql`
     type Query {
         getPatient(_id: ID!): Patient
         getBookings(date: String!): Booking
+        getBookSetups(start_date: String!, end_date: String!): [BookSetup]
     }
 
     type Mutation {
@@ -106,3 +107,12 @@ module.exports = gql`
     }
 `
 
+// https://stackoverflow.com/questions/49792726/insert-wrong-date-in-mongodb
+// When you create new dates with just date or date and time, it usually creates them in the same timezone as the program is.
+// So if you dont specify the timezone, it becomes the timezone the server is in. When you save to Mongo, the Date is serialized to UTC -> zero timezone.
+// Create the dates with +00:00 timezone and you should have consistent data.
+
+// https://stackoverflow.com/questions/18907566/mongodb-query-specific-monthyear-not-date
+// With MongoDB 3.6 and newer, you can use the $expr operator in your find() query. This allows you to build query expressions that compare fields from the same document in a $match stage.
+// MongoDB $expr -> https://www.mongodb.com/docs/manual/reference/operator/query/expr/
+// aggregate pipeline (what $expr allows the use of ) -> https://www.mongodb.com/docs/manual/meta/aggregation-quick-reference/#std-label-aggregation-expressions
