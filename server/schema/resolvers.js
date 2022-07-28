@@ -37,6 +37,39 @@ const resolvers = {
             } else {
                 throw new AuthenticationError('You must be signed in!');
             }
+        },
+        getBookSetups: async (parent, { start_date, end_date }, context) => {
+            if (context.user) {
+                try {
+                    const bookSetup = await BookSetup.find({
+                        date: {
+                            $gte: start_date,
+                            $lte: end_date
+                        }
+                    })
+
+                    if (!bookSetup) {
+                        throw new Error("No Bookings were found with within these dates.");
+                    }
+
+                    // https://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
+                    const populateBookSetup = bookSetup.map((bookDay) => {
+                        return bookDay.populate({ 
+                            path: 'bookings',
+                            populate: {
+                                path: 'patient',
+                                model: 'Patient'
+                            } 
+                        })
+                    })
+
+                    return populateBookSetup; // return [BookSetup]
+                } catch(e) {
+                    throw new Error(`something went wrong! Details: ${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
         }
     },
     Mutation: {
@@ -235,6 +268,7 @@ const resolvers = {
                     const convBookingStart = new Date(booking_start);
                     const convBookingEnd = new Date(booking_end);
 
+                    // using $expr allows the use of aggregate operators, which would include all the date opertions. Also using $expr/aggirgate version of $eq.
                     const bookSetup = await BookSetup.findOne({
                         $and: [
                             { $expr: {$eq: [{$dayOfMonth: "$date"}, convBookingDate.getDate()]} },
