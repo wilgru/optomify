@@ -20,7 +20,7 @@ import { GET_BOOK_SETUPS } from '../graphql/queries';
 import { useMutation, useQuery } from '@apollo/client';
 
 // Utils
-import { getWeek } from '../utils.js/date';
+import { getWeek } from '../utils/date';
 
 // Ant Design from components
 const { Content, Sider } = Layout;
