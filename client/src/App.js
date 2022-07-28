@@ -1,13 +1,14 @@
-import './App.css';
-
-// react router
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// Styles
+import 'antd/dist/antd.css'
+import './App.less';
 
 // Ant Design
 // import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
-import 'antd/dist/antd.css';
+
+// react router
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // components
 import Navbar from './components/Navbar';
@@ -58,7 +59,7 @@ const { Footer } = Layout;
 const App = () => (
   <ApolloProvider client={client}>
      <Router>
-      <Layout>
+      <Layout style={{height: '100vh'}}>
         <Navbar />
         <Routes>
           <Route path='/dashboard' element={<Dashboard />}/>
