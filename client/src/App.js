@@ -17,6 +17,8 @@ import Navbar from './components/Navbar';
 import Dashboard from './pages/Dashboard';
 import Bookings from './pages/Bookings';
 import Patients from './pages/Patients';
+import Patient from './pages/Patient';
+import Login from './components/Login';
 
 // Apollo imports
 import {
@@ -66,6 +68,7 @@ const App = () => (
           <Route path='/dashboard' element={<Dashboard />}/>
           <Route path='/bookings' element={<Bookings />}/>
           <Route path='/patients' element={<Patients />}/>
+          <Route path='/patients/:id' element={<Patient />}/>
         </Routes>
         <Footer style={{textAlign: 'center'}}>
           Ant Design ©2018 Created by Ant UED
