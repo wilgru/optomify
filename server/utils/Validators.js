@@ -10,7 +10,7 @@ module.exports = {
         message: "booking status invalid" 
     },
     validateBookingType: {
-        validator: function (value) { return ["General eye test", "Health concern", "RMS form"].includes(value) },
+        validator: function (value) { return ["General eye test", "Health concern", "RMS form", "Re-check", "other"].includes(value) },
         message: "booking type invalid" 
     },
     validate30MinBlock: {
@@ -37,7 +37,7 @@ module.exports = {
         message: "Value must be measured in dioptres (units of 0.25)"
     },
     validateCylinder: { 
-        funnction(value) { return  value <= 0 },
+        validator: function(value) { return  value <= 0 },
         message: "Value must be a negative number"
     },
     validateAxisDegree: {
