@@ -4,7 +4,6 @@ import React from 'react';
 // Ant Design
 import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu } from 'antd';
-import 'antd/dist/antd.css';
 
 // Ant Design from layout component
 const { Content, Sider } = Layout;
