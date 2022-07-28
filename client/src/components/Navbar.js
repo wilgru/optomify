@@ -93,7 +93,7 @@ const AppNavbar = () => {
   return (
     <Header className="header">
         <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-            <Login />
+            <Login hideModal={setIsModalVisible}/>
         </Modal>
         <div className="logo">
             <img
@@ -106,7 +106,7 @@ const AppNavbar = () => {
             {!auth.loggedIn() ? (
                 <Button onClick={showModal}>Login</Button>
             ) : (
-                <Button onClick={auth.logout()}>Sign out</Button>
+                <Button onClick={auth.logout}>Sign out</Button>
             )}
         </div>
     </Header>
