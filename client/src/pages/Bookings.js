@@ -2,8 +2,17 @@
 import React, { useEffect, useState } from 'react';
 
 // Ant Design
-import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import { Breadcrumb, Layout, DatePicker, Menu, Space, Button } from 'antd';
+import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal } from 'antd';
+import BookingForm from '../components/BookingForm';
+import {
+    HomeOutlined,
+    LoadingOutlined,
+    SettingFilled,
+    SmileOutlined,
+    SyncOutlined,
+    EyeOutlined,
+  } from '@ant-design/icons';
+
 import moment from 'moment';
 
 // grpahQL
@@ -15,30 +24,18 @@ import { getWeek } from '../utils.js/date';
 
 // Ant Design from components
 const { Content, Sider } = Layout;
+const { Meta } = Card;
 const { RangePicker } = DatePicker;
-
-// const items2old = [UserOutlined, LaptopOutlined, NotificationOutlined].map((icon, index) => {
-//     const key = String(index + 1);
-//     return {
-//     key: `sub${key}`,
-//     icon: React.createElement(icon),
-//     label: `subnav ${key}`,
-//     children: new Array(4).fill(null).map((_, j) => {
-//         const subKey = index * 4 + j + 1;
-//         return {
-//         key: subKey,
-//         label: `option${subKey}`,
-//         };
-//     }),
-//     };
-// });
 
 const Bookings = () => {
     //start date and end date for bookings to show
     const [startDate, setStartDate] = useState(getWeek().firstDay.toISOString());
     const [endDate, setEndDate] = useState(getWeek().lastDay.toISOString());
 
-    console.log(startDate, endDate)
+    // for booking modal
+    const [bookingDate, setBookingDate] = useState('')
+    const [bookingStart, setbookingStart] = useState('')
+    const [bookingEnd, setbookingEnd] = useState('')
 
     // get booksetup and bookings
     const { loading, data } = useQuery(GET_BOOK_SETUPS, {
@@ -48,8 +45,82 @@ const Bookings = () => {
         },
         fetchPolicy: "no-cache"
     });
+    const bookSetupData = data?.getBookSetups || [];
+    const bookingList = []
 
-    const bookSetupData = data?.getBookSetups || {};
+    // populate bookingList
+    bookSetupData.forEach((day) => {
+        // console.log("DAY HERE")
+        // console.log(day)
+        let todaysList = {}
+        const today = new Date(parseInt(day.open_time)).toISOString()
+        const todayUTC = moment.utc(today).subtract(10, 'h');
+        todaysList.date = todayUTC;
+        todaysList.list = [];
+
+        // find static times
+        const opening = new Date(parseInt(day.open_time)).toISOString()
+        const openingUTC = moment.utc(opening).subtract(10, 'h');
+
+        const closing = new Date(parseInt(day.closing_time)).toISOString()
+        const closingUTC = moment.utc(closing).subtract(10, 'h');
+
+        const optomBreak = new Date(parseInt(day.optom_break_start)).toISOString()
+        const optomBreakUTC = moment.utc(optomBreak).subtract(10, 'h');
+
+        // init cursor
+        let cursorUTC = moment(openingUTC)
+        
+        while (moment(cursorUTC).isBefore(closingUTC)) {
+
+            let busy = false
+
+            // first check for optom break
+            if (moment(cursorUTC).isSame(optomBreakUTC)) {
+                // console.log("OPTOM BREAK HERE")
+                todaysList.list.push({
+                    time: optomBreakUTC,
+                    bookingType: "optom break",
+                    firstName: "",
+                    lastName: ""
+                })
+                busy = true
+            }
+
+            // now check bookings
+            day.bookings.forEach((booking) => {
+                const bookingTime = new Date(parseInt(booking.booking_start)).toISOString()
+                const bookingTimeUTC = moment.utc(bookingTime).subtract(10, 'h');
+
+                if (moment(cursorUTC).isSame(bookingTimeUTC)) {
+                    // console.log("BOOKING HERE")
+                    todaysList.list.push({
+                        time: bookingTimeUTC,
+                        bookingType: booking.booking_type,
+                        firstName: booking.patient.first_name,
+                        lastName: booking.patient.last_name,
+                    })
+                    busy = true
+                }
+            })
+
+            if (!busy) {
+                // console.log("EMPTY")
+                todaysList.list.push({
+                    time: moment(cursorUTC),
+                    bookingType: "empty",
+                    firstName: "",
+                    lastName: ""
+                })
+            }
+            cursorUTC = cursorUTC.add(30, 'm')
+            // console.log(cursorUTC._d)
+        }
+
+        bookingList.push(todaysList);
+
+    })
+    console.log(bookingList);
 
     // listener for date range picker
     const onPanelChange = (value, mode) => {
@@ -79,10 +150,10 @@ const Bookings = () => {
     };
 
     // sub nav options
-    const items2 = [
+    const subNav = [
         {
             key: 'sub1',
-            label: 'Time Range',
+            label: 'Show Range',
             children: [
                 {
                     key: 'sub1option1',
@@ -108,47 +179,125 @@ const Bookings = () => {
                     )
                 }
             ]
+        },
+        {
+            key: 'sub3',
+            label: 'Add New Book',
+            children: [
+                {
+                    key: 'sub3option1',
+                    label: (    
+                        <div>
+                            <DatePicker size={"small"} format={[ "DD MMM", "YYYY-MM-DDTHH:mm:ss"]} defaultValue={moment(startDate, "YYYY-MM-DDT00:00:00+00.00")} onChange={onPanelChange}/>
+                            <Button type="primary">Button</Button>
+                        </div>
+                    )
+                }
+            ]
         }
     ]
 
-    console.log(bookSetupData)
+    // return conditional icon
+    function ConditionalIcon(props) {
+        if(props.type === 'General eye test') {
+            return <EyeOutlined style={{fontSize: '20px'}}/>
+        } else if (props.type === 'optom break') {
+            return <SyncOutlined style={{fontSize: '20px'}}/>
+        }
+    }
+
+    // MODAL
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+
+    const showModal = () => {
+      setIsModalVisible(true);
+    };
+  
+    const handleOk = () => {
+      setIsModalVisible(false);
+    };
+  
+    const handleCancel = () => {
+      setIsModalVisible(false);
+    };
+
+    // END MODAL
+
+    // date working
+    function dateWorker(date) {
+        let b = String(date)
+        let c = b.split(" ", 5)
+        let d = c.join(" ")
+        let e = d+" UTC" 
+        let f = new Date(e)
+
+        return f.toISOString()
+    }
 
     return (
-        // <Content style={{padding: '20px'}}>
-        //     <Layout>
-        //         <Sider width={200} className="site-layout-background" style={{padding: '20px'}}>
-        //             <h1>Date Range</h1>
-        //             <RangePicker size={"small"} format={[ "DD MMMM", "YYYY-MM-DDTHH:mm:ss"]}/>
-        //             <Button type="primary">Button</Button>
-        //         </Sider>
-        //         <Layout style={{padding: '0 24px 24px'}}>
-        //             <Breadcrumb style={{ margin: '16px 0' }}>
-        //                 <Breadcrumb.Item>Home</Breadcrumb.Item>
-        //                 <Breadcrumb.Item>List</Breadcrumb.Item>
-        //                 <Breadcrumb.Item>App</Breadcrumb.Item>
-        //             </Breadcrumb>
-        //             <Content className="site-layout-background" style={{ padding: 24, margin: 0, minHeight: 280 }}>
-        //                 Content
-        //             </Content>
-        //         </Layout>
-        //     </Layout>
-        // </Content>
         <Content style={{padding: '20px'}}>
-        <Layout>
-            <Sider width={200} className="site-layout-background">
-                <Menu mode="inline" defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} style={{height: '100%'}} items={items2} />
-            </Sider>
-            <Layout style={{padding: '0 24px 24px'}}>
-                <Content className="site-layout-background" style={{ padding: 24, margin: 0, minHeight: 280 }}>
-                    {loading ? (
-                        <h1>loading</h1>
-                    ) : (
-                        <h1>Loaded! hehe!</h1>
-                    )}
-                </Content>
+            <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                <BookingForm bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} />
+            </Modal>
+            <Layout>
+                <Sider width={220} className="site-layout-background">
+                    <Menu mode="inline" defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} style={{height: '100%'}} items={subNav} />
+                </Sider>
+                <Layout style={{padding: '0 24px 24px'}}>
+                    <Content className="site-layout-background" style={{ padding: 24, margin: 0, minHeight: 280 }}>
+                        {loading ? (
+                            <h1>loading</h1>
+                        ) : (
+                            <div style={{display:"flex"}}>
+                                {bookingList.map((day) => {
+                                    return (
+                                        <List
+                                            header={<div>{day.date.format('ddd MMM Do, YYYY')}</div>}
+                                            bordered
+                                            itemLayout="horizontal"
+                                            dataSource={day.list}
+                                            renderItem={(item) => (
+                                            <List.Item>
+                                                <div style={{display:"flex"}}> 
+                                                    <ConditionalIcon type={item.bookingType} />
+                                                    
+                                                    <div className='booking'>
+                                                        {<h4>{`${item.time.hour()+10}:${item.time.minute()} ${item.firstName} ${item.lastName}`}</h4>}
+                                                        {item.bookingType} 
+                                                    </div>
+
+                                                    {item.bookingType === 'empty' ? (
+                                                        <a 
+                                                        data-date={new Date(day.date.toISOString())}
+                                                        data-start-time={new Date(item.time.toISOString())}
+                                                        onClick={(event) => {
+                                                            showModal();
+                                                            setBookingDate(dateWorker(event.target.getAttribute('data-date')))
+                                                            setbookingStart(dateWorker(event.target.getAttribute('data-start-time')))
+                                                            setbookingEnd(dateWorker(event.target.getAttribute('data-start-time')))
+                                                            console.log("HELLO??")
+                                                            console.log(dateWorker(event.target.getAttribute('data-date')))
+                                                            console.log(dateWorker(event.target.getAttribute('data-start-time')))
+
+                                                        }}>
+                                                            Book an Appointment
+                                                        </a>
+                                                    ) : (
+                                                        <a></a>
+                                                    )}
+                                                </div>
+                                            </List.Item>
+                                            )}
+                                        />
+                                    )
+                                })}
+                            </div>
+                        )}
+                    </Content>
+                </Layout>
             </Layout>
-        </Layout>
-    </Content>
+        </Content>
     )
 }
 
