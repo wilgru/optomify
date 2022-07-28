@@ -21,6 +21,23 @@ const resolvers = {
                 throw new AuthenticationError('You must be signed in!');
             }
         },
+        getAllPatients: async (parent, args, context) => {
+            if (context.user) {
+                try {
+                    const patients = await Patient.find();
+
+                    if (!patients) {
+                        throw new Error("No Patients was found.");
+                    }
+
+                    return patients; // return Patient
+                } catch(e) {
+                    throw new Error(`something went wrong! Details: ${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
+        },
         getBookings: async (parent, { date }, context) => {
             if (context.user) {
                 try {
@@ -62,7 +79,7 @@ const resolvers = {
                             } 
                         })
                     })
-
+                    console.log(bookSetup)
                     return populateBookSetup; // return [BookSetup]
                 } catch(e) {
                     throw new Error(`something went wrong! Details: ${e.message}`);
@@ -105,6 +122,7 @@ const resolvers = {
                 }
           
                 const token = signToken(user);
+                console.log(token)
           
                 return { token, user }; // return Auth
             } catch(e) {
@@ -299,6 +317,80 @@ const resolvers = {
                     await bookSetup.save();
 
                     return patient.populate('bookings');
+
+                } catch(e) {
+                    throw new Error(`something went wrong! Details: ${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
+        },
+        createNewPatientAndBooking: async (parent, { first_name, last_name, dob, mobile_number, email, has_medicare, medicare_ref, medicare_exp, booking_date, booking_start, booking_end, booking_note, booking_type }, context) => {
+            if (context.user) {
+                try {
+                    // const patient = await Patient.findById(on_patient_id);
+
+                    // if (!patient) {
+                    //     throw new Error("could not find patient");
+                    // }
+
+                    const created_by = context.user._id;
+                    const patient = await Patient.create({ 
+                        first_name, 
+                        last_name, 
+                        dob, 
+                        mobile_number, 
+                        email, 
+                        has_medicare, 
+                        medicare_ref, 
+                        medicare_exp,
+                        created_by
+                    });
+    
+                    if (!patient) {
+                        throw new Error(`something went wrong! Details: ${e.message}`)
+                    }
+
+                    const convBookingDate = new Date(booking_date);
+                    const convBookingStart = new Date(booking_start);
+                    const convBookingEnd = new Date(booking_end);
+
+                    // using $expr allows the use of aggregate operators, which would include all the date opertions. Also using $expr/aggirgate version of $eq.
+                    const bookSetup = await BookSetup.findOne({
+                        $and: [
+                            { $expr: {$eq: [{$dayOfMonth: "$date"}, convBookingDate.getDate()]} },
+                            { $expr: {$eq: [{$month: "$date"}, convBookingDate.getMonth() + 1]} },
+                            { $expr: {$eq: [{$year: "$date"}, convBookingDate.getFullYear()]} }
+                        ]
+                    })
+
+                    if (!bookSetup) {
+                        throw new Error("could not day to book on");
+                    }
+
+                    const newBooking = await Booking.create({ 
+                        booking_date: convBookingDate, 
+                        booking_start: convBookingStart, 
+                        booking_end: convBookingEnd, 
+                        patient: patient._id, 
+                        booking_note, 
+                        booking_type,
+                        created_by
+                    })
+
+                    patient.bookings.push(newBooking);
+                    await patient.save();
+
+                    bookSetup.bookings.push(newBooking);
+                    await bookSetup.save();
+
+                    return bookSetup.populate({
+                        path: 'bookings',
+                        populate: {
+                            path: 'patient',
+                            model: 'Patient'
+                        } 
+                    });
 
                 } catch(e) {
                     throw new Error(`something went wrong! Details: ${e.message}`);
