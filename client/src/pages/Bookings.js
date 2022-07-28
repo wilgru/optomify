@@ -2,13 +2,9 @@
 import React, { useEffect, useState } from 'react';
 
 // Ant Design
-import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal } from 'antd';
+import { List, Layout, DatePicker, Menu, Button, Card, Modal } from 'antd';
 import BookingForm from '../components/BookingForm';
 import {
-    HomeOutlined,
-    LoadingOutlined,
-    SettingFilled,
-    SmileOutlined,
     SyncOutlined,
     EyeOutlined,
   } from '@ant-design/icons';
