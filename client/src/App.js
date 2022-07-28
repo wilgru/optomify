@@ -16,6 +16,7 @@ import Navbar from './components/Navbar';
 // Pages
 import Dashboard from './pages/Dashboard';
 import Bookings from './pages/Bookings';
+import Patients from './pages/Patients';
 
 // Apollo imports
 import {
@@ -59,11 +60,12 @@ const { Footer } = Layout;
 const App = () => (
   <ApolloProvider client={client}>
      <Router>
-      <Layout style={{height: '100vh'}}>
+      <Layout style={{height: 'fit-content'}}>
         <Navbar />
         <Routes>
           <Route path='/dashboard' element={<Dashboard />}/>
           <Route path='/bookings' element={<Bookings />}/>
+          <Route path='/patients' element={<Patients />}/>
         </Routes>
         <Footer style={{textAlign: 'center'}}>
           Ant Design ©2018 Created by Ant UED
@@ -74,33 +76,3 @@ const App = () => (
 );
 
 export default App;
-
-
-
-// function App() {
-//   return (
-//     <ApolloProvider client={client}>
-//       <Router>
-//         <>
-//           <Navbar />
-//           <Routes>
-//             <Route 
-//               path='/dashboard'
-//               element={<Dashboard />}
-//             />
-//             <Route 
-//               path='/bookings'
-//               element={<Bookings />}
-//             />
-//             <Route 
-//               path='*'
-//               element={<h1 className='display-2'>Wrong page!</h1>}
-//             />
-//           </Routes>
-//         </>
-//       </Router>
-//     </ApolloProvider>
-//   );
-// }
-
-// export default App;
