@@ -12,7 +12,8 @@ You can visit a deployed demo web application [here](https://projecthub-crm.hero
 
 ## Project Description
 
-An accessible customer relationship management system, which can be used for storing a company's client and project database.
+lorum ipsum
+
 <br>
 
 ## Table of Contents
