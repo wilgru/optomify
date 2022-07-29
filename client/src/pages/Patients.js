@@ -74,14 +74,22 @@ const Patients = () => {
                                 itemLayout="horizontal"
                                 dataSource={patientData}
                                 renderItem={(item) => (
-                                <List.Item>
-                                    <Link to={{ pathname: `/patients/${item._id}` }} style={{display:"flex"}}> 
-                                        <div className='booking'>
-                                            {<h4>{`${item.first_name} ${item.last_name}`}</h4>}
-                                            {item.email} 
-                                        </div>
-                                    </Link>
-                                </List.Item>
+                                    // <List.Item>
+                                    //     <Link to={{ pathname: `/patients/${item._id}` }} style={{display:"flex"}}> 
+                                    //         <div className='booking'>
+                                    //             {<h4>{`${item.first_name} ${item.last_name}`}</h4>}
+                                    //             {item.email} 
+                                    //         </div>
+                                    //     </Link>
+                                    // </List.Item>
+                                    <List.Item  className={"patient-record-li"}>
+                                        <Link to={{ pathname: `/patients/${item._id}` }} className={"patient-record"} onClick={()=> console.log(item.first_name)}>
+                                            <div>
+                                                <h3>{`${item.first_name} ${item.last_name}`}</h3>
+                                                <h4>{item.email} </h4>
+                                            </div>
+                                        </Link>
+                                    </List.Item>
                                 )}
                             />
                         )}
