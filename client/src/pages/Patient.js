@@ -6,6 +6,7 @@ import { GET_PATIENT } from '../graphql/queries';
 
 // componenets
 import PatientOverview from '../components/PatientOverview'
+import PatientClinicalFiles from '../components/PatientClinicalFiles'
 
 // antd
 import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal } from 'antd';
@@ -89,7 +90,9 @@ const Patient = () => {
     switch (props.choice) {
       case "overview":
         return <PatientOverview patient={patient}/>
-        // return <h1>hello</h1>
+        break;
+      case "clinical_files":
+        return <PatientClinicalFiles patient={patient}/>
         break;
     
       default:
