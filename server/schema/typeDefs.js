@@ -61,7 +61,8 @@ module.exports = gql`
         booking_end: String!
         patient: Patient
         booking_note: String
-        booking_type: String!
+        booking_type: String
+        booking_status: String!
         date_created: String
         created_by: User!
     }
