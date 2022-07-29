@@ -13,7 +13,7 @@ const resolvers = {
                         throw new Error("No Patient was found with this ID.");
                     }
 
-                    return patient; // return Patient
+                    return patient.populate('bookings clinical_files notes created_by'); // return Patient
                 } catch(e) {
                     throw new Error(`something went wrong! Details: ${e.message}`);
                 }
@@ -130,7 +130,7 @@ const resolvers = {
             }
             
         },
-        createNewPatient: async (parent, { first_name, last_name, dob, mobile_number, email, has_medicare, medicare_ref, medicare_exp }, context) => {
+        createNewPatient: async (parent, { first_name, last_name, dob, mobile_number, email, has_medicare, medicare_number, medicare_ref, medicare_exp }, context) => {
             if (context.user) {
                 try {
                     const created_by = context.user._id;
@@ -141,6 +141,7 @@ const resolvers = {
                         mobile_number, 
                         email, 
                         has_medicare, 
+                        medicare_number,
                         medicare_ref, 
                         medicare_exp,
                         created_by
@@ -325,7 +326,7 @@ const resolvers = {
                 throw new AuthenticationError('You must be signed in!');
             }
         },
-        createNewPatientAndBooking: async (parent, { first_name, last_name, dob, mobile_number, email, has_medicare, medicare_ref, medicare_exp, booking_date, booking_start, booking_end, booking_note, booking_type }, context) => {
+        createNewPatientAndBooking: async (parent, { first_name, last_name, dob, mobile_number, email, has_medicare, medicare_number, medicare_ref, medicare_exp, booking_date, booking_start, booking_end, booking_note, booking_type }, context) => {
             if (context.user) {
                 try {
                     // const patient = await Patient.findById(on_patient_id);
@@ -342,6 +343,7 @@ const resolvers = {
                         mobile_number, 
                         email, 
                         has_medicare, 
+                        medicare_number,
                         medicare_ref, 
                         medicare_exp,
                         created_by
