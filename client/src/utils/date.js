@@ -12,3 +12,17 @@ export const getWeek = (date) => {
         lastDay
     }
 }
+
+// date working
+export const dateWorker = (date) => {
+    let b = String(date)
+    let c = b.split(" ", 5)
+    let d = c.join(" ")
+    let e = d+" UTC" 
+    let f = new Date(e)
+    let g = f.toISOString()
+    let h = g.split(".")[0]
+    let i = h+"+00.00"
+
+    return i
+}
