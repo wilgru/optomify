@@ -13,13 +13,12 @@ You can visit a deployed demo web application [here](https://projecthub-crm.hero
 ## Project Description
 
 lorum ipsum
-
 <br>
 
 ## Table of Contents
 
-[Functionality](#Functionality)  
 [Technologies Used](#Technologies) 
+[Functionality](#Functionality)  
 [Installation and Usage](#Installation) 
 [Future Development](#Future)  
 [Gallery](#Gallery)  
@@ -35,7 +34,6 @@ Here are some of Optomify's key features:
 ### Bookings
 
 ### Patients
-
 <br>
 
 <a name="Technologies"></a>
@@ -60,12 +58,15 @@ Apollo -
 ### APIs:
 
 TinyMCE -
-
 <br>
 
 <a name="Installation"></a>
 
 ## Installation and Usage
+
+### Prerequisites
+
+To be able to run the back-end server you will need to have MongoDB isntall on your computer for this app to connect to.  
 
 You can pull the source code for this project by cloning this repo using the following command: 
 
@@ -74,7 +75,7 @@ bash
 git clone
 ```
 
-PLease note, to be able to run the back-end server you will need to have MongoDB isntall on your computer for this app to connect to.  
+### Development
 
 To run ant react scripts or start any servers, first change directory to the Optomify folder and run 'npm install'. This will install all depenancies for the server and client in one command:
 
@@ -110,8 +111,6 @@ bash
 ```
 npm run develop
 ```
-
-
 <br>
 
 <a name="Future"></a>
