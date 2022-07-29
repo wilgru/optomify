@@ -58,6 +58,7 @@ export const GET_BOOK_SETUPS = gql`
             booking_end
             booking_note
             booking_type
+            booking_status
             patient {
                 first_name
                 last_name
