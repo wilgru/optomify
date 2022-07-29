@@ -1,0 +1,24 @@
+.confirmed {
+  background-color: orange;
+}
+
+.arrived {
+  background-color: green;
+}
+
+.booked {
+  background-color: khaki;
+}
+
+.blocked {
+  background-color: gray;
+}
+
+.booking-note {
+  background-color: lightblue;
+  margin-bottom: 10px;
+}
+
+.booking-card {
+  width: 250px;
+}
