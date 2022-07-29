@@ -10,8 +10,6 @@ import { useMutation } from '@apollo/client';
 const PatientOverview = (props) => {
     const [form] = Form.useForm();
 
-    console.log(new Date(parseInt(props.patient.dob)))
-
     // const [hasMedicare, setHasMedicare] = useState(true);
     // useEffect(() => {
     //     form.setFieldValue({
