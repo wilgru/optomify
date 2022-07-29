@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { useParams, Link } from 'react-router-dom';
-// import {  } from '../utils/mutations';
+import { loggedin } from '../utils/auth';
 import { GET_PATIENT } from '../graphql/queries';
+
+// componenets
+import PatientOverview from '../components/PatientOverview'
 
 // antd
 import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal } from 'antd';
+import moment from 'moment';
 const { Content, Sider } = Layout;
 
 const Patient = () => {
   let { id } = useParams();
+  const [chosenContent, setChosenContent] = useState('overview');
 
   const { loading, data } = useQuery(GET_PATIENT, {
-    variables: { _id: id },
+    variables: { id },
+    fetchPolicy: "no-cache"
   });
 
   const patient = data?.getPatient || [];
+  console.log(patient)
 
 //   const [createPatient, { error }] = useMutation(CREATE_VOTE);
 
@@ -39,53 +46,72 @@ const Patient = () => {
     // }
   };
 
-      // MODAL
+  // MODAL
 
-      const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-      const showModal = () => {
-        setIsModalVisible(true);
-      };
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  // END MODAL
+
+  // sub nav options
+  const subNav = [
+      {
+          key: 'overview',
+          label: 'Overview',
+      },
+      {
+          key: 'clinical_files',
+          label: 'Clinical Files',
+      },
+      {
+          key: 'notes',
+          label: 'Notes',
+      },
+      {
+          key: 'bookings',
+          label: 'Bookings',
+      }
+  ]
+
+  function PatientContent(props) {
+    console.log(props.choice)
+    switch (props.choice) {
+      case "overview":
+        return <PatientOverview patient={patient}/>
+        // return <h1>hello</h1>
+        break;
     
-      const handleOk = () => {
-        setIsModalVisible(false);
-      };
-    
-      const handleCancel = () => {
-        setIsModalVisible(false);
-      };
-  
-      // END MODAL
-
-    // sub nav options
-    const subNav = [
-        {
-            key: 'sub1',
-            label: 'Overview',
-        },
-        {
-            key: 'sub2',
-            label: 'Clinical Files',
-        },
-        {
-            key: 'sub3',
-            label: 'Notes',
-        },
-        {
-            key: 'sub4',
-            label: 'Bookings',
-        }
-    ]
+      default:
+        break;
+    }
+  }
 
   return (
     <Content style={{padding: '20px'}}>
         <Layout>
             <Sider width={220} className="site-layout-background">
-                <Menu mode="inline" defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} style={{height: '100%'}} items={subNav} />
+                <Menu mode="inline" defaultSelectedKeys={['overview']} defaultOpenKeys={['overview']} style={{height: '100%'}} items={subNav} onClick={(item, key, keyPath)=>{console.log(item.key); setChosenContent(item.key)}}/>
             </Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="site-layout-background" style={{ padding: 24, margin: 0, minHeight: 280 }}>
-                    Content
+                  {loading ? (
+                    <></>
+                  ) : (
+                    // <PatientOverview patient={patient}/>
+                    <PatientContent choice={chosenContent} />
+                  )}
+                    
                 </Content>
             </Layout>
         </Layout>
