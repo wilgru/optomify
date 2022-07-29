@@ -47,3 +47,18 @@
 .booking-card {
   width: 250px;
 }
+
+
+.ant-popover-content p {
+  margin: 0;
+}
+
+.patient-record {
+  padding: none;
+  width: 100%;
+}
+
+.patient-record-li:hover {
+
+  background-color: lightblue;
+}
