@@ -46,21 +46,21 @@ From here you can get a view fo all the patients in your system. Get some instan
 Lorum Ipsum
 
 ### Stack:
-MongoDB - 
+MongoDB - https://www.mongodb.com/docs/
 
-Express.js -
+Express.js - https://expressjs.com/
 
-React - 
+React - https://reactjs.org/
 
-Noode.js - 
+Node.js - https://nodejs.org/en/docs/
 
-GraphQL - 
+GraphQL - https://graphql.org/
 
-Apollo - 
+Apollo - https://www.apollographql.com/
 
 ### APIs:
 
-TinyMCE -
+TinyMCE -https://www.tiny.cloud/
 <br>
 
 <a name="Installation"></a>
