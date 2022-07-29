@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 // Ant Design
-import { List, Layout, DatePicker, Menu, Button, Card, Modal } from 'antd';
+import { List, Layout, DatePicker, Menu, Button, Card, Modal, Popover } from 'antd';
 import BookingForm from '../components/BookingForm';
 import {
     SyncOutlined,
@@ -44,7 +44,15 @@ const Bookings = () => {
     const bookSetupData = data?.getBookSetups || [];
     const bookingList = []
 
-    console.log("booksetup", bookSetupData)
+    // buttons for popover
+    const buttonSet = {
+        Empty: ["Book New", "Book Existing", "Block"],
+        Booked: ["Confirm", "Arrive", "Cancel"],
+        Confirmed: ["Arrive", "Cancel"],
+        Arrived: ["Cancel"],
+        Blocked: ["Cancel"],
+        OptomBreak: [],
+    };
 
     // populate bookingList
     bookSetupData.forEach((day) => {
@@ -79,6 +87,7 @@ const Bookings = () => {
                 todaysList.list.push({
                     time: optomBreakUTC,
                     bookingType: "optom break",
+                    bookingStatus: "OptomBreak",
                     firstName: "",
                     lastName: ""
                 })
@@ -95,6 +104,7 @@ const Bookings = () => {
                     todaysList.list.push({
                         time: bookingTimeUTC,
                         bookingType: booking.booking_type,
+                        bookingStatus: booking.booking_status,
                         firstName: booking.patient.first_name,
                         lastName: booking.patient.last_name,
                     })
@@ -107,6 +117,7 @@ const Bookings = () => {
                 todaysList.list.push({
                     time: moment(cursorUTC),
                     bookingType: "empty",
+                    bookingStatus: "Empty",
                     firstName: "",
                     lastName: ""
                 })
@@ -118,7 +129,7 @@ const Bookings = () => {
         bookingList.push(todaysList);
 
     })
-    // console.log(bookingList);
+    console.log(bookingList);
 
     // listener for date range picker
     const onPanelChange = (value, mode) => {
@@ -207,6 +218,7 @@ const Bookings = () => {
     // MODAL
 
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [okState, setOkState] = useState(false);
 
     const showModal = () => {
       setIsModalVisible(true);
@@ -214,6 +226,7 @@ const Bookings = () => {
   
     const handleOk = () => {
       setIsModalVisible(false);
+      setOkState(true);
     };
   
     const handleCancel = () => {
@@ -261,37 +274,93 @@ const Bookings = () => {
                                             itemLayout="horizontal"
                                             dataSource={day.list}
                                             renderItem={(item) => (
-                                            <List.Item>
-                                                <div style={{display:"flex"}}> 
-                                                    <ConditionalIcon type={item.bookingType} />
+                                            // <List.Item>
+                                            //     <div style={{display:"flex"}}> 
+                                            //         <ConditionalIcon type={item.bookingType} />
                                                     
-                                                    <div className='booking'>
-                                                        {<h4>{`${item.time.hour()+10}:${item.time.minute()} ${item.firstName} ${item.lastName}`}</h4>}
-                                                        {item.bookingType} 
+                                            //         <div className='booking'>
+                                            //             {<h4>{`${item.time.hour()+10}:${item.time.minute()} ${item.firstName} ${item.lastName}`}</h4>}
+                                            //             {item.bookingType} 
+                                            //         </div>
+
+                                            //         {item.bookingType === 'empty' ? (
+                                            //             <a 
+                                            //             data-date={new Date(day.date.toISOString())}
+                                            //             data-start-time={new Date(item.time.toISOString())}
+                                            //             onClick={(event) => {
+                                            //                 showModal();
+                                            //                 setBookingDate(dateWorker(event.target.getAttribute('data-date')))
+                                            //                 setbookingStart(dateWorker(event.target.getAttribute('data-start-time')))
+                                            //                 setbookingEnd(dateWorker(event.target.getAttribute('data-start-time')))
+                                            //                 console.log("HELLO??")
+                                            //                 console.log(dateWorker(event.target.getAttribute('data-date')))
+                                            //                 console.log(dateWorker(event.target.getAttribute('data-start-time')))
+
+                                            //             }}>
+                                            //                 Book an Appointment
+                                            //             </a>
+                                            //         ) : (
+                                            //             <a></a>
+                                            //         )}
+                                            //     </div>
+                                            // </List.Item>
+                                            <List.Item className={item.bookingStatus}>
+                                                <Popover
+                                                    content={
+                                                    <div 
+                                                        className={"booking-card"}           
+                                                    >
+                                                        {item.bookingNote ? (
+                                                            <Card className={"booking-note"}>
+                                                                {item.bookingNote}
+                                                            </Card>
+                                                        ) : (
+                                                            <></>
+                                                        )}
+
+                                                        <div
+                                                            style={{
+                                                                display: "flex",
+                                                                justifyContent: "space-between"
+                                                            }}
+                                                        >
+                                                            {buttonSet[item.bookingStatus].map((btn) => {
+                                                                if (btn === "Book New") {
+                                                                    return (
+                                                                        <Button
+                                                                            data-date={new Date(day.date.toISOString())}
+                                                                            data-start-time={new Date(item.time.toISOString())}
+                                                                            onClick={(event) => {
+                                                                                setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
+                                                                                setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                                                                                setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                                                                                showModal();
+                                                                            }}
+                                                                        >
+                                                                            {btn}   
+                                                                        </Button>
+                                                                    );
+                                                                } else {
+                                                                    return <Button>{btn}</Button>;
+                                                                }
+                                                            })}
+                                                        </div>
                                                     </div>
-
-                                                    {item.bookingType === 'empty' ? (
-                                                        <a 
-                                                        data-date={new Date(day.date.toISOString())}
-                                                        data-start-time={new Date(item.time.toISOString())}
-                                                        onClick={(event) => {
-                                                            showModal();
-                                                            setBookingDate(dateWorker(event.target.getAttribute('data-date')))
-                                                            setbookingStart(dateWorker(event.target.getAttribute('data-start-time')))
-                                                            setbookingEnd(dateWorker(event.target.getAttribute('data-start-time')))
-                                                            console.log("HELLO??")
-                                                            console.log(dateWorker(event.target.getAttribute('data-date')))
-                                                            console.log(dateWorker(event.target.getAttribute('data-start-time')))
-
-                                                        }}>
-                                                            Book an Appointment
-                                                        </a>
-                                                    ) : (
-                                                        <a></a>
-                                                    )}
-                                                </div>
+                                                    }
+                                                    title={`${item.firstName} ${item.lastName}`}
+                                                    placement="right"
+                                                >
+                                                    <div className={"fill-container"} style={{display:"flex", width: "100%", padding: "0"}}> 
+                                                        <ConditionalIcon type={item.bookingType} />
+                                                        <div className='booking'>
+                                                            {<h4>{`${item.time.hour()+10}:${String(item.time.minute()).padStart(2, '0')} ${item.firstName} ${item.lastName}`}</h4>}
+                                                            {item.bookingType} 
+                                                        </div>
+                                                    </div>
+                                                </Popover>
                                             </List.Item>
                                             )}
+                                            
                                         />
                                     )
                                 })}
