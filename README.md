@@ -30,10 +30,13 @@ lorum ipsum
 Here are some of Optomify's key features:
 
 ### Dashboard
+THe dashboard is a place where you can find general information about your clinic. 
 
 ### Bookings
+Here is where you can see all the bookings for a given date range. You can hover over each booking to see the patient's details, booking notes, as well as some actions for that booking. The sider provides some useful tools, loike a date range picker to see past/future weeks, a quick view of the next patients details, and the ability to add new booking setups. You can book a patinet simply by clicking an empty slot, and selecting either new patient or existing patient. 
 
 ### Patients
+From here you can get a view fo all the patients in your system. Get some instant information, like their name and contact details, or use the search bar to find the patient you are looking for. By clicking on a patient form the list, you can see their file where you can view, add or update their details, prescriptions or notes. You can also view their past and upcoming bookings from this page too 
 <br>
 
 <a name="Technologies"></a>
