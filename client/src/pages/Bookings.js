@@ -44,6 +44,8 @@ const Bookings = () => {
     const bookSetupData = data?.getBookSetups || [];
     const bookingList = []
 
+    console.log("booksetup", bookSetupData)
+
     // populate bookingList
     bookSetupData.forEach((day) => {
         // console.log("DAY HERE")
@@ -116,7 +118,7 @@ const Bookings = () => {
         bookingList.push(todaysList);
 
     })
-    console.log(bookingList);
+    // console.log(bookingList);
 
     // listener for date range picker
     const onPanelChange = (value, mode) => {
@@ -227,14 +229,19 @@ const Bookings = () => {
         let d = c.join(" ")
         let e = d+" UTC" 
         let f = new Date(e)
+        let g = f.toISOString()
 
-        return f.toISOString()
+        return g
+        // let h = g.split(".")[0]
+        // let i = h+"+00.00"
+
+        // return i
     }
 
     return (
         <Content style={{padding: '20px'}}>
             <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                <BookingForm bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} />
+                <BookingForm bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} modalVis={setIsModalVisible}/>
             </Modal>
             <Layout>
                 <Sider width={220} className="site-layout-background">
