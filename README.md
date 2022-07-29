@@ -12,7 +12,7 @@ You can visit a deployed demo web application [here](https://projecthub-crm.hero
 
 ## Project Description
 
-lorum ipsum
+Optomify is a booking system web application built for use in optometry practices. Unlike other generic booking systems, Optomify is optimised to include features and workflows that tailor specifically towards the day to day book and patient management one would undertake, and in effect will improve efficiency and overall user satisfaction when running their clinic. 
 <br>
 
 ## Table of Contents
@@ -43,7 +43,9 @@ From here you can get a view fo all the patients in your system. Get some instan
 
 ## Technologies Used
 
-Lorum Ipsum
+Optomify is built using the MERNG framework, allowing for a faster, more responsive experience, with minimal reloads and quick data loading from the database. 
+
+Optomify uses TinyMCE for markdown text editing in notes and clinical files, which allows for a more organised and feature full experience. 
 
 ### Stack:
 MongoDB - https://www.mongodb.com/docs/
@@ -69,7 +71,7 @@ TinyMCE -https://www.tiny.cloud/
 
 ### Prerequisites
 
-To be able to run the back-end server you will need to have MongoDB isntall on your computer for this app to connect to.  
+To be able to run the back-end server you will need to have MongoDB installed on your computer for this app to connect to.  
 
 You can pull the source code for this project by cloning this repo using the following command: 
 
