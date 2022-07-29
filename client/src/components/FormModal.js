@@ -46,3 +46,6 @@ const App = () => {
 
 const rootElement = document.getElementById("root");
 ReactDOM.render(<App />, rootElement);
+
+// https://medium.com/@alef.duarte/using-ant-design-form-inside-a-modal-in-react-stateless-functional-component-634f33357c80
+// https://codesandbox.io/s/agitated-jackson-xjnxg?from-embed=&file=/src/index.js
