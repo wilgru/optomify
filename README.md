@@ -74,8 +74,7 @@ TinyMCE -https://www.tiny.cloud/
 To be able to run the back-end server you will need to have MongoDB installed on your computer for this app to connect to.  
 
 You can pull the source code for this project by cloning this repo using the following command: 
-
-bash 
+ 
 ```
 git clone
 ```
@@ -83,36 +82,31 @@ git clone
 ### Development
 
 To run ant react scripts or start any servers, first change directory to the Optomify folder and run 'npm install'. This will install all depenancies for the server and client in one command:
-
-bash 
+ 
 ```
 cd Optomify && npm install
 ```
 
 From there you can run and build the app. To buid the app run:
 
-bash
 ```
 npm run build
 ```
 
 To run the back-end server only:
 
-bash
 ```
 npm run start
 ```
 
 React development server:
 
-bash
 ```
 cd client && npm run start
 ```
 
 Run the app in developemnt (both backend server and React development server):
 
-bash
 ```
 npm run develop
 ```
