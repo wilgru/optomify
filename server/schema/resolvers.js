@@ -15,7 +15,7 @@ const resolvers = {
 
                     return patient.populate('bookings clinical_files notes created_by'); // return Patient
                 } catch(e) {
-                    throw new Error(`something went wrong! Details: ${e.message}`);
+                    throw new Error(`${e.message}`);
                 }
             } else {
                 throw new AuthenticationError('You must be signed in!');
@@ -32,7 +32,7 @@ const resolvers = {
 
                     return patients; // return Patient
                 } catch(e) {
-                    throw new Error(`something went wrong! Details: ${e.message}`);
+                    throw new Error(`${e.message}`);
                 }
             } else {
                 throw new AuthenticationError('You must be signed in!');
@@ -49,7 +49,7 @@ const resolvers = {
 
                     return bookings; // return Booking
                 } catch(e) {
-                    throw new Error(`something went wrong! Details: ${e.message}`);
+                    throw new Error(`${e.message}`);
                 }
             } else {
                 throw new AuthenticationError('You must be signed in!');
@@ -82,7 +82,7 @@ const resolvers = {
                     console.log(bookSetup)
                     return populateBookSetup; // return [BookSetup]
                 } catch(e) {
-                    throw new Error(`something went wrong! Details: ${e.message}`);
+                    throw new Error(`${e.message}`);
                 }
             } else {
                 throw new AuthenticationError('You must be signed in!');
@@ -104,7 +104,7 @@ const resolvers = {
 
                 return { token, user }; // return Auth
             } catch(e) {
-                throw new Error(`something went wrong! Details: ${e.message}`);
+                throw new Error(`${e.message}`);
             }
         },
         login: async (parent, { email, password }) => {
@@ -126,7 +126,7 @@ const resolvers = {
           
                 return { token, user }; // return Auth
             } catch(e) {
-                throw new Error(`something went wrong! Details: ${e.message}`);
+                throw new Error(`${e.message}`);
             }
             
         },
@@ -148,12 +148,12 @@ const resolvers = {
                     });
     
                     if (!patient) {
-                        throw new Error(`something went wrong! Details: ${e.message}`)
+                        throw new Error(`${e.message}`)
                     }
 
                     return patient.populate('created_by'); // return User
                 } catch(e) {
-                    throw new Error(`something went wrong! Details: ${e.message}`);
+                    throw new Error(`${e.message}`);
                 }
             } else {
                 throw new AuthenticationError('You must be signed in!');
@@ -176,7 +176,7 @@ const resolvers = {
                     });
     
                     if (!noteData) {
-                        throw new Error(`something went wrong! Details: ${e.message}`)
+                        throw new Error(`${e.message}`)
                     }
 
                     patient.notes.push(noteData);
@@ -184,7 +184,7 @@ const resolvers = {
 
                     return patient.populate('notes'); // return Patient
                 } catch(e) {
-                    throw new Error(`something went wrong! Details: ${e.message}`);
+                    throw new Error(`${e.message}`);
                 }
             } else {
                 throw new AuthenticationError('You must be signed in!');
@@ -242,7 +242,53 @@ const resolvers = {
 
                     return patient.populate('clinical_files');
                 } catch(e) {
-                    throw new Error(`something went wrong! Details: ${e.message}`);
+                    throw new Error(`${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
+        },
+        updateClinicalFile: async (parent, { on_patient_id, file_to_update_id, file_type, title, text_field, medicare_item_code, recall, ppr_sphere, ppr_cylinder, ppr_axis, ppl_sphere, ppl_cylinder, ppl_axis, pp_inter_add, pp_near_add, gpr_sphere, gpr_cylinder, gpr_axis, gpl_sphere, gpl_cylinder, gpl_axis, gp_inter_add, gp_near_add }, context) => {
+            if (context.user) {
+                try {
+                    const created_by = context.user._id;
+                    let clinicalFileData = await ClinicalFile.findById(file_to_update_id)
+
+                    clinicalFileData.file_type = file_type
+                    clinicalFileData.title = title
+                    clinicalFileData.text_field = text_field
+                    clinicalFileData.medicare_item_code = medicare_item_code
+                    clinicalFileData.recall = recall
+                    clinicalFileData.created_by = created_by
+                    clinicalFileData.prev_prescription.right_od.sphere = ppr_sphere
+                    clinicalFileData.prev_prescription.right_od.cylinder = ppr_cylinder
+                    clinicalFileData.prev_prescription.right_od.axis = ppr_axis
+                    clinicalFileData.prev_prescription.left_os.sphere = ppl_sphere
+                    clinicalFileData.prev_prescription.left_os.cylinder = ppl_cylinder
+                    clinicalFileData.prev_prescription.left_os.axis = ppl_axis
+                    clinicalFileData.prev_prescription.inter_add = pp_inter_add
+                    clinicalFileData.prev_prescription.near_add = pp_near_add
+                    clinicalFileData.given_prescription.right_od.sphere = gpr_sphere
+                    clinicalFileData.given_prescription.right_od.cylinder = gpr_cylinder
+                    clinicalFileData.given_prescription.right_od.axis = gpr_axis
+                    clinicalFileData.given_prescription.left_os.sphere = gpl_sphere
+                    clinicalFileData.given_prescription.left_os.cylinder = gpl_cylinder
+                    clinicalFileData.given_prescription.left_os.axis = gpl_axis
+                    clinicalFileData.given_prescription.inter_add = gp_inter_add
+                    clinicalFileData.given_prescription.near_add = gp_near_add
+
+                    await clinicalFileData.save()
+
+                    // get the patient after the clinical file was updated
+                    const patient = await Patient.findById(on_patient_id);
+
+                    if (!patient) {
+                        throw new Error("could not find patient");
+                    }
+
+                    return patient.populate('bookings clinical_files notes created_by');
+                } catch(e) {
+                    throw new Error(`${e.message}`);
                 }
             } else {
                 throw new AuthenticationError('You must be signed in!');
@@ -268,7 +314,7 @@ const resolvers = {
                     return newBookSetup;
 
                 } catch(e) {
-                    throw new Error(`something went wrong! Details: ${e.message}`);
+                    throw new Error(`${e.message}`);
                 }
             } else {
                 throw new AuthenticationError('You must be signed in!');
@@ -320,7 +366,7 @@ const resolvers = {
                     return patient.populate('bookings');
 
                 } catch(e) {
-                    throw new Error(`something went wrong! Details: ${e.message}`);
+                    throw new Error(`${e.message}`);
                 }
             } else {
                 throw new AuthenticationError('You must be signed in!');
@@ -350,7 +396,7 @@ const resolvers = {
                     });
     
                     if (!patient) {
-                        throw new Error(`something went wrong! Details: ${e.message}`)
+                        throw new Error(`${e.message}`)
                     }
 
                     const convBookingDate = new Date(booking_date);
@@ -395,7 +441,7 @@ const resolvers = {
                     });
 
                 } catch(e) {
-                    throw new Error(`something went wrong! Details: ${e.message}`);
+                    throw new Error(`${e.message}`);
                 }
             } else {
                 throw new AuthenticationError('You must be signed in!');
