@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation } from '@apollo/client';
 import { useParams, Link } from 'react-router-dom';
+
+// utils
 import { loggedin } from '../utils/auth';
+
+// GraphQL
 import { GET_PATIENT } from '../graphql/queries';
 
 // componenets
