@@ -148,6 +148,22 @@ const App = () => {
       <Form.Item
         label="Inter add"
         name="InterAdd"
+        rules={[
+          {
+            validator: async (_, value) => {
+              if (!value) return;
+
+              if (!isNaN(value)) {
+                  return Promise.resolve(); //resolve to say true or it passed
+              } else {
+                return Promise.reject(
+                  new Error("'title' is must be unique"),
+                );
+              }
+          },
+            message: "Must be a number!"
+          }
+        ]}
       >
         <Input
           disabled={!conditionalReq}
@@ -159,6 +175,22 @@ const App = () => {
       <Form.Item
         label="Near add"
         name="NearAdd"
+        rules={[
+          {
+            validator: async (_, value) => {
+              if (!value) return;
+
+              if (!isNaN(value)) {
+                  return Promise.resolve(); //resolve to say true or it passed
+              } else {
+                return Promise.reject(
+                  new Error("'title' is must be unique"),
+                );
+              }
+            },
+            message: "Must be a number!"
+          }
+        ]}
       >
         <Input
           disabled={!conditionalReq}
