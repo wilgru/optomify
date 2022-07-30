@@ -12,6 +12,7 @@ const App = () => {
   const rxNotationRegex = new RegExp(
     "[-,+]\\d+\\.(00|25|75)\\/-\\d+.(00|25|75)[x,X][1-9][0-8]?[0-9]?$"
   );
+  //[-,+]\d+\.(00|25|75)\/-\d+.(00|25|75)[x,X][1-9][0-8]?[0-9]?$
 
   const onFinish = (values) => {
     console.log("Success:", values);
