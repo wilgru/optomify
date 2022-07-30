@@ -46,6 +46,31 @@ const Bookings = () => {
     const bookingList = []
 
     // buttons for popover
+    const newButtonSet = {
+        Empty: [
+            {text: "Book New", clickFn: function(event){}}, 
+            {text: "Book Existing", clickFn: function(event){}}, 
+            {text: "Block", clickFn: function(event){}}
+        ],
+        Booked: [
+            {text: "Confirm", clickFn: function(event){}}, 
+            {text: "Arrive", clickFn: function(event){}}, 
+            {text: "Cancel", clickFn: function(event){}}
+        ],
+        Confirmed: [
+            {text: "Arrive", clickFn: function(event){}}, 
+            {text: "Cancel", clickFn: function(event){}}
+        ],
+        Arrived: [
+            {text: "Cancel", clickFn: function(event){}}
+        ],
+        Blocked: [
+            {text: "Cancel", clickFn: function(event){}}
+        ],
+        OptomBreak: [],
+    };
+
+    // buttons for popover
     const buttonSet = {
         Empty: ["Book New", "Book Existing", "Block"],
         Booked: ["Confirm", "Arrive", "Cancel"],
@@ -104,6 +129,7 @@ const Bookings = () => {
                     // console.log("BOOKING HERE")
                     todaysList.list.push({
                         time: bookingTimeUTC,
+                        bookingId: booking._id,
                         bookingType: booking.booking_type,
                         bookingStatus: booking.booking_status,
                         firstName: booking.patient.first_name,
@@ -308,9 +334,7 @@ const Bookings = () => {
                                             <List.Item className={item.bookingStatus}>
                                                 <Popover
                                                     content={
-                                                    <div 
-                                                        className={"booking-card"}           
-                                                    >
+                                                    <div className={"booking-card"}>
                                                         {item.bookingNote ? (
                                                             <Card className={"booking-note"}>
                                                                 {item.bookingNote}
@@ -342,7 +366,18 @@ const Bookings = () => {
                                                                         </Button>
                                                                     );
                                                                 } else {
-                                                                    return <Button>{btn}</Button>;
+                                                                    return <Button >{btn}</Button>;
+                                                                    // return (
+                                                                    //     <Button
+                                                                    //         data-date={new Date(day.date.toISOString())}
+                                                                    //         data-start-time={new Date(item.time.toISOString())}
+                                                                    //         data-booking-id={item.bookingId}
+                                                                    //         data-booking-action={btn.text}
+                                                                    //         onClick={btn.clickFn}
+                                                                    //     >
+                                                                    //         {btn.text}   
+                                                                    //     </Button>
+                                                                    // );
                                                                 }
                                                             })}
                                                         </div>
