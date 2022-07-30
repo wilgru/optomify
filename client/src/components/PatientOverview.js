@@ -63,7 +63,7 @@ const PatientOverview = (props) => {
     <Form
         name="basic"
         labelCol={{
-            span: 8,
+            span: 5,
         }}
         wrapperCol={{
             span: 16,
@@ -182,12 +182,12 @@ const PatientOverview = (props) => {
 
         <Form.Item
             wrapperCol={{
-            offset: 8,
+            offset: 5,
             span: 16,
             }}
         >
             <Button type="primary" htmlType="submit">
-            Submit
+                Update patient details
             </Button>
         </Form.Item>
     </Form>
