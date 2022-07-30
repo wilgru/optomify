@@ -59,7 +59,7 @@ const Patients = (props) => {
 
     return (
         <Content style={{padding: '20px'}}>
-            <Modal title="View file" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+            <Modal title="View file" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} width={1000}>
                 <ViewClinicalFile patientId={patientId} selectedClinicalFileData={selectedClinicalFile} modalVis={setIsModalVisible}/>
             </Modal>
             <Modal title="Add new clinical file" visible={isAddModalVisible} onOk={handleAddOk} onCancel={handleAddCancel} width={1000}>
