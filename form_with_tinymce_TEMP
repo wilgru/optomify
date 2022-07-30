@@ -275,3 +275,288 @@ const App = () => {
 };
 
 export default App;
+
+
+
+NEW \/
+
+
+
+import React, { useState } from "react";
+import "antd/dist/antd.css";
+import "./index.css";
+import { Button, Form, Input, Select, DatePicker } from "antd";
+import { Editor } from "@tinymce/tinymce-react";
+
+const { Option } = Select;
+
+const App = () => {
+  const [conditionalReq, setConditionalReq] = useState(true);
+
+  const rxNotationRegex = new RegExp(
+    "[-,+]\\d+\\.(00|25|75)\\/-\\d+.(00|25|75)[x,X][1-9][0-8]?[0-9]?$"
+  );
+
+  const onFinish = (values) => {
+    console.log("Success:", values);
+    console.log(values.tinymcevalue?.level.content || null);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
+  return (
+    <Form
+      name="basic"
+      labelCol={{
+        span: 8
+      }}
+      wrapperCol={{
+        span: 16
+      }}
+      initialValues={{
+        select: "Prescription"
+      }}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+    >
+
+      <Form.Item
+        name="select"
+        label="Type"
+        hasFeedback
+        rules={[
+          {
+            required: true,
+            message: "Please select your country!"
+          }
+        ]}
+      >
+        <Select
+          placeholder="File type"
+          defaultValue={"Prescription"}
+          onChange={(value) => {
+            value === "Prescription"
+              ? setConditionalReq(true)
+              : setConditionalReq(false);
+          }}
+        >
+          <Option value="Prescription">Prescription</Option>
+          <Option value="HealthCheck">Health check</Option>
+          <Option value="Report">Report</Option>
+        </Select>
+      </Form.Item>
+
+      <Form.Item
+        label="Notes"
+        name="tinymcevalue"
+        valuePropName="tinymcevalue"
+        rules={[
+          {
+            required: true,
+            message: "Please input some text!"
+          }
+        ]}
+      >
+        <Editor
+          apiKey={"qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc"}
+          init={{
+            menubar: false,
+            plugins: "link image code autoresize lists",
+            toolbar:
+              "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help"
+          }}
+          initialValue="<p>This is the initial content of the editor.</p>"
+        />
+      </Form.Item>
+
+      <Form.Item
+        label="Recall"
+        name="Recall"
+        rules={[
+          {
+            required: conditionalReq,
+            validator: async (_, value) => {
+              if (!value) return;
+
+              if (value > Date.now()) {
+                return Promise.resolve(); //resolve to say true or it passed
+              } else {
+                return Promise.reject(new Error("'title' is must be unique"));
+              }
+            },
+            message: "Please input valid date in the future!"
+          }
+        ]}
+      >
+        <DatePicker />
+      </Form.Item>
+
+      <Form.Item label="Use notation">
+        <span className="ant-form-text">(-/+)0.00/-0.00x000</span>
+      </Form.Item>
+
+      <Form.Item
+        label="Right"
+        name="Right"
+        rules={[
+          {
+            required: conditionalReq,
+            validator: async (_, value) => {
+              if (!value) return;
+
+              if (rxNotationRegex.test(value)) {
+                return Promise.resolve(); //resolve to say true or it passed
+              } else {
+                return Promise.reject(new Error("'title' is must be unique"));
+              }
+            },
+            message: "Please enter prescription using the correct notation!"
+          }
+        ]}
+      >
+        <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
+      </Form.Item>
+
+      {/* <Input.Group>
+        <Form.Item
+          label="Right Inter Add"
+          name="Right"
+          rules={[
+            {
+              required: conditionalReq,
+              message: "Please input your password!"
+            }
+          ]}
+        >
+          <Input disabled={!conditionalReq} style={{width: "100px"}} />
+        </Form.Item>
+
+        <Form.Item
+          label="Right Inter Add"
+          name="Right"
+          rules={[
+            {
+              required: conditionalReq,
+              message: "Please input your password!"
+            }
+          ]}
+        >
+          <Input disabled={!conditionalReq} style={{width: "100px"}} />
+        </Form.Item>
+      </Input.Group> */}
+
+      <Form.Item
+        label="Left"
+        name="Left"
+        rules={[
+          {
+            required: conditionalReq,
+            validator: async (_, value) => {
+              if (!value) return;
+
+              if (rxNotationRegex.test(value)) {
+                return Promise.resolve(); //resolve to say true or it passed
+              } else {
+                return Promise.reject(new Error("'title' is must be unique"));
+              }
+            },
+            message: "Please enter prescription using the correct notation!"
+          }
+        ]}
+      >
+        <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
+      </Form.Item>
+
+      <Form.Item
+        label="Inter add"
+        name="InterAdd"
+        rules={[
+          {
+            validator: async (_, value) => {
+              if (!value) return;
+
+              if (!isNaN(value) && value % 0.25 === 0 && value > 0) {
+                return Promise.resolve(); //resolve to say true or it passed
+              } else {
+                return Promise.reject(new Error("'title' is must be unique"));
+              }
+            },
+            message:
+              "Must be a positive number measured in dioptres (steps of 0.25)!"
+          }
+        ]}
+      >
+        <Input
+          disabled={!conditionalReq}
+          style={{ width: "100px" }}
+          placeholder="Inter Add"
+        />
+      </Form.Item>
+
+      <Form.Item
+        label="Near add"
+        name="NearAdd"
+        rules={[
+          {
+            validator: async (_, value) => {
+              if (!value) return;
+
+              if (!isNaN(value) && value % 0.25 === 0 && value > 0) {
+                return Promise.resolve(); //resolve to say true or it passed
+              } else {
+                return Promise.reject(new Error("'title' is must be unique"));
+              }
+            },
+            message:
+              "Must be a positive number measured in dioptres (steps of 0.25)!"
+          }
+        ]}
+      >
+        <Input
+          disabled={!conditionalReq}
+          style={{ width: "100px" }}
+          placeholder="Inter Add"
+        />
+      </Form.Item>
+
+      <Form.Item
+        label="Expiry"
+        name="Expiry"
+        rules={[
+          {
+            required: conditionalReq,
+            validator: async (_, value) => {
+              if (!value) return;
+
+              if (value > Date.now()) {
+                return Promise.resolve(); //resolve to say true or it passed
+              } else {
+                return Promise.reject(new Error("'title' is must be unique"));
+              }
+            },
+            message: "Please input valid date in the future!"
+          }
+        ]}
+      >
+        <DatePicker disabled={!conditionalReq} />
+      </Form.Item>
+
+      <Form.Item
+        wrapperCol={{
+          offset: 8,
+          span: 16
+        }}
+      >
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default App;
+
