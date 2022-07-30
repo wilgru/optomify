@@ -29,7 +29,7 @@ const ViewClinicalFile = (props) => {
     const [conditionalReq, setConditionalReq] = useState(true);
 
     const rxNotationRegex = new RegExp(
-        "[-,+]\\d+\\.(00|25|75)\\/-(\\d+.(00|25|75)x[1-9][0-8]?[0-9]?|0\\.00x000)$"
+        "[-,+]\\d+\\.(00|25|50|75)\\/-(\\d+.(00|25|50|75)x[1-9][0-8]?[0-9]?|0\\.00x000)$"
     );
 
     const onFinish = (values) => {
