@@ -20,6 +20,40 @@ query GetPatient($id: ID!) {
     }
     clinical_files {
       _id
+      file_type
+      title
+      date_created
+      text_field
+      medicare_item_code
+      recall
+      prev_prescription {
+        right_od {
+          sphere
+          cylinder
+          axis
+        }
+        left_os {
+          sphere
+          cylinder
+          axis
+        }
+        inter_add
+        near_add
+      }
+      given_prescription {
+        right_od {
+          sphere
+          cylinder
+          axis
+        }
+        left_os {
+          sphere
+          cylinder
+          axis
+        }
+        inter_add
+        near_add
+      }
     }
     notes {
       _id
