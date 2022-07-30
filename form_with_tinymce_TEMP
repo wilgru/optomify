@@ -104,28 +104,6 @@ const App = () => {
         <Input disabled={!conditionalReq} placeholder="+00.00/-00.00x000" />
       </Form.Item>
 
-      <Form.Item
-        label="Right add"
-        name="RightAdd"
-        rules={[
-          {
-            required: conditionalReq,
-            message: "Please input your password!"
-          }
-        ]}
-      >
-        <Input
-          disabled={!conditionalReq}
-          style={{ width: "100px" }}
-          placeholder="Inter Add"
-        />
-        <Input
-          disabled={!conditionalReq}
-          style={{ width: "100px", marginLeft: "10px" }}
-          placeholder="Add"
-        />
-      </Form.Item>
-
       {/* <Input.Group>
         <Form.Item
           label="Right Inter Add"
@@ -168,24 +146,24 @@ const App = () => {
       </Form.Item>
 
       <Form.Item
-        label="Left add"
-        name="LeftAdd"
-        rules={[
-          {
-            required: conditionalReq,
-            message: "Please input your password!"
-          }
-        ]}
+        label="Inter add"
+        name="InterAdd"
       >
         <Input
           disabled={!conditionalReq}
           style={{ width: "100px" }}
           placeholder="Inter Add"
         />
+      </Form.Item>
+
+      <Form.Item
+        label="Near add"
+        name="NearAdd"
+      >
         <Input
           disabled={!conditionalReq}
-          style={{ width: "100px", marginLeft: "10px" }}
-          placeholder="Add"
+          style={{ width: "100px" }}
+          placeholder="Inter Add"
         />
       </Form.Item>
 
