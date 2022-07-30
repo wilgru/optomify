@@ -5,9 +5,13 @@ import React, { useEffect, useState } from 'react';
 import { List, Layout, DatePicker, Menu, Button, Card, Modal, Popover } from 'antd';
 import BookingForm from '../components/BookingForm';
 import {
-    SyncOutlined,
     EyeOutlined,
-    CoffeeOutlined
+    CoffeeOutlined,
+    CarOutlined,
+    SyncOutlined,
+    ExclamationCircleOutlined,
+    SmallDashOutlined,
+    ClockCircleOutlined
   } from '@ant-design/icons';
 
 import moment from 'moment';
@@ -46,9 +50,14 @@ const Bookings = () => {
     const bookingList = []
 
     // buttons for popover
-    const newButtonSet = {
+    const buttonSet = {
         Empty: [
-            {text: "Book New", clickFn: function(event){}}, 
+            {text: "Book New", clickFn: function(event){
+                setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
+                setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                showModal();
+            }}, 
             {text: "Book Existing", clickFn: function(event){}}, 
             {text: "Block", clickFn: function(event){}}
         ],
@@ -70,15 +79,15 @@ const Bookings = () => {
         OptomBreak: [],
     };
 
-    // buttons for popover
-    const buttonSet = {
-        Empty: ["Book New", "Book Existing", "Block"],
-        Booked: ["Confirm", "Arrive", "Cancel"],
-        Confirmed: ["Arrive", "Cancel"],
-        Arrived: ["Cancel"],
-        Blocked: ["Cancel"],
-        OptomBreak: [],
-    };
+    // // buttons for popover
+    // const oldButtonSet = {
+    //     Empty: ["Book New", "Book Existing", "Block"],
+    //     Booked: ["Confirm", "Arrive", "Cancel"],
+    //     Confirmed: ["Arrive", "Cancel"],
+    //     Arrived: ["Cancel"],
+    //     Blocked: ["Cancel"],
+    //     OptomBreak: [],
+    // };
 
     // populate bookingList
     bookSetupData.forEach((day) => {
@@ -105,19 +114,23 @@ const Bookings = () => {
         
         while (moment(cursorUTC).isBefore(closingUTC)) {
 
-            let busy = false
+            let titleTime = `${cursorUTC.hour()+10}:${String(cursorUTC.minute()).padStart(2, '0')}`
+            let slotTaken = false
 
             // first check for optom break
             if (moment(cursorUTC).isSame(optomBreakUTC)) {
                 // console.log("OPTOM BREAK HERE")
                 todaysList.list.push({
                     time: optomBreakUTC,
+                    titleTime: titleTime,
+                    titleText: "Optometrist break",
+                    subTitle: "",
                     bookingType: "optom break",
-                    bookingStatus: "OptomBreak",
+                    bookingStatus: "Blocked",
                     firstName: "",
                     lastName: ""
                 })
-                busy = true
+                slotTaken = true
             }
 
             // now check bookings
@@ -129,20 +142,26 @@ const Bookings = () => {
                     // console.log("BOOKING HERE")
                     todaysList.list.push({
                         time: bookingTimeUTC,
+                        titleTime: titleTime,
+                        titleText:`${booking.patient.first_name} ${booking.patient.last_name}` ,
+                        subTitle: booking.booking_type,
                         bookingId: booking._id,
                         bookingType: booking.booking_type,
                         bookingStatus: booking.booking_status,
                         firstName: booking.patient.first_name,
                         lastName: booking.patient.last_name,
                     })
-                    busy = true
+                    slotTaken = true
                 }
             })
 
-            if (!busy) {
+            if (!slotTaken) {
                 // console.log("EMPTY")
                 todaysList.list.push({
                     time: moment(cursorUTC),
+                    titleTime: titleTime,
+                    titleText: "Available slot",
+                    subTitle: "",
                     bookingType: "empty",
                     bookingStatus: "Empty",
                     firstName: "",
@@ -235,10 +254,20 @@ const Bookings = () => {
 
     // return conditional icon
     function ConditionalIcon(props) {
-        if(props.type === 'General eye test') {
-            return <EyeOutlined style={{fontSize: '20px'}}/>
+        if(props.type === 'General eye test' || props.type === 'general eye test') {
+            return <EyeOutlined style={{fontSize: '40px'}}/>
+        } else if (props.type === 'health concern') {
+            return <ExclamationCircleOutlined style={{fontSize: '40px'}}/>
+        } else if (props.type === 'rms form') {
+            return <CarOutlined style={{fontSize: '40px'}}/>
+        } else if (props.type === 're-check') {
+            return <SyncOutlined style={{fontSize: '40px'}}/>
+        } else if (props.type === 'other') {
+            return <SmallDashOutlined style={{fontSize: '40px'}}/>
         } else if (props.type === 'optom break') {
-            return <CoffeeOutlined style={{fontSize: '20px'}}/>
+            return <CoffeeOutlined style={{fontSize: '40px'}}/>
+        } else {
+            return <ClockCircleOutlined style={{fontSize: '40px'}}/>
         }
     }
 
@@ -350,47 +379,48 @@ const Bookings = () => {
                                                             }}
                                                         >
                                                             {buttonSet[item.bookingStatus].map((btn) => {
-                                                                if (btn === "Book New") {
-                                                                    return (
-                                                                        <Button
-                                                                            data-date={new Date(day.date.toISOString())}
-                                                                            data-start-time={new Date(item.time.toISOString())}
-                                                                            onClick={(event) => {
-                                                                                setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
-                                                                                setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
-                                                                                setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
-                                                                                showModal();
-                                                                            }}
-                                                                        >
-                                                                            {btn}   
-                                                                        </Button>
-                                                                    );
-                                                                } else {
-                                                                    return <Button >{btn}</Button>;
-                                                                    // return (
-                                                                    //     <Button
-                                                                    //         data-date={new Date(day.date.toISOString())}
-                                                                    //         data-start-time={new Date(item.time.toISOString())}
-                                                                    //         data-booking-id={item.bookingId}
-                                                                    //         data-booking-action={btn.text}
-                                                                    //         onClick={btn.clickFn}
-                                                                    //     >
-                                                                    //         {btn.text}   
-                                                                    //     </Button>
-                                                                    // );
-                                                                }
+                                                                // if (btn === "Book New") {
+                                                                //     return (
+                                                                //         <Button
+                                                                //             data-date={new Date(day.date.toISOString())}
+                                                                //             data-start-time={new Date(item.time.toISOString())}
+                                                                //             onClick={(event) => {
+                                                                //                 setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
+                                                                //                 setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                                                                //                 setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                                                                //                 showModal();
+                                                                //             }}
+                                                                //         >
+                                                                //             {btn}   
+                                                                //         </Button>
+                                                                //     );
+                                                                // } else {
+                                                                //     return <Button >{btn}</Button>;
+                                                                // }
+
+                                                                return (
+                                                                    <Button
+                                                                        data-date={new Date(day.date.toISOString())}
+                                                                        data-start-time={new Date(item.time.toISOString())}
+                                                                        data-booking-id={item.bookingId}
+                                                                        data-booking-action={btn.text}
+                                                                        onClick={btn.clickFn}
+                                                                    >
+                                                                        {btn.text}   
+                                                                    </Button>
+                                                                );
                                                             })}
                                                         </div>
                                                     </div>
                                                     }
-                                                    title={`${item.firstName} ${item.lastName}`}
+                                                    title={`${item.titleTime} - ${item.titleText}`}
                                                     placement="right"
                                                 >
                                                     <div className={"fill-container"} style={{display:"flex", width: "100%", padding: "0"}}> 
                                                         <ConditionalIcon type={item.bookingType} />
                                                         <div className='booking'>
-                                                            {<h4>{`${item.time.hour()+10}:${String(item.time.minute()).padStart(2, '0')} ${item.firstName} ${item.lastName}`}</h4>}
-                                                            {item.bookingType} 
+                                                            {<h4>{`${item.titleTime} - ${item.titleText}`}</h4>}
+                                                            {item.subTitle} 
                                                         </div>
                                                     </div>
                                                 </Popover>
