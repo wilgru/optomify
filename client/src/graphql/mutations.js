@@ -76,3 +76,32 @@ export const LOGIN = gql`
   }
 }
 `
+
+export const CREATE_NEW_CLINICAL_FILE = gql`
+mutation CreateNewClinicalFile($on_patient_id:ID!, $fileType: String!, $title: String!, $textField: String!, $medicareItemCode: String, $pprCylinder: Float, $pprSphere: Float, $pprAxis: Float, $pplSphere: Float, $pplCylinder: Float, $gpNearAdd: Float, $gpInterAdd: Float, $gplAxis: Float, $gplCylinder: Float, $gplSphere: Float, $gprAxis: Float, $gprCylinder: Float, $gprSphere: Float, $ppNearAdd: Float, $ppInterAdd: Float, $pplAxis: Float) {
+  createNewClinicalFile(on_patient_id:$on_patient_id file_type: $fileType, title: $title, text_field: $textField, medicare_item_code: $medicareItemCode, ppr_cylinder: $pprCylinder, ppr_sphere: $pprSphere, ppr_axis: $pprAxis, ppl_sphere: $pplSphere, ppl_cylinder: $pplCylinder, gp_near_add: $gpNearAdd, gp_inter_add: $gpInterAdd, gpl_axis: $gplAxis, gpl_cylinder: $gplCylinder, gpl_sphere: $gplSphere, gpr_axis: $gprAxis, gpr_cylinder: $gprCylinder, gpr_sphere: $gprSphere, pp_near_add: $ppNearAdd, pp_inter_add: $ppInterAdd, ppl_axis: $pplAxis) {
+    _id
+    first_name
+    clinical_files {
+      _id
+      title
+      prev_prescription {
+        right_od {
+          sphere
+        }
+        left_os {
+          sphere
+        }
+      }
+      given_prescription {
+        right_od {
+          sphere
+        }
+        left_os {
+          sphere
+        }
+      }
+    }
+  }
+}
+`
