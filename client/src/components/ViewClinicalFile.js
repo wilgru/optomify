@@ -13,7 +13,7 @@ import { dateWorker } from '../utils/date'
 import { getSph, getCyl, getAxis, createRxNotation } from '../utils/rxNotation'
 
 // grpahQL
-import { CREATE_NEW_CLINICAL_FILE } from '../graphql/mutations';
+import { UPDATE_CLINICAL_FILE } from '../graphql/mutations';
 import { GET_PATIENT } from '../graphql/queries';
 import { useMutation } from '@apollo/client';
 
@@ -23,7 +23,7 @@ const { Option } = Select;
 const ViewClinicalFile = (props) => {
     const [form] = Form.useForm();
 
-    const [createNewClinicalFile, { data, loading, error }] = useMutation(CREATE_NEW_CLINICAL_FILE);
+    const [updateClinicalFile, { data, loading, error }] = useMutation(UPDATE_CLINICAL_FILE);
 
     // conditionally required if prescription is selected
     const [conditionalReq, setConditionalReq] = useState(true);
@@ -34,16 +34,17 @@ const ViewClinicalFile = (props) => {
 
     const onFinish = (values) => {
         console.log('Success:', values);
-        console.log(props.patientId)
+        console.log(props)
         console.log(values.tinyMCEValue2?.level.content)
 
         if (values.fileType === "prescription") {
-            createNewClinicalFile({
+            updateClinicalFile({
                 variables: {
-                    on_patient_id: props.patientId,
+                    onPatientId: props.patientId,
+                    fileToUpdateId: props.selectedClinicalFileData._id,
                     fileType: values.fileType,
                     title: values.title,
-                    textField: values.tinyMCEValue2?.level.content,
+                    textField: values.tinyMCEValue2?.level.content || props.selectedClinicalFileData.text_field, // becuase tinymce doesnt exactly work like the other inputs, it wont give its initial val as the value on submit. itll give nothing if the user doesnt change anything in the input
                     medicareItemCode: values.medicareItemCode,
 
                     pprSphere: getSph(values.previousRight),
