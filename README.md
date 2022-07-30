@@ -1,8 +1,9 @@
 # Optomify
 
 ![TinyMCE](https://img.shields.io/badge/API-TinyMCE-Blue)
-![googleMaps](https://img.shields.io/badge/API-DomainAPI-Blue)
+![Ant Design](https://img.shields.io/badge/CSS-AntDesign-green)
 ![lodash](https://img.shields.io/badge/node-lodash-orange)
+![GraphQL](https://img.shields.io/badge/node-GraphQL-orange)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <!-- ## Deployed web address -->
