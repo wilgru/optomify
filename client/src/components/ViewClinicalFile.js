@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // antd
-import { Button, Checkbox, Form, Input, Select, DatePicker } from 'antd';
+import { Button, Checkbox, Form, Input, Select, DatePicker, Card } from 'antd';
 import moment from 'moment';
 
 // tinyMCE
@@ -83,7 +83,7 @@ const ViewClinicalFile = (props) => {
         <Form
             name="basic"
             labelCol={{
-                span: 8
+                span: 5
             }}
             wrapperCol={{
                 span: 16
@@ -190,7 +190,6 @@ const ViewClinicalFile = (props) => {
             name="recall"
             rules={[
             {
-                required: conditionalReq,
                 validator: async (_, value) => {
                 if (!value) return;
 
@@ -211,191 +210,195 @@ const ViewClinicalFile = (props) => {
             <span className="ant-form-text">(-/+)0.00/-0.00x000</span>
         </Form.Item>
 
-        <Form.Item
-            label="Previous R"
-            name="previousRight"
-            rules={[
-            {
-                validator: async (_, value) => {
-                if (!value) return;
+        <Card>
+            <Form.Item
+                label="Previous R"
+                name="previousRight"
+                rules={[
+                {
+                    validator: async (_, value) => {
+                    if (!value) return;
 
-                if (rxNotationRegex.test(value)) {
-                    return Promise.resolve(); //resolve to say true or it passed
-                } else {
-                    return Promise.reject(new Error("Please enter prescription using the correct notation."));
+                    if (rxNotationRegex.test(value)) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("Please enter prescription using the correct notation."));
+                    }
+                    },
+                    message: "Please enter prescription using the correct notation."
                 }
-                },
-                message: "Please enter prescription using the correct notation."
-            }
-            ]}
-        >
-            <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
-        </Form.Item>
+                ]}
+            >
+                <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
+            </Form.Item>
 
-        <Form.Item
-            label="Previous L"
-            name="previousLeft"
-            rules={[
-            {
-                validator: async (_, value) => {
-                if (!value) return;
+            <Form.Item
+                label="Previous L"
+                name="previousLeft"
+                rules={[
+                {
+                    validator: async (_, value) => {
+                    if (!value) return;
 
-                if (rxNotationRegex.test(value)) {
-                    return Promise.resolve(); //resolve to say true or it passed
-                } else {
-                    return Promise.reject(new Error("Please enter prescription using the correct notation."));
+                    if (rxNotationRegex.test(value)) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("Please enter prescription using the correct notation."));
+                    }
+                    },
+                    message: "Please enter prescription using the correct notation."
                 }
-                },
-                message: "Please enter prescription using the correct notation."
-            }
-            ]}
-        >
-            <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
-        </Form.Item>
+                ]}
+            >
+                <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
+            </Form.Item>
 
-        <Form.Item
-            label="Previous Inter add"
-            name="previousInterAdd"
-            rules={[
-            {
-                validator: async (_, value) => {
-                if (!value) return;
+            <Form.Item
+                label="Previous Inter add"
+                name="previousInterAdd"
+                rules={[
+                {
+                    validator: async (_, value) => {
+                    if (!value) return;
 
-                if (!isNaN(value) && value % 0.25 === 0 && value > 0) {
-                    return Promise.resolve(); //resolve to say true or it passed
-                } else {
-                    return Promise.reject(new Error("Must be a positive number measured in dioptres (steps of 0.25)."));
+                    if (!isNaN(value) && value % 0.25 === 0 && value > 0) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("Must be a positive number measured in dioptres (steps of 0.25)."));
+                    }
+                    },
+                    message: "Must be a positive number measured in dioptres (steps of 0.25)."
                 }
-                },
-                message: "Must be a positive number measured in dioptres (steps of 0.25)."
-            }
-            ]}
-        >
-            <Input
+                ]}
+            >
+                <Input
+                    disabled={!conditionalReq}
+                    style={{ width: "100px" }}
+                    placeholder="Inter Add"
+                />
+            </Form.Item>
+
+            <Form.Item
+                label="Previous Near add"
+                name="previousNearAdd"
+                rules={[
+                {
+                    validator: async (_, value) => {
+                    if (!value) return;
+
+                    if (!isNaN(value) && value % 0.25 === 0 && value > 0) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("Must be a positive number measured in dioptres (steps of 0.25)."));
+                    }
+                    },
+                    message: "Must be a positive number measured in dioptres (steps of 0.25)."
+                }
+                ]}
+            >
+                <Input
+                    disabled={!conditionalReq}
+                    style={{ width: "100px" }}
+                    placeholder="Inter Add"
+                />
+            </Form.Item>
+        </Card>
+
+        <Card>
+            <Form.Item
+                label="Given R"
+                name="givenRight"
+                rules={[
+                {
+                    required: conditionalReq,
+                    validator: async (_, value) => {
+                    if (!value) return;
+
+                    if (rxNotationRegex.test(value)) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("Please enter prescription using the correct notation."));
+                    }
+                    },
+                    message: "Please enter prescription using the correct notation."
+                }
+                ]}
+            >
+                <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
+            </Form.Item>
+
+            <Form.Item
+                label="Given L"
+                name="givenLeft"
+                rules={[
+                {
+                    required: conditionalReq,
+                    validator: async (_, value) => {
+                    if (!value) return;
+
+                    if (rxNotationRegex.test(value)) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("Please enter prescription using the correct notation."));
+                    }
+                    },
+                    message: "Please enter prescription using the correct notation."
+                }
+                ]}
+            >
+                <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
+            </Form.Item>
+
+            <Form.Item
+                label="Given Inter add"
+                name="givenInterAdd"
+                rules={[
+                {
+                    validator: async (_, value) => {
+                    if (!value) return;
+
+                    if (!isNaN(value) && value % 0.25 === 0 && value > 0) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("Must be a positive number measured in dioptres (steps of 0.25)."));
+                    }
+                    },
+                    message: "Must be a positive number measured in dioptres (steps of 0.25)."
+                }
+                ]}
+            >
+                <Input
                 disabled={!conditionalReq}
                 style={{ width: "100px" }}
                 placeholder="Inter Add"
-            />
-        </Form.Item>
+                />
+            </Form.Item>
 
-        <Form.Item
-            label="Previous Near add"
-            name="previousNearAdd"
-            rules={[
-            {
-                validator: async (_, value) => {
-                if (!value) return;
+            <Form.Item
+                label="Near add"
+                name="givenNearAdd"
+                rules={[
+                {
+                    validator: async (_, value) => {
+                    if (!value) return;
 
-                if (!isNaN(value) && value % 0.25 === 0 && value > 0) {
-                    return Promise.resolve(); //resolve to say true or it passed
-                } else {
-                    return Promise.reject(new Error("Must be a positive number measured in dioptres (steps of 0.25)."));
+                    if (!isNaN(value) && value % 0.25 === 0 && value > 0) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("Must be a positive number measured in dioptres (steps of 0.25)."));
+                    }
+                    },
+                    message: "Must be a positive number measured in dioptres (steps of 0.25)."
                 }
-                },
-                message: "Must be a positive number measured in dioptres (steps of 0.25)."
-            }
-            ]}
-        >
-            <Input
-                disabled={!conditionalReq}
-                style={{ width: "100px" }}
-                placeholder="Inter Add"
-            />
-        </Form.Item>
-
-        <Form.Item
-            label="Given R"
-            name="givenRight"
-            rules={[
-            {
-                required: conditionalReq,
-                validator: async (_, value) => {
-                if (!value) return;
-
-                if (rxNotationRegex.test(value)) {
-                    return Promise.resolve(); //resolve to say true or it passed
-                } else {
-                    return Promise.reject(new Error("Please enter prescription using the correct notation."));
-                }
-                },
-                message: "Please enter prescription using the correct notation."
-            }
-            ]}
-        >
-            <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
-        </Form.Item>
-
-        <Form.Item
-            label="Given L"
-            name="givenLeft"
-            rules={[
-            {
-                required: conditionalReq,
-                validator: async (_, value) => {
-                if (!value) return;
-
-                if (rxNotationRegex.test(value)) {
-                    return Promise.resolve(); //resolve to say true or it passed
-                } else {
-                    return Promise.reject(new Error("Please enter prescription using the correct notation."));
-                }
-                },
-                message: "Please enter prescription using the correct notation."
-            }
-            ]}
-        >
-            <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
-        </Form.Item>
-
-        <Form.Item
-            label="Given Inter add"
-            name="givenInterAdd"
-            rules={[
-            {
-                validator: async (_, value) => {
-                if (!value) return;
-
-                if (!isNaN(value) && value % 0.25 === 0 && value > 0) {
-                    return Promise.resolve(); //resolve to say true or it passed
-                } else {
-                    return Promise.reject(new Error("Must be a positive number measured in dioptres (steps of 0.25)."));
-                }
-                },
-                message: "Must be a positive number measured in dioptres (steps of 0.25)."
-            }
-            ]}
-        >
-            <Input
-            disabled={!conditionalReq}
-            style={{ width: "100px" }}
-            placeholder="Inter Add"
-            />
-        </Form.Item>
-
-        <Form.Item
-            label="Near add"
-            name="givenNearAdd"
-            rules={[
-            {
-                validator: async (_, value) => {
-                if (!value) return;
-
-                if (!isNaN(value) && value % 0.25 === 0 && value > 0) {
-                    return Promise.resolve(); //resolve to say true or it passed
-                } else {
-                    return Promise.reject(new Error("Must be a positive number measured in dioptres (steps of 0.25)."));
-                }
-                },
-                message: "Must be a positive number measured in dioptres (steps of 0.25)."
-            }
-            ]}
-        >
-            <Input
-                disabled={!conditionalReq}
-                style={{ width: "100px" }}
-                placeholder="Inter Add"
-            />
-        </Form.Item>
+                ]}
+            >
+                <Input
+                    disabled={!conditionalReq}
+                    style={{ width: "100px" }}
+                    placeholder="Inter Add"
+                />
+            </Form.Item>
+        </Card>
 
         <Form.Item
             label="Expiry"
@@ -445,12 +448,12 @@ const ViewClinicalFile = (props) => {
 
         <Form.Item
             wrapperCol={{
-            offset: 8,
+            offset: 5,
             span: 16
             }}
         >
             <Button type="primary" htmlType="submit">
-                Submit
+                Update file
             </Button>
         </Form.Item>
     </Form>
