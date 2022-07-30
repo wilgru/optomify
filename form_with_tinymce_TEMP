@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import "antd/dist/antd.css";
 import "./index.css";
-import { Button, Form, Input } from "antd";
+import { Button, Form, Input, Select } from "antd";
 import { Editor } from "@tinymce/tinymce-react";
 
+const { Option } = Select;
+
 const App = () => {
+  const [conditionalReq, setConditionalReq] = useState(true);
+
   const onFinish = (values) => {
     console.log("Success:", values);
     console.log(values.tinymcevalue?.level.content || null);
@@ -23,17 +27,41 @@ const App = () => {
       wrapperCol={{
         span: 16
       }}
-      initialValues={{}}
+      initialValues={{
+        select: "Prescription"
+      }}
       onFinish={onFinish}
       onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
+      <Form.Item label="Plain Text">
+        <span className="ant-form-text">China</span>
+      </Form.Item>
+
+      <Form.Item
+        name="select"
+        label="Select"
+        hasFeedback
+        rules={[
+          {
+            required: true,
+            message: "Please select your country!"
+          }
+        ]}
+      >
+        <Select placeholder="File type" defaultValue={"Prescription"} onChange={(value)=>{value === "Prescription" ? setConditionalReq(true) : setConditionalReq(false)}}>
+          <Option value="Prescription">Prescription</Option>
+          <Option value="HealthCheck">Health check</Option>
+          <Option value="Report">Report</Option>
+        </Select>
+      </Form.Item>
+
       <Form.Item
         label="Username"
         name="username"
         rules={[
           {
-            required: true,
+            required: conditionalReq,
             message: "Please input your username!"
           }
         ]}
@@ -46,12 +74,12 @@ const App = () => {
         name="password"
         rules={[
           {
-            required: true,
+            required: conditionalReq,
             message: "Please input your password!"
           }
         ]}
       >
-        <Input.Password />
+        <Input />
       </Form.Item>
 
       <Form.Item
@@ -69,7 +97,7 @@ const App = () => {
         ]}
       >
         <Editor
-          apiKey={""}
+          apiKey={"qagffr3pkuv17a8on1afax661irst1hbr4e6tbv888sz91jc"}
           init={{
             menubar: false,
             plugins: "link image code autoresize lists",
