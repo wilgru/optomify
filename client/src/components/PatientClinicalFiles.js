@@ -4,8 +4,11 @@ import React, { useEffect, useState } from 'react';
 // Ant Design
 import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal } from 'antd';
 
-// grpahQL
-import { GET_ALL_PATIENTS } from '../graphql/queries';
+// Components
+import AddClinicalFile from './AddClinicalFile'
+import ViewClinicalFile from './ViewClinicalFile'
+
+// graphQL
 import { useMutation, useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 
@@ -15,8 +18,10 @@ const { Content, Sider } = Layout;
 const Patients = (props) => {
     const clinicalFiles = props.patient.clinical_files
 
-    // MODAL
+    // selected clinical file
+    const [selectedClinicalFile, setSelectedClinicalFile] = useState({});
 
+    // ADD MODAL
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const showModal = () => {
@@ -31,10 +36,9 @@ const Patients = (props) => {
       setIsModalVisible(false);
     };
 
-    // END MODAL
+    // END VIEW MODAL
 
-    // MODAL
-
+    // ADD MODAL
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
 
     const showAddModal = () => {
@@ -49,13 +53,15 @@ const Patients = (props) => {
         setIsAddModalVisible(false);
     };
 
-    // END MODAL
+    // END ADD MODAL
 
     return (
         <Content style={{padding: '20px'}}>
-            <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+            <Modal title="View file" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+                <ViewClinicalFile selectedClinicalFileData={selectedClinicalFile}/>
             </Modal>
-            <Modal title="Add new clinical file" visible={isAddModalVisible} onOk={handleAddOk} onCancel={handleAddCancel}>
+            <Modal title="Add new clinical file" visible={isAddModalVisible} onOk={handleAddOk} onCancel={handleAddCancel} width={1000}>
+                <AddClinicalFile patientId={props.patient._id} modalVis={setIsModalVisible}/>
             </Modal>
             <Layout>
                 <Content className="site-layout-background" style={{ padding: 0, margin: 0, minHeight: 280 }}>
@@ -66,10 +72,13 @@ const Patients = (props) => {
                         dataSource={clinicalFiles}
                         renderItem={(item) => (
                             <List.Item  className={"patient-record-li"}>
-                                <div className={"patient-record"} onClick={showModal}>
+                                <div className={"patient-record"} onClick={() => {
+                                    setSelectedClinicalFile(item)
+                                    showModal()
+                                }}>
                                     <div>
-                                        <h3>{`${item.first_name} ${item.last_name}`}</h3>
-                                        <h4>{item.email} </h4>
+                                        <h3>{`${item.title}`}</h3>
+                                        <h4>{item.dateCreated} </h4>
                                     </div>
                                 </div>
                             </List.Item>
