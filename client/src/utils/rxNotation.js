@@ -21,12 +21,21 @@ export const createRxNotation = (sph, cyl, axis) => {
     let sphPad = ""
     if (sph % 1 === 0) {
         sphPad = ".00"
+    } else if (sph % 1 === 0.5) {
+        sphPad = "0"
     }
 
     let cylPad = ""
     if (sph % 1 === 0) {
         cylPad = ".00"
+    } else if (cyl % 1 === 0.5) {
+        sphPad = "0"
     }
 
-    return prefix+sph+sphPad+'/'+cyl+cylPad+'x'+axis
+    let cylPrefix = ""
+    if (cyl===0) {
+        cylPrefix="-"
+    }
+
+    return prefix+sph+sphPad+'/'+cylPrefix+cyl+cylPad+'x'+axis
 }
