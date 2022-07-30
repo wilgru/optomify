@@ -94,6 +94,7 @@ export const GET_BOOK_SETUPS = gql`
             booking_type
             booking_status
             patient {
+                _id
                 first_name
                 last_name
             }
