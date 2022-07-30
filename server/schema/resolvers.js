@@ -413,7 +413,7 @@ const resolvers = {
                     })
 
                     if (!bookSetup) {
-                        throw new Error("could not day to book on");
+                        throw new Error("could not find day to book on");
                     }
 
                     const newBooking = await Booking.create({ 
@@ -439,6 +439,33 @@ const resolvers = {
                             model: 'Patient'
                         } 
                     });
+
+                } catch(e) {
+                    throw new Error(`${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
+        },
+        updateBooking: async (parent, {booking_to_update_id, update_action}, context) => {
+            if (context.user) {
+                try {
+                    const booking = await Booking.findById(booking_to_update_id);
+
+                    if (!booking) {
+                        throw new Error("could not find booking");
+                    }
+
+                    switch (update_action) {
+                        case "Confirm":
+                            
+                            break;
+                        case "Arrive":
+                            
+                            break;
+                        default:
+                            break;
+                    }
 
                 } catch(e) {
                     throw new Error(`${e.message}`);
