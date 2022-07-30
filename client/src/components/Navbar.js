@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 // import Auth from '../utils/auth';
 
@@ -11,15 +11,21 @@ import 'antd/dist/antd.css';
 import Login from './Login';
 
 // Antd Layout components
-const { Header, Content, Footer, Sider } = Layout;
+const { Header } = Layout;
 
 const AppNavbar = () => {
-    // 
-    const items1old = ['1', '2', '3'].map((key) => ({
-        key,
-        label: `nav ${key}`,
-    }));
+    
+    // if the current token in local storage is exired log it out
+    if (auth.isTokenExpired(auth.getToken())) {
+        localStorage.removeItem('id_token');
+    }
+    
+    // const items1old = ['1', '2', '3'].map((key) => ({
+    //     key,
+    //     label: `nav ${key}`,
+    // }));
 
+    //
     const items1 = [
         {
             key: 2,
