@@ -1,13 +1,18 @@
-import { Button, Checkbox, Form, Input, DatePicker } from 'antd';
-import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
+// antd
+import { Button, Checkbox, Form, Input, DatePicker, Select } from 'antd';
+import moment from 'moment';
+
+// utils
 import { dateWorker } from '../utils/date'
 
 // grpahQL
 import { CREATE_NEW_PATIENT_AND_BOOKING } from '../graphql/mutations';
 import { GET_BOOK_SETUPS } from '../graphql/queries';
 import { useMutation } from '@apollo/client';
+
+const { Option } = Select;
 
 const BookingForm = (props) => {
     const [form] = Form.useForm();
@@ -61,7 +66,7 @@ const BookingForm = (props) => {
                 bookingDate: props.bookingDate,
                 bookingStart: props.bookingStart,
                 bookingEnd: props.bookingEnd,
-                bookingType: "General eye test"
+                bookingType: values.bookingType
             },
             refetchQueries: [
                 {query: GET_BOOK_SETUPS},
@@ -92,6 +97,29 @@ const BookingForm = (props) => {
             onFinishFailed={onFinishFailed}
             autoComplete="off"
         >
+            <Form.Item
+                label="Booking Reason"
+                name="bookingType"
+                hasFeedback
+                rules={[
+                {
+                    required: true,
+                    message: "Please select a file type!"
+                }
+                ]}
+            >
+                <Select
+                    placeholder="Booking Reason"
+                    onChange={(value) => {}}
+                >
+                    <Option value="general eye test">General eye test</Option>
+                    <Option value="health check">Health concern</Option>
+                    <Option value="rms form">RMS form/Drivers License</Option>
+                    <Option value="re-check">Re-check</Option>
+                    <Option value="other">Other</Option>
+                </Select>
+            </Form.Item>
+
             <Form.Item
                 label="First Name"
                 name="first_name"
