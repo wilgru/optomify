@@ -10,7 +10,7 @@ module.exports = {
         message: "booking status invalid" 
     },
     validateBookingType: {
-        validator: function (value) { return ["General eye test", "Health concern", "RMS form", "Re-check", "other"].includes(value) },
+        validator: function (value) { return ["general eye test", "health concern", "rms form", "re-check", "other"].includes(value) },
         message: "booking type invalid" 
     },
     validate30MinBlock: {
