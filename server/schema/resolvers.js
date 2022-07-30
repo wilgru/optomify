@@ -79,7 +79,7 @@ const resolvers = {
                             } 
                         })
                     })
-                    console.log(bookSetup)
+
                     return populateBookSetup; // return [BookSetup]
                 } catch(e) {
                     throw new Error(`${e.message}`);
@@ -458,14 +458,44 @@ const resolvers = {
 
                     switch (update_action) {
                         case "Confirm":
-                            
+                            booking.booking_type = "Confirmed"
                             break;
                         case "Arrive":
-                            
+                            booking.booking_type = "Arrived"
+                            break;
+                        case "Absent":
+                            booking.booking_type = "Absent"
                             break;
                         default:
-                            break;
+                            throw new Error(`Action unknown`);
                     }
+
+                    await booking.save();
+
+                    // now get the booksetps and return them
+                    const bookSetup = await BookSetup.find({
+                        date: {
+                            $gte: start_date,
+                            $lte: end_date
+                        }
+                    })
+
+                    if (!bookSetup) {
+                        throw new Error("No Bookings were found with within these dates.");
+                    }
+
+                    // https://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
+                    const populateBookSetup = bookSetup.map((bookDay) => {
+                        return bookDay.populate({ 
+                            path: 'bookings',
+                            populate: {
+                                path: 'patient',
+                                model: 'Patient'
+                            } 
+                        })
+                    })
+
+                    return populateBookSetup; // return [BookSetup]
 
                 } catch(e) {
                     throw new Error(`${e.message}`);
