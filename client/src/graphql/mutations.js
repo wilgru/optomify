@@ -105,3 +105,70 @@ mutation CreateNewClinicalFile($on_patient_id:ID!, $fileType: String!, $title: S
   }
 }
 `
+
+export const UPDATE_CLINICAL_FILE = gql`
+mutation UpdateClinicalFile($onPatientId: ID!, $fileToUpdateId: ID!, $fileType: String!, $title: String!, $textField: String!, $medicareItemCode: String, $recall: String, $pprSphere: Float, $pprCylinder: Float, $pprAxis: Float, $pplSphere: Float, $pplCylinder: Float, $pplAxis: Float, $ppInterAdd: Float, $ppNearAdd: Float, $gprSphere: Float, $gprCylinder: Float, $gprAxis: Float, $gplSphere: Float, $gplCylinder: Float, $gplAxis: Float, $gpInterAdd: Float, $gpNearAdd: Float) {
+  updateClinicalFile(on_patient_id: $onPatientId, file_to_update_id: $fileToUpdateId, file_type: $fileType, title: $title, text_field: $textField, medicare_item_code: $medicareItemCode, recall: $recall, ppr_sphere: $pprSphere, ppr_cylinder: $pprCylinder, ppr_axis: $pprAxis, ppl_sphere: $pplSphere, ppl_cylinder: $pplCylinder, ppl_axis: $pplAxis, pp_inter_add: $ppInterAdd, pp_near_add: $ppNearAdd, gpr_sphere: $gprSphere, gpr_cylinder: $gprCylinder, gpr_axis: $gprAxis, gpl_sphere: $gplSphere, gpl_cylinder: $gplCylinder, gpl_axis: $gplAxis, gp_inter_add: $gpInterAdd, gp_near_add: $gpNearAdd) {
+    _id
+    first_name
+    last_name
+    mobile_number
+    email
+    dob
+    has_medicare
+    medicare_number
+    medicare_ref
+    medicare_exp
+    bookings {
+      _id
+      booking_date
+      booking_start
+    }
+    clinical_files {
+      _id
+      file_type
+      title
+      date_created
+      text_field
+      medicare_item_code
+      recall
+      prev_prescription {
+        right_od {
+          sphere
+          cylinder
+          axis
+        }
+        left_os {
+          sphere
+          cylinder
+          axis
+        }
+        inter_add
+        near_add
+      }
+      given_prescription {
+        right_od {
+          sphere
+          cylinder
+          axis
+        }
+        left_os {
+          sphere
+          cylinder
+          axis
+        }
+        inter_add
+        near_add
+      }
+    }
+    notes {
+      _id
+    }
+    date_created 
+    created_by {
+      _id
+      username
+    }
+  }
+}
+`
