@@ -9,6 +9,10 @@ const { Option } = Select;
 const App = () => {
   const [conditionalReq, setConditionalReq] = useState(true);
 
+  const rxNotationRegex = new RegExp(
+    "[-,+]\\d+\\.(00|25|75)\\/-\\d+.(00|25|75)[x,X][1-9][0-8]?[0-9]?$"
+  );
+
   const onFinish = (values) => {
     console.log("Success:", values);
     console.log(values.tinymcevalue?.level.content || null);
@@ -34,8 +38,8 @@ const App = () => {
       onFinishFailed={onFinishFailed}
       autoComplete="off"
     >
-      <Form.Item label="Plain Text">
-        <span className="ant-form-text">China</span>
+      <Form.Item label="for prescriptions use ">
+        <span className="ant-form-text">(-/+)0.00/-0.00x000</span>
       </Form.Item>
 
       <Form.Item
@@ -87,7 +91,25 @@ const App = () => {
         />
       </Form.Item>
 
-      <Form.Item label="Recall" name="Recall">
+      <Form.Item
+        label="Recall"
+        name="Recall"
+        rules={[
+          {
+            required: conditionalReq,
+            validator: async (_, value) => {
+              if (!value) return;
+
+              if (value > Date.now()) {
+                return Promise.resolve(); //resolve to say true or it passed
+              } else {
+                return Promise.reject(new Error("'title' is must be unique"));
+              }
+            },
+            message: "Please input valid date in the future!"
+          }
+        ]}
+      >
         <DatePicker />
       </Form.Item>
 
@@ -97,7 +119,16 @@ const App = () => {
         rules={[
           {
             required: conditionalReq,
-            message: "Please input your password!"
+            validator: async (_, value) => {
+              if (!value) return;
+
+              if (rxNotationRegex.test(value)) {
+                return Promise.resolve(); //resolve to say true or it passed
+              } else {
+                return Promise.reject(new Error("'title' is must be unique"));
+              }
+            },
+            message: "Please enter prescription using the correct notation!"
           }
         ]}
       >
@@ -138,7 +169,16 @@ const App = () => {
         rules={[
           {
             required: conditionalReq,
-            message: "Please input your password!"
+            validator: async (_, value) => {
+              if (!value) return;
+
+              if (rxNotationRegex.test(value)) {
+                return Promise.resolve(); //resolve to say true or it passed
+              } else {
+                return Promise.reject(new Error("'title' is must be unique"));
+              }
+            },
+            message: "Please enter prescription using the correct notation!"
           }
         ]}
       >
@@ -153,15 +193,14 @@ const App = () => {
             validator: async (_, value) => {
               if (!value) return;
 
-              if (!isNaN(value)) {
-                  return Promise.resolve(); //resolve to say true or it passed
+              if (!isNaN(value) && value % 0.25 === 0 && value > 0) {
+                return Promise.resolve(); //resolve to say true or it passed
               } else {
-                return Promise.reject(
-                  new Error("'title' is must be unique"),
-                );
+                return Promise.reject(new Error("'title' is must be unique"));
               }
-          },
-            message: "Must be a number!"
+            },
+            message:
+              "Must be a positive number measured in dioptres (steps of 0.25)!"
           }
         ]}
       >
@@ -180,15 +219,14 @@ const App = () => {
             validator: async (_, value) => {
               if (!value) return;
 
-              if (!isNaN(value)) {
-                  return Promise.resolve(); //resolve to say true or it passed
+              if (!isNaN(value) && value % 0.25 === 0 && value > 0) {
+                return Promise.resolve(); //resolve to say true or it passed
               } else {
-                return Promise.reject(
-                  new Error("'title' is must be unique"),
-                );
+                return Promise.reject(new Error("'title' is must be unique"));
               }
             },
-            message: "Must be a number!"
+            message:
+              "Must be a positive number measured in dioptres (steps of 0.25)!"
           }
         ]}
       >
@@ -205,7 +243,16 @@ const App = () => {
         rules={[
           {
             required: conditionalReq,
-            message: "Please input your username!"
+            validator: async (_, value) => {
+              if (!value) return;
+
+              if (value > Date.now()) {
+                return Promise.resolve(); //resolve to say true or it passed
+              } else {
+                return Promise.reject(new Error("'title' is must be unique"));
+              }
+            },
+            message: "Please input valid date in the future!"
           }
         ]}
       >
