@@ -7,6 +7,7 @@ import BookingForm from '../components/BookingForm';
 import {
     SyncOutlined,
     EyeOutlined,
+    CoffeeOutlined
   } from '@ant-design/icons';
 
 import moment from 'moment';
@@ -211,7 +212,7 @@ const Bookings = () => {
         if(props.type === 'General eye test') {
             return <EyeOutlined style={{fontSize: '20px'}}/>
         } else if (props.type === 'optom break') {
-            return <SyncOutlined style={{fontSize: '20px'}}/>
+            return <CoffeeOutlined style={{fontSize: '20px'}}/>
         }
     }
 
