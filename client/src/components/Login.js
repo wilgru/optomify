@@ -22,7 +22,7 @@ const Login = (props) => {
                 variables: {
                     email: values.email,
                     password: values.password
-                }
+                } // refect queries depending on the page use useParams to ge the page
             });
 
             if (!data) {
@@ -49,7 +49,7 @@ const Login = (props) => {
         <>
         {error ? (
             <Alert
-                message="error"
+                message="Somethings wrong!"
                 description={error.message}
                 type="error"
                 closable
