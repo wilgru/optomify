@@ -18,6 +18,8 @@ const { Content, Sider } = Layout;
 const Patients = (props) => {
     const clinicalFiles = props.patient.clinical_files
 
+    const patientId = props.patient._id
+
     // selected clinical file
     const [selectedClinicalFile, setSelectedClinicalFile] = useState({});
 
@@ -58,10 +60,10 @@ const Patients = (props) => {
     return (
         <Content style={{padding: '20px'}}>
             <Modal title="View file" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                <ViewClinicalFile selectedClinicalFileData={selectedClinicalFile}/>
+                <ViewClinicalFile patientId={patientId} selectedClinicalFileData={selectedClinicalFile} modalVis={setIsModalVisible}/>
             </Modal>
             <Modal title="Add new clinical file" visible={isAddModalVisible} onOk={handleAddOk} onCancel={handleAddCancel} width={1000}>
-                <AddClinicalFile patientId={props.patient._id} modalVis={setIsModalVisible}/>
+                <AddClinicalFile patientId={patientId} modalVis={setIsModalVisible}/>
             </Modal>
             <Layout>
                 <Content className="site-layout-background" style={{ padding: 0, margin: 0, minHeight: 280 }}>
@@ -71,7 +73,7 @@ const Patients = (props) => {
                         itemLayout="horizontal"
                         dataSource={clinicalFiles}
                         renderItem={(item) => (
-                            <List.Item  className={"patient-record-li"}>
+                            <List.Item className={"patient-record-li"}>
                                 <div className={"patient-record"} onClick={() => {
                                     setSelectedClinicalFile(item)
                                     showModal()
