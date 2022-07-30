@@ -3,6 +3,15 @@ import React, { useEffect, useState } from 'react';
 
 // Ant Design
 import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal } from 'antd';
+import {
+    EyeOutlined,
+    CoffeeOutlined,
+    CarOutlined,
+    SyncOutlined,
+    ExclamationCircleOutlined,
+    SmallDashOutlined,
+    ClockCircleOutlined
+  } from '@ant-design/icons';
 
 // Components
 import AddClinicalFile from './AddClinicalFile'
@@ -22,6 +31,17 @@ const Patients = (props) => {
 
     // selected clinical file
     const [selectedClinicalFile, setSelectedClinicalFile] = useState({});
+
+    // return conditional icon
+    function ConditionalIcon(props) {
+        if(props.type === 'prescription') {
+            return <EyeOutlined style={{fontSize: '40px'}}/>
+        } else if (props.type === 'health check') {
+            return <ExclamationCircleOutlined style={{fontSize: '40px'}}/>
+        } else {
+            return <ClockCircleOutlined style={{fontSize: '40px'}}/>
+        }
+    }
 
     // ADD MODAL
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -78,9 +98,10 @@ const Patients = (props) => {
                                     setSelectedClinicalFile(item)
                                     showModal()
                                 }}>
+                                    <ConditionalIcon type={item.file_type}/>
                                     <div>
                                         <h3>{`${item.title}`}</h3>
-                                        <h4>{item.dateCreated} </h4>
+                                        <h4>{item.date_created} </h4>
                                     </div>
                                 </div>
                             </List.Item>
