@@ -1,4 +1,4 @@
-import { Button, Checkbox, Form, Input, DatePicker } from 'antd';
+import { Button, Checkbox, Form, Input, DatePicker, Alert } from 'antd';
 import React, { useEffect, useState } from 'react';
 
 // grpahQL
@@ -40,7 +40,27 @@ const Login = (props) => {
         console.log('Failed:', errorInfo);
     };
 
+    //alert
+    const onClose = (e) => {
+        console.log(e, 'I was closed.');
+    };
+
     return (
+        <>
+        {error ? (
+            <Alert
+                message="error"
+                description={error.message}
+                type="error"
+                closable
+                onClose={onClose}
+                style={{
+                    marginBottom:"10px"
+                }}
+            />
+        ) : (
+            <></>
+        )}
         <Form
             name="basic"
             labelCol={{ span: 8 }}
@@ -72,6 +92,7 @@ const Login = (props) => {
             </Button>
         </Form.Item>
         </Form>
+        </>
     );
 };
 
