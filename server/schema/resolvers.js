@@ -209,38 +209,38 @@ const resolvers = {
                         created_by,
                         prev_prescription: {
                             right_od: {
-                                ppr_sphere,
-                                ppr_cylinder,
-                                ppr_axis
+                                sphere: ppr_sphere,
+                                cylinder: ppr_cylinder,
+                                axis: ppr_axis
                             },
                             left_os: {
-                                ppl_sphere,
-                                ppl_cylinder,
-                                ppl_axis
+                                sphere: ppl_sphere,
+                                cylinder: ppl_cylinder,
+                                axis: ppl_axis
                             },
-                            pp_inter_add,
-                            pp_near_add
+                            inter_add: pp_inter_add,
+                            near_add: pp_near_add
                         },
                         given_prescription: {
                             right_od: {
-                                gpr_sphere,
-                                gpr_cylinder,
-                                gpr_axis
+                                sphere: gpr_sphere,
+                                cylinder: gpr_cylinder,
+                                axis: gpr_axis
                             },
                             left_os: {
-                                gpl_sphere,
-                                gpl_cylinder,
-                                gpl_axis
+                                sphere: gpl_sphere,
+                                cylinder: gpl_cylinder,
+                                axis: gpl_axis
                             },
-                            gp_inter_add,
-                            gp_near_add
+                            inter_add: gp_inter_add,
+                            near_add: gp_near_add
                         }
                     })
 
                     patient.clinical_files.push(clinicalFileData);
                     await patient.save();
 
-                    return patient.populate('clinical_notes').populate('prev_prescription').populate('given_prescription');
+                    return patient.populate('clinical_files');
                 } catch(e) {
                     throw new Error(`something went wrong! Details: ${e.message}`);
                 }
