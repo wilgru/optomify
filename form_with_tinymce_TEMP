@@ -1,0 +1,97 @@
+import React from "react";
+import "antd/dist/antd.css";
+import "./index.css";
+import { Button, Form, Input } from "antd";
+import { Editor } from "@tinymce/tinymce-react";
+
+const App = () => {
+  const onFinish = (values) => {
+    console.log("Success:", values);
+    console.log(values.tinymcevalue?.level.content || null);
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
+
+  return (
+    <Form
+      name="basic"
+      labelCol={{
+        span: 8
+      }}
+      wrapperCol={{
+        span: 16
+      }}
+      initialValues={{}}
+      onFinish={onFinish}
+      onFinishFailed={onFinishFailed}
+      autoComplete="off"
+    >
+      <Form.Item
+        label="Username"
+        name="username"
+        rules={[
+          {
+            required: true,
+            message: "Please input your username!"
+          }
+        ]}
+      >
+        <Input />
+      </Form.Item>
+
+      <Form.Item
+        label="Password"
+        name="password"
+        rules={[
+          {
+            required: true,
+            message: "Please input your password!"
+          }
+        ]}
+      >
+        <Input.Password />
+      </Form.Item>
+
+      <Form.Item
+        name="tinymcevalue"
+        valuePropName="tinymcevalue"
+        wrapperCol={{
+          offset: 8,
+          span: 16
+        }}
+        rules={[
+          {
+            required: true,
+            message: "Please input some text!"
+          }
+        ]}
+      >
+        <Editor
+          apiKey={""}
+          init={{
+            menubar: false,
+            plugins: "link image code autoresize lists",
+            toolbar:
+              "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help"
+          }}
+          initialValue="<p>This is the initial content of the editor.</p>"
+        />
+      </Form.Item>
+
+      <Form.Item
+        wrapperCol={{
+          offset: 8,
+          span: 16
+        }}
+      >
+        <Button type="primary" htmlType="submit">
+          Submit
+        </Button>
+      </Form.Item>
+    </Form>
+  );
+};
+
+export default App;
