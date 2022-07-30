@@ -117,14 +117,14 @@ npm run develop
 
 ## Future Development
 
-- <strong>Edit/Delete Records:</strong> giving the website full CRUD like features, which in turn makes the website more useful.
+- <strong>Drag to move bookings:</strong> Ability to easily move booking ust by clicking and dragging the booking to another free slot.
 
-- <strong>Pagination:</strong> pages displaying lists of records could be paginated so that the webpage can load faster and so that the user is not overwhelmed with information.
+- <strong>Pagination:</strong> pages displaying patients could be paginated so that the webpage can load faster and so that the user is not overwhelmed with information.
 
-- <strong>Export CSV data:</strong> Abitliy to export clients and projects database as an CSV file to be able to load into a spreadsheet and do calculations with
+- <strong>Print Prescriptions:</strong> Abitliy to print patients prescriptions to a nicelt formated PDF.
   <br>
 
-- <strong>Editing Clients:</strong> Option for a user to edit a client's personal details in the individual client page.
+- <strong>Editing Patients:</strong> Option for a user to edit a patient's personal details in the individual patient page.
   <br>
 
 <a name="Gallery"></a>
