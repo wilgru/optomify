@@ -20,7 +20,8 @@ Optomify is a booking system web application built for use in optometry practice
 
 [Technologies Used](#Technologies)  
 [Functionality](#Functionality)  
-[Installation and Usage](#Installation)   
+[Installation and Usage](#Installation)  
+[Testing](#Testing)  
 [Future Development](#Future)  
 [Gallery](#Gallery)  
 [Resources](#Resources) 
@@ -110,6 +111,22 @@ Run the app in developemnt (both backend server and React development server):
 
 ```
 npm run develop
+```
+<br>
+
+<a name="Testing"></a>
+
+## Testing
+
+You can use the follwing data to test the web app, especially if you may not know certain optical terminology or processes.
+
+Users 
+```
+```
+
+Prescritions
+```
+-1.25/-0.75x82
 ```
 <br>
 
