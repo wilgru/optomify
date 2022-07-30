@@ -2,7 +2,7 @@
 
 module.exports = {
     validateClinicalFileType: {
-        validator: function (value) { return ["Prescription", "Clinical note", "Report"].includes(value) },
+        validator: function (value) { return ["prescription", "clinical note", "report"].includes(value) },
         message: props => `${props.value} File type invalid`
     },
     validateBookingStatus: {
