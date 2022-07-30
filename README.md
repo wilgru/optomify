@@ -17,12 +17,12 @@ Optomify is a booking system web application built for use in optometry practice
 
 ## Table of Contents
 
-[Technologies Used](#Technologies) 
+[Technologies Used](#Technologies)  
 [Functionality](#Functionality)  
-[Installation and Usage](#Installation) 
+[Installation and Usage](#Installation)   
 [Future Development](#Future)  
 [Gallery](#Gallery)  
-[Resources](#Resources)
+[Resources](#Resources) 
 
 <a name="Functionality"></a>
 
