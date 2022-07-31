@@ -503,6 +503,35 @@ const resolvers = {
             } else {
                 throw new AuthenticationError('You must be signed in!');
             }
+        },
+        updatePatient: async (parent, { patient_to_update_id, first_name, last_name, dob, mobile_number, email, has_medicare, medicare_number, medicare_ref, medicare_exp }, context) => {
+            if (context.user) {
+                try {
+                    const patient = await Patient.findById(patient_to_update_id)
+                    
+                    patient.first_name = first_name
+                    patient.last_name = last_name
+                    patient.dob = dob
+                    patient.mobile_number = mobile_number
+                    patient.email = email
+                    patient.has_medicare = has_medicare
+                    patient.medicare_number = medicare_number
+                    patient.medicare_ref = medicare_ref
+                    patient.medicare_exp = medicare_exp
+
+                    await patient.save();
+    
+                    if (!patient) {
+                        throw new Error(`${e.message}`)
+                    }
+
+                    return patient.populate('bookings clinical_files notes created_by'); // return User
+                } catch(e) {
+                    throw new Error(`${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
         }
     }
 }
