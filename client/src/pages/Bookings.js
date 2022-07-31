@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 
 // Ant Design
 import { List, Layout, DatePicker, Menu, Button, Card, Modal, Popover } from 'antd';
-import BookingForm from '../components/BookingForm';
 import {
     EyeOutlined,
     CoffeeOutlined,
@@ -16,8 +15,13 @@ import {
 
 import moment from 'moment';
 
+// Components
+import BookingForm from '../components/BookingForm';
+import Refetcher from '../components/refetcher';
+
 // grpahQL
 import { GET_BOOK_SETUPS } from '../graphql/queries';
+import { UPDATE_BOOKING, DELETE_BOOKING } from '../graphql/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 
 // Utils
@@ -38,8 +42,15 @@ const Bookings = () => {
     const [bookingStart, setbookingStart] = useState('')
     const [bookingEnd, setbookingEnd] = useState('')
 
+    // for updating booking status
+    // const [bookingToUpdateId, setBookingToUpdateId] = useState('')
+    // const [action, setAction] = useState('')
+
+    const [updateBooking, { updateError }] = useMutation(UPDATE_BOOKING);
+    const [deleteBooking, { deletError }] = useMutation(DELETE_BOOKING);
+
     // get booksetup and bookings
-    const { loading, data } = useQuery(GET_BOOK_SETUPS, {
+    const { loading, data, err, refetch } = useQuery(GET_BOOK_SETUPS, {
         variables: {
             startDate,
             endDate
@@ -48,6 +59,39 @@ const Bookings = () => {
     });
     const bookSetupData = data?.getBookSetups || [];
     const bookingList = []
+
+    // update bookinng function
+    const updateBookingFn = (event, action) => {
+        console.log(startDate, endDate)
+        updateBooking({
+            variables: {
+                bookingToUpdateId: event.target.parentNode.getAttribute('data-booking-id'),
+                updateAction: action,
+                startDate,
+                endDate
+            },
+            refetchQueries: [
+                {query: GET_BOOK_SETUPS},
+                GET_BOOK_SETUPS
+            ]
+        })
+    }
+
+    // delete bookinng function
+    const deleteBookingFn = (event) => {
+        console.log(startDate, endDate)
+        deleteBooking({
+            variables: {
+                bookingToDeleteId: event.target.parentNode.getAttribute('data-booking-id'),
+                startDate,
+                endDate
+            },
+            refetchQueries: [
+                {query: GET_BOOK_SETUPS},
+                GET_BOOK_SETUPS
+            ]
+        })
+    }
 
     // buttons for popover
     const buttonSet = {
@@ -62,19 +106,33 @@ const Bookings = () => {
             {text: "Block", clickFn: function(event){}}
         ],
         Booked: [
-            {text: "Confirm", clickFn: function(event){}}, 
-            {text: "Arrive", clickFn: function(event){}}, 
-            {text: "Cancel", clickFn: function(event){}}
+            {text: "Confirm", clickFn: function(event){
+                updateBookingFn(event, "Confirm")
+            }}, 
+            {text: "Arrive", clickFn: function(event){
+                updateBookingFn(event, "Arrive")
+            }}, 
+            {text: "Cancel", clickFn: function(event){
+                deleteBookingFn(event)
+            }}
         ],
         Confirmed: [
-            {text: "Arrive", clickFn: function(event){}}, 
-            {text: "Cancel", clickFn: function(event){}}
+            {text: "Arrive", clickFn: function(event){
+                updateBookingFn(event, "Arrive")
+            }}, 
+            {text: "Cancel", clickFn: function(event){
+                deleteBookingFn(event)
+            }}
         ],
         Arrived: [
-            {text: "Cancel", clickFn: function(event){}}
+            {text: "Cancel", clickFn: function(event){
+                deleteBookingFn(event)
+            }}
         ],
         Blocked: [
-            {text: "Cancel", clickFn: function(event){}}
+            {text: "Cancel", clickFn: function(event){
+                deleteBookingFn(event)
+            }}
         ],
         OptomBreak: [],
     };
@@ -309,8 +367,9 @@ const Bookings = () => {
 
     return (
         <Content style={{padding: '20px'}}>
-            <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+            <Modal title="Book new patient" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
                 <BookingForm bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} modalVis={setIsModalVisible}/>
+                {/* <Refetcher modalVis={setIsModalVisible} bookingToUpdateId={bookingToUpdateId} action={action}/> */}
             </Modal>
             <Layout>
                 <Sider width={220} className="site-layout-background">
