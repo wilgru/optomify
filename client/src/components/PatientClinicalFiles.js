@@ -4,13 +4,9 @@ import React, { useEffect, useState } from 'react';
 // Ant Design
 import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal } from 'antd';
 import {
-    EyeOutlined,
-    CoffeeOutlined,
-    CarOutlined,
-    SyncOutlined,
-    ExclamationCircleOutlined,
-    SmallDashOutlined,
-    ClockCircleOutlined
+    ReconciliationOutlined,
+    HeartOutlined,
+    FileTextOutlined,
   } from '@ant-design/icons';
 
 // Components
@@ -35,11 +31,11 @@ const Patients = (props) => {
     // return conditional icon
     function ConditionalIcon(props) {
         if(props.type === 'prescription') {
-            return <EyeOutlined style={{fontSize: '40px'}}/>
+            return <ReconciliationOutlined style={{fontSize: '40px'}}/>
         } else if (props.type === 'health check') {
-            return <ExclamationCircleOutlined style={{fontSize: '40px'}}/>
+            return <HeartOutlined style={{fontSize: '40px'}}/>
         } else {
-            return <ClockCircleOutlined style={{fontSize: '40px'}}/>
+            return <FileTextOutlined style={{fontSize: '40px'}}/>
         }
     }
 
