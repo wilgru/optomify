@@ -67,6 +67,10 @@ Apollo - https://www.apollographql.com/
 TinyMCE -https://www.tiny.cloud/
 <br>
 
+### Other:
+
+Debounce - https://www.npmjs.com/package/debounce
+
 <a name="Installation"></a>
 
 ## Installation and Usage
