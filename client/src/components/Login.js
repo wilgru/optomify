@@ -12,8 +12,6 @@ const Login = (props) => {
 
     const [loginMutation, { error }] = useMutation(LOGIN);
 
-    // const [hasMedicare, setHasMedicare] = useState(true);
-
     const onFinish = async (values) => {
         console.log('Success:', values);
 
