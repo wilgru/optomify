@@ -113,7 +113,7 @@ const BookingForm = (props) => {
                     onChange={(value) => {}}
                 >
                     <Option value="general eye test">General eye test</Option>
-                    <Option value="health check">Health concern</Option>
+                    <Option value="health concern">Health concern</Option>
                     <Option value="rms form">RMS form/Drivers License</Option>
                     <Option value="re-check">Re-check</Option>
                     <Option value="other">Other</Option>
