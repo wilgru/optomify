@@ -42,10 +42,6 @@ const Bookings = () => {
     const [bookingStart, setbookingStart] = useState('')
     const [bookingEnd, setbookingEnd] = useState('')
 
-    // for updating booking status
-    // const [bookingToUpdateId, setBookingToUpdateId] = useState('')
-    // const [action, setAction] = useState('')
-
     const [updateBooking, { updateError }] = useMutation(UPDATE_BOOKING);
     const [deleteBooking, { deletError }] = useMutation(DELETE_BOOKING);
 
