@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 
 // Ant Design
-import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal } from 'antd';
+import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal, Input } from 'antd';
 import BookingForm from '../components/BookingForm';
 import {
     HomeOutlined,
@@ -20,13 +20,26 @@ import { GET_ALL_PATIENTS } from '../graphql/queries';
 import { useMutation, useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 
+
 // Ant Design from components
 const { Content, Sider } = Layout;
-const { RangePicker } = DatePicker;
+const { Search } = Input
 
 const Patients = () => {
-    const { loading, data } = useQuery(GET_ALL_PATIENTS, {fetchPolicy: "no-cache"}) 
+    const [searchTerm, setSearchTerm] = useState("")
+
+    const { loading, data } = useQuery(GET_ALL_PATIENTS, {
+        variables: {
+            searchTerm
+        },
+        fetchPolicy: "no-cache"
+    }) 
     const patientData = data?.getAllPatients || [];
+
+    // search field
+    const onSearch = (value) => {
+        setSearchTerm(value)
+    }
 
     // MODAL
 
@@ -46,17 +59,6 @@ const Patients = () => {
 
     // END MODAL
 
-    // date working
-    function dateWorker(date) {
-        let b = String(date)
-        let c = b.split(" ", 5)
-        let d = c.join(" ")
-        let e = d+" UTC" 
-        let f = new Date(e)
-
-        return f.toISOString()
-    }
-
     return (
         <Content style={{padding: '20px'}}>
             {/* <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
@@ -65,6 +67,14 @@ const Patients = () => {
             <Layout>
                 <Layout style={{padding: '0 24px 24px'}}>
                     <Content className="site-layout-background" style={{ padding: 24, margin: 0, minHeight: 280 }}>
+                        <Search
+                            placeholder="Search for name, email or mobile number..."
+                            allowClear
+                            onSearch={onSearch}
+                            style={{
+                                marginBottom: 10,
+                            }}
+                        />
                         {loading ? (
                             <h1>loading</h1>
                         ) : (
@@ -74,14 +84,6 @@ const Patients = () => {
                                 itemLayout="horizontal"
                                 dataSource={patientData}
                                 renderItem={(item) => (
-                                    // <List.Item>
-                                    //     <Link to={{ pathname: `/patients/${item._id}` }} style={{display:"flex"}}> 
-                                    //         <div className='booking'>
-                                    //             {<h4>{`${item.first_name} ${item.last_name}`}</h4>}
-                                    //             {item.email} 
-                                    //         </div>
-                                    //     </Link>
-                                    // </List.Item>
                                     <List.Item  className={"patient-record-li"}>
                                         <Link to={{ pathname: `/patients/${item._id}` }} className={"patient-record"} onClick={()=> console.log(item.first_name)}>
                                             <div>
