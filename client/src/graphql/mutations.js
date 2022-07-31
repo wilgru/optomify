@@ -173,6 +173,32 @@ mutation UpdateClinicalFile($onPatientId: ID!, $fileToUpdateId: ID!, $fileType: 
 }
 `
 
+export const UPDATE_BOOKING = gql`
+mutation UpdateBooking($bookingToUpdateId: ID!, $updateAction: String!, $startDate: String!, $endDate: String!) {
+  updateBooking(booking_to_update_id: $bookingToUpdateId, update_action: $updateAction, start_date: $startDate, end_date: $endDate) {
+    _id
+    date
+    open_time
+    closing_time
+    optom_break_start
+    optom_break_end
+    bookings {
+      _id
+      booking_start
+      booking_end
+      booking_note
+      booking_type
+      booking_status
+      patient {
+        _id
+        first_name
+        last_name
+      }
+    }
+  }
+}
+`
+
 export const UPDATE_PATIENT = gql`
 mutation UpdatePatient($patientToUpdateId: ID!, $firstName: String!, $lastName: String!, $dob: String!, $email: String!, $hasMedicare: Boolean!, $medicareNumber: String, $medicareRef: String, $medicareExp: String, $mobileNumber: String) {
   updatePatient(patient_to_update_id: $patientToUpdateId, first_name: $firstName, last_name: $lastName, dob: $dob, email: $email, has_medicare: $hasMedicare, medicare_number: $medicareNumber, medicare_ref: $medicareRef, medicare_exp: $medicareExp, mobile_number: $mobileNumber) {
@@ -235,6 +261,31 @@ mutation UpdatePatient($patientToUpdateId: ID!, $firstName: String!, $lastName: 
     created_by {
       _id
       username
+    }
+  }
+}`
+
+export const DELETE_BOOKING = gql`
+mutation DeleteBooking($bookingToDeleteId: ID!, $startDate: String!, $endDate: String!) {
+  deleteBooking(booking_to_delete_id: $bookingToDeleteId, start_date: $startDate, end_date: $endDate) {
+    _id
+    date
+    open_time
+    closing_time
+    optom_break_start
+    optom_break_end
+    bookings {
+      _id
+      booking_start
+      booking_end
+      booking_note
+      booking_type
+      booking_status
+      patient {
+        _id
+        first_name
+        last_name
+      }
     }
   }
 }`
