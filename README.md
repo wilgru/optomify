@@ -2,7 +2,7 @@
 
 ![TinyMCE](https://img.shields.io/badge/API-TinyMCE-Blue)
 ![Ant Design](https://img.shields.io/badge/CSS-AntDesign-green)
-![lodash](https://img.shields.io/badge/node-lodash-orange)
+![lodash](https://img.shields.io/badge/node-debounce-orange)
 ![GraphQL](https://img.shields.io/badge/node-GraphQL-orange)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
