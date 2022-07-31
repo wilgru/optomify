@@ -67,8 +67,8 @@ query GetPatient($id: ID!) {
 }`
 
 export const GET_ALL_PATIENTS = gql`
-query GetAllPatients {
-  getAllPatients {
+query GetAllPatients($searchTerm: String!) {
+  getAllPatients(search_term: $searchTerm) {
     _id
     first_name
     last_name
