@@ -477,14 +477,14 @@ const resolvers = {
 
                     console.log(update_action)
                     switch (update_action) {
-                        case "Confirm":
-                            booking.booking_status = "Confirmed"
+                        case "confirmed":
+                            booking.booking_status = "confirmed"
                             break;
-                        case "Arrive":
-                            booking.booking_status = "Arrived"
+                        case "arrived":
+                            booking.booking_status = "arrived"
                             break;
-                        case "Absent":
-                            booking.booking_status = "Absent"
+                        case "absent":
+                            booking.booking_status = "absent"
                             break;
                         default:
                             throw new Error(`Action unknown`);
