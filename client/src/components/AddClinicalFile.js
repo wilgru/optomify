@@ -50,12 +50,12 @@ const AddClinicalFile = (props) => {
                     textField: values.tinyMCEValue?.level.content,
                     medicareItemCode: values.medicareItemCode,
 
-                    pprSphere: getSph(values.previousRight),
-                    pprCylinder: getCyl(values.previousRight),
-                    pprAxis: getAxis(values.previousRight),
-                    pplSphere: getSph(values.previousLeft),
-                    pplCylinder: getCyl(values.previousLeft),
-                    pplAxis: getAxis(values.previousLeft),
+                    pprSphere: values.previousRight ? getSph(values.previousRight) : undefined,
+                    pprCylinder: values.previousRight ? getCyl(values.previousRight) : undefined,
+                    pprAxis: values.previousRight ? getAxis(values.previousRight) : undefined,
+                    pplSphere: values.previousLeft ? getSph(values.previousLeft) : undefined,
+                    pplCylinder: values.previousLeft ? getCyl(values.previousLeft) : undefined,
+                    pplAxis: values.previousLeft ? getAxis(values.previousLeft) : undefined,
                     ppInterAdd: parseFloat(values.previousInterAdd) || 0,
                     ppNearAdd: parseFloat(values.previousNearAdd) || 0,
 
