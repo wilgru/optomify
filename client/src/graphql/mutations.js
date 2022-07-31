@@ -172,3 +172,69 @@ mutation UpdateClinicalFile($onPatientId: ID!, $fileToUpdateId: ID!, $fileType: 
   }
 }
 `
+
+export const UPDATE_PATIENT = gql`
+mutation UpdatePatient($patientToUpdateId: ID!, $firstName: String!, $lastName: String!, $dob: String!, $email: String!, $hasMedicare: Boolean!, $medicareNumber: String, $medicareRef: String, $medicareExp: String, $mobileNumber: String) {
+  updatePatient(patient_to_update_id: $patientToUpdateId, first_name: $firstName, last_name: $lastName, dob: $dob, email: $email, has_medicare: $hasMedicare, medicare_number: $medicareNumber, medicare_ref: $medicareRef, medicare_exp: $medicareExp, mobile_number: $mobileNumber) {
+    _id
+    first_name
+    last_name
+    mobile_number
+    email
+    dob
+    has_medicare
+    medicare_number
+    medicare_ref
+    medicare_exp
+    bookings {
+      _id
+      booking_date
+      booking_start
+    }
+    clinical_files {
+      _id
+      file_type
+      title
+      date_created
+      text_field
+      medicare_item_code
+      recall
+      prev_prescription {
+        right_od {
+          sphere
+          cylinder
+          axis
+        }
+        left_os {
+          sphere
+          cylinder
+          axis
+        }
+        inter_add
+        near_add
+      }
+      given_prescription {
+        right_od {
+          sphere
+          cylinder
+          axis
+        }
+        left_os {
+          sphere
+          cylinder
+          axis
+        }
+        inter_add
+        near_add
+      }
+    }
+    notes {
+      _id
+    }
+    date_created 
+    created_by {
+      _id
+      username
+    }
+  }
+}`
