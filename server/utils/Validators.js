@@ -6,12 +6,12 @@ module.exports = {
         message: props => `${props.value} File type invalid`
     },
     validateBookingStatus: {
-        validator: function (value) { return ["Booked", "Confirmed", "Arrived", "Absent", "Cancelled"].includes(value) },
-        message: "booking status invalid" 
+        validator: function (value) { return ["booked", "confirmed", "arrived", "absent", "cancelled"].includes(value) },
+        message: props => `'${props.value}' is an invalid booking status` 
     },
     validateBookingType: {
         validator: function (value) { return ["general eye test", "health concern", "rms form", "re-check", "other"].includes(value) },
-        message: "booking type invalid" 
+        message: props => `'${props.value}' is an invalid booking type` 
     },
     validate30MinBlock: {
         validator: function (value) { return value.getMinutes() % 30 === 0 },
