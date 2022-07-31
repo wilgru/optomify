@@ -35,7 +35,7 @@ const bookingSchema = new Schema({
   },
   booking_status: {
     type: String,
-    default: "Booked",
+    default: "booked",
     validate: validateBookingStatus,
     required: true,
   },
