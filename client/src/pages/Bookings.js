@@ -17,7 +17,7 @@ import moment from 'moment';
 
 // Components
 import BookingForm from '../components/BookingForm';
-import Refetcher from '../components/refetcher';
+import BookExistingForm from '../components/BookExistingForm';
 
 // grpahQL
 import { GET_BOOK_SETUPS } from '../graphql/queries';
@@ -29,13 +29,12 @@ import { getWeek } from '../utils/date';
 
 // Ant Design from components
 const { Content, Sider } = Layout;
-const { Meta } = Card;
 const { RangePicker } = DatePicker;
 
 const Bookings = () => {
     //start date and end date for bookings to show
-    const [startDate, setStartDate] = useState(getWeek().firstDay.toISOString());
-    const [endDate, setEndDate] = useState(getWeek().lastDay.toISOString());
+    const [startDate, setStartDate] = useState(getWeek().firstDay);
+    const [endDate, setEndDate] = useState(getWeek().lastDay);
 
     // for booking modal
     const [bookingDate, setBookingDate] = useState('')
@@ -46,7 +45,7 @@ const Bookings = () => {
     const [deleteBooking, { deletError }] = useMutation(DELETE_BOOKING);
 
     // get booksetup and bookings
-    const { loading, data, err, refetch } = useQuery(GET_BOOK_SETUPS, {
+    const { loading, data, err} = useQuery(GET_BOOK_SETUPS, {
         variables: {
             startDate,
             endDate
@@ -91,57 +90,53 @@ const Bookings = () => {
 
     // buttons for popover
     const buttonSet = {
-        Empty: [
+        empty: [
             {text: "Book New", clickFn: function(event){
                 setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
                 setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
                 setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
-                showModal();
+                showModalNewPatient();
             }}, 
-            {text: "Book Existing", clickFn: function(event){}}, 
-            {text: "Block", clickFn: function(event){}}
+            {text: "Book Existing", clickFn: function(event){
+                setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
+                setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                showModalExistingPatient();
+            }}, 
+            {text: "Block", clickFn: function(event){
+            }}
         ],
-        Booked: [
+        booked: [
             {text: "Confirm", clickFn: function(event){
-                updateBookingFn(event, "Confirm")
+                updateBookingFn(event, "confirmed")
             }}, 
             {text: "Arrive", clickFn: function(event){
-                updateBookingFn(event, "Arrive")
+                updateBookingFn(event, "arrived")
             }}, 
             {text: "Cancel", clickFn: function(event){
                 deleteBookingFn(event)
             }}
         ],
-        Confirmed: [
+        confirmed: [
             {text: "Arrive", clickFn: function(event){
-                updateBookingFn(event, "Arrive")
+                updateBookingFn(event, "arrived")
             }}, 
             {text: "Cancel", clickFn: function(event){
                 deleteBookingFn(event)
             }}
         ],
-        Arrived: [
+        arrived: [
             {text: "Cancel", clickFn: function(event){
                 deleteBookingFn(event)
             }}
         ],
-        Blocked: [
+        blocked: [
             {text: "Cancel", clickFn: function(event){
                 deleteBookingFn(event)
             }}
         ],
-        OptomBreak: [],
+        optomBreak: [],
     };
-
-    // // buttons for popover
-    // const oldButtonSet = {
-    //     Empty: ["Book New", "Book Existing", "Block"],
-    //     Booked: ["Confirm", "Arrive", "Cancel"],
-    //     Confirmed: ["Arrive", "Cancel"],
-    //     Arrived: ["Cancel"],
-    //     Blocked: ["Cancel"],
-    //     OptomBreak: [],
-    // };
 
     // populate bookingList
     bookSetupData.forEach((day) => {
@@ -180,7 +175,7 @@ const Bookings = () => {
                     titleText: "Optometrist break",
                     subTitle: "",
                     bookingType: "optom break",
-                    bookingStatus: "Blocked",
+                    bookingStatus: "blocked",
                     firstName: "",
                     lastName: ""
                 })
@@ -217,7 +212,7 @@ const Bookings = () => {
                     titleText: "Available slot",
                     subTitle: "",
                     bookingType: "empty",
-                    bookingStatus: "Empty",
+                    bookingStatus: "empty",
                     firstName: "",
                     lastName: ""
                 })
@@ -325,25 +320,37 @@ const Bookings = () => {
         }
     }
 
-    // MODAL
+    // MODAL - NEW PATIENT
+    const [isModalVisibleNewPatient, setIsModalVisibleNewPatient] = useState(false);
 
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [okState, setOkState] = useState(false);
-
-    const showModal = () => {
-      setIsModalVisible(true);
+    const showModalNewPatient = () => {
+      setIsModalVisibleNewPatient(true);
     };
   
-    const handleOk = () => {
-      setIsModalVisible(false);
-      setOkState(true);
+    const handleOkNewPatient = () => {
+      setIsModalVisibleNewPatient(false);
     };
   
-    const handleCancel = () => {
-      setIsModalVisible(false);
+    const handleCancelNewPatient = () => {
+      setIsModalVisibleNewPatient(false);
     };
+    // END MODAL - NEW PATIENT
 
-    // END MODAL
+    // MODAL - EXISTING PATIENT
+    const [isModalVisibleExistingPatient, setIsModalVisibleExistingPatient] = useState(false);
+
+    const showModalExistingPatient = () => {
+      setIsModalVisibleExistingPatient(true);
+    };
+  
+    const handleOkExistingPatient = () => {
+      setIsModalVisibleExistingPatient(false);
+    };
+  
+    const handleCancelExistingPatient = () => {
+      setIsModalVisibleExistingPatient(false);
+    };
+    // END MODAL - EXISTING PATIENT
 
     // date working
     function dateWorker(date) {
@@ -363,9 +370,11 @@ const Bookings = () => {
 
     return (
         <Content style={{padding: '20px'}}>
-            <Modal title="Book new patient" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-                <BookingForm bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} modalVis={setIsModalVisible}/>
-                {/* <Refetcher modalVis={setIsModalVisible} bookingToUpdateId={bookingToUpdateId} action={action}/> */}
+            <Modal title="Book new patient" visible={isModalVisibleNewPatient} onOk={handleOkNewPatient} onCancel={handleCancelNewPatient}>
+                <BookingForm bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} modalVis={setIsModalVisibleNewPatient}/>
+            </Modal>
+            <Modal title="Book existing patient" visible={isModalVisibleExistingPatient} onOk={handleOkExistingPatient} onCancel={handleCancelExistingPatient}>
+                <BookExistingForm bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} modalVis={setIsModalVisibleExistingPatient}/>
             </Modal>
             <Layout>
                 <Sider width={220} className="site-layout-background">
@@ -399,7 +408,7 @@ const Bookings = () => {
                                             //             data-date={new Date(day.date.toISOString())}
                                             //             data-start-time={new Date(item.time.toISOString())}
                                             //             onClick={(event) => {
-                                            //                 showModal();
+                                            //                 showModalNewPatient();
                                             //                 setBookingDate(dateWorker(event.target.getAttribute('data-date')))
                                             //                 setbookingStart(dateWorker(event.target.getAttribute('data-start-time')))
                                             //                 setbookingEnd(dateWorker(event.target.getAttribute('data-start-time')))
@@ -443,7 +452,7 @@ const Bookings = () => {
                                                                 //                 setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
                                                                 //                 setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
                                                                 //                 setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
-                                                                //                 showModal();
+                                                                //                 showModalNewPatient();
                                                                 //             }}
                                                                 //         >
                                                                 //             {btn}   
