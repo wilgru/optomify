@@ -447,7 +447,7 @@ const resolvers = {
                 throw new AuthenticationError('You must be signed in!');
             }
         },
-        updateBooking: async (parent, {booking_to_update_id, update_action}, context) => {
+        updateBooking: async (parent, {booking_to_update_id, update_action, start_date, end_date}, context) => {
             if (context.user) {
                 try {
                     const booking = await Booking.findById(booking_to_update_id);
@@ -456,21 +456,67 @@ const resolvers = {
                         throw new Error("could not find booking");
                     }
 
+                    console.log(update_action)
                     switch (update_action) {
                         case "Confirm":
-                            booking.booking_type = "Confirmed"
+                            booking.booking_status = "Confirmed"
                             break;
                         case "Arrive":
-                            booking.booking_type = "Arrived"
+                            booking.booking_status = "Arrived"
                             break;
                         case "Absent":
-                            booking.booking_type = "Absent"
+                            booking.booking_status = "Absent"
                             break;
                         default:
                             throw new Error(`Action unknown`);
                     }
 
                     await booking.save();
+
+                    // return booking;
+
+                    // now get the booksetps and return them
+                    const bookSetup = await BookSetup.find({
+                        date: {
+                            $gte: start_date,
+                            $lte: end_date
+                        }
+                    })
+
+                    if (!bookSetup) {
+                        throw new Error("No Bookings were found with within these dates.");
+                    }
+
+                    // https://stackoverflow.com/questions/19222520/populate-nested-array-in-mongoose
+                    const populateBookSetup = bookSetup.map((bookDay) => {
+                        return bookDay.populate({ 
+                            path: 'bookings',
+                            populate: {
+                                path: 'patient',
+                                model: 'Patient'
+                            } 
+                        })
+                    })
+
+                    return populateBookSetup; // return [BookSetup]
+
+                } catch(e) {
+                    throw new Error(`${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
+        },
+        deleteBooking: async (parent, {booking_to_delete_id, start_date, end_date}, context) => {
+            if (context.user) {
+                try {
+                    const booking = await Booking.findOneAndDelete({ _id: booking_to_delete_id });
+
+                    if (!booking) {
+                        throw new Error("could not find booking");
+                    }
+
+                    // await booking.save();
 
                     // now get the booksetps and return them
                     const bookSetup = await BookSetup.find({

@@ -108,7 +108,8 @@ module.exports = gql`
         setupBook(date: String!, open_time: String!, closing_time: String!, optom_break_start: String!, optom_break_end: String!): BookSetup
         createNewPatientAndBooking(first_name: String!, last_name: String!, dob: String!, mobile_number: String, email: String!, has_medicare: Boolean!, medicare_number: String, medicare_ref: String, medicare_exp: String, booking_date: String!, booking_start: String!, booking_end: String!, booking_note: String, booking_type: String!): BookSetup
         updateClinicalFile(on_patient_id: ID!, file_to_update_id: ID!, file_type: String!, title: String!, text_field: String!, medicare_item_code: String, recall: String, ppr_sphere: Float, ppr_cylinder: Float, ppr_axis: Float, ppl_sphere: Float, ppl_cylinder: Float, ppl_axis: Float, pp_inter_add: Float, pp_near_add: Float, gpr_sphere: Float, gpr_cylinder: Float, gpr_axis: Float, gpl_sphere: Float, gpl_cylinder: Float, gpl_axis: Float, gp_inter_add: Float, gp_near_add: Float): Patient
-        updateBooking(booking_to_update_id: ID!, update_action: String!): [BookSetup]
+        updateBooking(booking_to_update_id: ID!, update_action: String!, start_date: String!, end_date: String!): [BookSetup]
+        deleteBooking(booking_to_delete_id: ID!, start_date: String!, end_date: String!): [BookSetup]
         updatePatient(patient_to_update_id: ID!, first_name: String!, last_name: String!, dob: String!, mobile_number: String, email: String!, has_medicare: Boolean!, medicare_number: String, medicare_ref: String, medicare_exp: String): Patient
     }
 `
