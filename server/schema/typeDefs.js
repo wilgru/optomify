@@ -93,7 +93,7 @@ module.exports = gql`
 
     type Query {
         getPatient(_id: ID!): Patient
-        getAllPatients: [Patient]
+        getAllPatients(search_term: String!): [Patient]
         getBookings(date: String!): Booking
         getBookSetups(start_date: String!, end_date: String!): [BookSetup]
     }

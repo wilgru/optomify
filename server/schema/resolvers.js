@@ -21,16 +21,35 @@ const resolvers = {
                 throw new AuthenticationError('You must be signed in!');
             }
         },
-        getAllPatients: async (parent, args, context) => {
+        getAllPatients: async (parent, { search_term }, context) => {
             if (context.user) {
                 try {
-                    const patients = await Patient.find();
+                    if (!search_term) {
+                        const patients = await Patient.find();
+
+                        if (!patients) {
+                            throw new Error("No Patients was found.");
+                        }
+
+                        return patients; // return Patient
+                    }
+
+                    // search using regex
+                    const patients = await Patient.find({
+                        $or: [
+                            {first_name: {$regex: search_term}}, 
+                            {last_name: {$regex: search_term}},
+                            {mobile_number: {$regex: search_term}},
+                            {email: {$regex: search_term}},
+                        ]
+                    });
 
                     if (!patients) {
                         throw new Error("No Patients was found.");
                     }
 
                     return patients; // return Patient
+                    
                 } catch(e) {
                     throw new Error(`${e.message}`);
                 }
