@@ -111,6 +111,7 @@ module.exports = gql`
         updateBooking(booking_to_update_id: ID!, update_action: String!, start_date: String!, end_date: String!): [BookSetup]
         deleteBooking(booking_to_delete_id: ID!, start_date: String!, end_date: String!): [BookSetup]
         updatePatient(patient_to_update_id: ID!, first_name: String!, last_name: String!, dob: String!, mobile_number: String, email: String!, has_medicare: Boolean!, medicare_number: String, medicare_ref: String, medicare_exp: String): Patient
+        updateNote(on_patient_id: ID!, title: String!, text_field: String!, note_to_update_id: ID!): Patient
     }
 `
 

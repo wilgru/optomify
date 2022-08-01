@@ -612,7 +612,32 @@ const resolvers = {
             } else {
                 throw new AuthenticationError('You must be signed in!');
             }
-        }
+        },
+        updateNote: async (parent, { title, text_field, note_to_update_id, on_patient_id }, context) => {
+            if (context.user) {
+                try {
+                    const note = await Note.findById(note_to_update_id);
+
+                    note.title = title
+                    note.text_field = text_field
+                    note.created_by = context.user._id;
+
+                    await note.save();
+
+                    const patient = await Patient.findById(on_patient_id);
+
+                    if (!patient) {
+                        throw new Error("could not find patient");
+                    }
+
+                    return patient.populate('notes'); // return Patient
+                } catch(e) {
+                    throw new Error(`${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
+        },
     }
 }
 
