@@ -377,19 +377,19 @@ const Bookings = () => {
     // return conditional icon
     function ConditionalIcon(props) {
         if(props.type === 'General eye test' || props.type === 'general eye test') {
-            return <EyeOutlined style={{fontSize: '40px'}}/>
+            return <EyeOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         } else if (props.type === 'health concern') {
-            return <ExclamationCircleOutlined style={{fontSize: '40px'}}/>
+            return <ExclamationCircleOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         } else if (props.type === 'rms form') {
-            return <CarOutlined style={{fontSize: '40px'}}/>
+            return <CarOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         } else if (props.type === 're-check') {
-            return <SyncOutlined style={{fontSize: '40px'}}/>
+            return <SyncOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         } else if (props.type === 'other') {
-            return <SmallDashOutlined style={{fontSize: '40px'}}/>
+            return <SmallDashOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         } else if (props.type === 'optom break') {
-            return <CoffeeOutlined style={{fontSize: '40px'}}/>
+            return <CoffeeOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         } else {
-            return <ClockCircleOutlined style={{fontSize: '40px'}}/>
+            // return <ClockCircleOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         }
     }
 
@@ -451,10 +451,10 @@ const Bookings = () => {
             </Modal>
             <Layout>
                 <Sider width={220} className="site-layout-background">
-                    <Menu mode="inline" defaultSelectedKeys={['1']} defaultOpenKeys={['sub1']} style={{height: '100%'}} items={subNav} />
+                    <Menu mode="inline" style={{height: '100%'}} items={subNav} />
                 </Sider>
                 <Layout style={{padding: '0 24px 24px'}}>
-                    <Content className="site-layout-background" style={{ padding: 24, margin: 0, minHeight: 280 }}>
+                    <Content className="site-layout-background" style={{ padding: "20 0", margin: 0, minHeight: 280 }}>
                         {loading ? (
                             <h1>loading</h1>
                         ) : (
@@ -506,7 +506,7 @@ const Bookings = () => {
                                             //         )}
                                             //     </div>
                                             // </List.Item>
-                                            <List.Item className={item.bookingStatus}>
+                                            <List.Item className={`${item.bookingStatus} ${item.hasPassed ? "past" : "future"} appt-li`}>
                                                 {/* {console.log("buttonSet in component")}
                                                 {console.log(buttonSet[item.bookingStatus])}
                                                 {buttonSet[item.bookingStatus].map(btn => {
@@ -570,11 +570,13 @@ const Bookings = () => {
                                                     title={`${item.titleTime} - ${item.titleText}`}
                                                     placement="right"
                                                 >
-                                                    <div className={"fill-container"} style={{display:"flex", width: "100%", padding: "0"}}> 
+                                                    <div style={{display:"flex", width: "100%", padding: "0"}}> 
                                                         <ConditionalIcon type={item.bookingType} />
-                                                        <div className={`booking ${item.hasPassed ? "past" : "future"}`}>
-                                                            {<h4>{`${item.titleTime} - ${item.titleText}`}</h4>}
-                                                            {item.subTitle} 
+                                                        {/* <div style={{display:"flex", flexDirection:"column", width: "100%", padding: "0"}} className={`booking ${item.hasPassed ? "past" : "future"}`}> */}
+                                                        <div style={{display:"flex", flexDirection:"column", width: "100%", padding: "0"}}>
+                                                            {<h4 style={{margin: 0}}>{item.titleTime}</h4>}
+                                                            {<h4 style={{margin: 0}}>{item.titleText}</h4>}
+                                                            {item.subTitle}
                                                         </div>
                                                     </div>
                                                 </Popover>
