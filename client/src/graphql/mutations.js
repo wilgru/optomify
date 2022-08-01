@@ -27,7 +27,7 @@ export const CREATE_NEW_PATIENT = gql`
 `
 
 export const CREATE_NEW_BOOKING = gql`
-   mutation CreateNewBooking($bookingDate: String!, $bookingStart: String!, $bookingEnd: String!, $onPatientId: ID!, $bookingType: String!, $bookingNote: String) {
+   mutation CreateNewBooking($bookingDate: String!, $bookingStart: String!, $bookingEnd: String!, $onPatientId: ID, $bookingType: String!, $bookingNote: String) {
   createNewBooking(booking_date: $bookingDate, booking_start: $bookingStart, booking_end: $bookingEnd, on_patient_id: $onPatientId, booking_type: $bookingType, booking_note: $bookingNote) {
     _id
     first_name
