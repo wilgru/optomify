@@ -1,5 +1,6 @@
 // React
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // Ant Design
 import { List, Layout, DatePicker, Menu, Button, Card, Modal, Popover } from 'antd';
@@ -18,6 +19,7 @@ import moment from 'moment';
 // Components
 import BookingForm from '../components/BookingForm';
 import BookExistingForm from '../components/BookExistingForm';
+import SetupBook from '../components/SetupBook';
 
 // grpahQL
 import { GET_BOOK_SETUPS } from '../graphql/queries';
@@ -142,8 +144,9 @@ const Bookings = () => {
         optomBreak: [],
     };
 
-    // get teh bookings and booksetup from given time range
+    // get the bookings and booksetup from given time range
     const [bookingList, setBookingList] = useState([])
+    const [nextPatient, setNextPatient] = useState({})
 
     // populate bookingList
     useEffect(() => {
@@ -157,8 +160,8 @@ const Bookings = () => {
             // console.log(day)
 
             // the current time to check whether appt is in the past or future
-            const beforeNow = new Date().toISOString()
-            const beforeNowUTC = moment(beforeNow);
+            const rightNow = new Date().toISOString()
+            const rightNowUTC = moment(rightNow);
 
             let todaysList = {}
             const today = new Date(parseInt(day.open_time)).toISOString()
@@ -194,7 +197,7 @@ const Bookings = () => {
                         subTitle: "",
                         bookingType: "optom break",
                         bookingStatus: "blocked",
-                        hasPassed: (moment(optomBreakUTC).isBefore(beforeNowUTC)),
+                        hasPassed: (moment(optomBreakUTC).isBefore(rightNowUTC)),
                         firstName: "",
                         lastName: ""
                     })
@@ -207,6 +210,18 @@ const Bookings = () => {
                     const bookingTimeUTC = moment.utc(bookingTime).subtract(10, 'h');
 
                     if (moment(cursorUTC).isSame(bookingTimeUTC)) {
+                        // set the next patient
+                        if (moment(bookingTimeUTC).isAfter(rightNowUTC) && Object.keys(nextPatient).length === 0) {
+                            console.log('\n\n', booking.patient.first_name,'\n\n')
+                            setNextPatient({
+                                id: booking.patient._id,
+                                firstName: booking.patient.first_name,
+                                lastName: booking.patient.last_name,
+                                time: titleTime,
+                                bookingType: booking.booking_type
+                            })
+                        }
+
                         // console.log("BOOKING HERE")
                         todaysList.list.push({
                             time: bookingTimeUTC,
@@ -217,7 +232,7 @@ const Bookings = () => {
                             bookingType: booking.booking_type,
                             bookingStatus: booking.booking_status,
                             bookingNote: booking.booking_note,
-                            hasPassed: (moment(bookingTimeUTC).isBefore(beforeNowUTC)),
+                            hasPassed: (moment(bookingTimeUTC).isBefore(rightNowUTC)),
                             firstName: booking.patient.first_name,
                             lastName: booking.patient.last_name,
                         })
@@ -234,7 +249,7 @@ const Bookings = () => {
                         subTitle: "",
                         bookingType: "empty",
                         bookingStatus: "empty",
-                        hasPassed: (moment(cursorUTC).isBefore(moment(beforeNowUTC))),
+                        hasPassed: (moment(cursorUTC).isBefore(moment(rightNowUTC))),
                         firstName: "",
                         lastName: ""
                     })
@@ -249,6 +264,9 @@ const Bookings = () => {
         })
         console.log('bookingList');
         console.log(bookingList);
+
+        console.log('nextPatient')
+        console.log(nextPatient)
     }, [data])
 
     // listener for date range picker
@@ -334,9 +352,10 @@ const Bookings = () => {
                 {
                     key: 'sub2option1',
                     label: (    
-                        <>
-
-                        </>
+                        <Link to={{ pathname: `/patients/${nextPatient.id}` }} className="patient-record-li">
+                            <h4>{`${nextPatient.time} - ${nextPatient.firstName} ${nextPatient.lastName}`}</h4>
+                            <h5>{nextPatient.bookingType}</h5>
+                        </Link>
                     )
                 }
             ]
@@ -348,10 +367,7 @@ const Bookings = () => {
                 {
                     key: 'sub3option1',
                     label: (    
-                        <div>
-                            <DatePicker size={"small"} format={[ "DD MMM", "YYYY-MM-DDTHH:mm:ss"]} defaultValue={moment(startDate, "YYYY-MM-DDT00:00:00+00.00")} onChange={onPanelChangeNewBook}/>
-                            <Button type="primary">Button</Button>
-                        </div>
+                        <SetupBook />
                     )
                 }
             ]
@@ -442,7 +458,10 @@ const Bookings = () => {
                         {loading ? (
                             <h1>loading</h1>
                         ) : (
-                            <div style={{display:"flex"}}>
+                            <div style={{
+                                display:"flex",
+                                // justifyContent: "space-evenly"
+                            }}>
                                 {console.log('bookingList in return component')}
                                 {console.log(bookingList)}
                                 {bookingList.map((day) => {
@@ -452,6 +471,10 @@ const Bookings = () => {
                                             bordered
                                             itemLayout="horizontal"
                                             dataSource={day.list}
+                                            style={{
+                                                marginRight: "20px",
+                                                width: '100%'
+                                            }}
                                             renderItem={(item) => (
                                             // <List.Item>
                                             //     <div style={{display:"flex"}}> 
