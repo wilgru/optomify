@@ -8,7 +8,7 @@ import {
     EyeOutlined,
     CoffeeOutlined,
     CarOutlined,
-    SyncOutlined,
+    ReloadOutlined,
     ExclamationCircleOutlined,
     SmallDashOutlined,
     StopOutlined
@@ -419,7 +419,7 @@ const Bookings = () => {
         } else if (props.type === 'rms form') {
             return <CarOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         } else if (props.type === 're-check') {
-            return <SyncOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
+            return <ReloadOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         } else if (props.type === 'other') {
             return <SmallDashOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         } else if (props.type === 'optom break') {
