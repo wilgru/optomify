@@ -289,3 +289,14 @@ mutation DeleteBooking($bookingToDeleteId: ID!, $startDate: String!, $endDate: S
     }
   }
 }`
+
+export const SETUP_BOOK = gql`
+mutation SetupBook($date: String!, $openTime: String!, $closingTime: String!, $optomBreakStart: String!, $optomBreakEnd: String!) {
+  setupBook(date: $date, open_time: $openTime, closing_time: $closingTime, optom_break_start: $optomBreakStart, optom_break_end: $optomBreakEnd) {
+    _id
+    date
+    open_time
+    closing_time
+  }
+}
+`
