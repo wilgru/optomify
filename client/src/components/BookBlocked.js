@@ -77,8 +77,8 @@ const BookBlocked = (props) => {
                     span: 16
                     }}
                 >
-                    <Button type="primary" htmlType="submit">
-                        Book patient
+                    <Button type="danger" htmlType="submit">
+                        Block 
                     </Button>
                 </Form.Item>
             </Form>
