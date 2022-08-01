@@ -31,11 +31,11 @@ const Patients = (props) => {
     // return conditional icon
     function ConditionalIcon(props) {
         if(props.type === 'prescription') {
-            return <ReconciliationOutlined style={{fontSize: '40px'}}/>
+            return <ReconciliationOutlined style={{fontSize: '40px', margin: 'auto 20px'}}/>
         } else if (props.type === 'health check') {
-            return <HeartOutlined style={{fontSize: '40px'}}/>
+            return <HeartOutlined style={{fontSize: '40px', margin: 'auto 20px'}}/>
         } else {
-            return <FileTextOutlined style={{fontSize: '40px'}}/>
+            return <FileTextOutlined style={{fontSize: '40px', margin: 'auto 20px'}}/>
         }
     }
 
@@ -90,14 +90,15 @@ const Patients = (props) => {
                         dataSource={clinicalFiles}
                         renderItem={(item) => (
                             <List.Item className={"patient-record-li"}>
-                                <div className={"patient-record"} onClick={() => {
+                                <div className={"patient-record"} 
+                                onClick={() => {
                                     setSelectedClinicalFile(item)
                                     showModal()
                                 }}>
                                     <ConditionalIcon type={item.file_type}/>
                                     <div>
                                         <h3>{`${item.title}`}</h3>
-                                        <h4>{item.date_created} </h4>
+                                        <h4>{Date(item.date_created)} </h4>
                                     </div>
                                 </div>
                             </List.Item>
