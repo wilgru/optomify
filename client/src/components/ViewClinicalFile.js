@@ -39,40 +39,38 @@ const ViewClinicalFile = (props) => {
         console.log(props)
         console.log(values.tinyMCEValue2?.level.content)
 
-        if (values.fileType === "prescription") {
-            updateClinicalFile({
-                variables: {
-                    onPatientId: props.patientId,
-                    fileToUpdateId: props.selectedClinicalFileData._id,
-                    fileType: values.fileType,
-                    title: values.title,
-                    textField: values.tinyMCEValue2?.level.content || props.selectedClinicalFileData.text_field, // becuase tinymce doesnt exactly work like the other inputs, it wont give its initial val as the value on submit. itll give nothing if the user doesnt change anything in the input
-                    medicareItemCode: values.medicareItemCode,
+        updateClinicalFile({
+            variables: {
+                onPatientId: props.patientId,
+                fileToUpdateId: props.selectedClinicalFileData._id,
+                fileType: values.fileType,
+                title: values.title,
+                textField: values.tinyMCEValue2?.level.content || props.selectedClinicalFileData.text_field, // becuase tinymce doesnt exactly work like the other inputs, it wont give its initial val as the value on submit. itll give nothing if the user doesnt change anything in the input
+                medicareItemCode: values.medicareItemCode,
+                
+                pprSphere: values.previousRight ? getSph(values.previousRight) : undefined,
+                pprCylinder: values.previousRight ? getCyl(values.previousRight) : undefined,
+                pprAxis: values.previousRight ? getAxis(values.previousRight) : undefined,
+                pplSphere: values.previousLeft ? getSph(values.previousLeft) : undefined,
+                pplCylinder: values.previousLeft ? getCyl(values.previousLeft) : undefined,
+                pplAxis: values.previousLeft ? getAxis(values.previousLeft) : undefined,
+                ppInterAdd: parseFloat(values.previousInterAdd) || 0,
+                ppNearAdd: parseFloat(values.previousNearAdd) || 0,
 
-                    pprSphere: getSph(values.previousRight),
-                    pprCylinder: getCyl(values.previousRight),
-                    pprAxis: getAxis(values.previousRight),
-                    pplSphere: getSph(values.previousLeft),
-                    pplCylinder: getCyl(values.previousLeft),
-                    pplAxis: getAxis(values.previousLeft),
-                    ppInterAdd: parseInt(values.previousInterAdd),
-                    ppNearAdd: parseInt(values.previousNearAdd),
-
-                    gprSphere: getSph(values.givenRight),
-                    gprCylinder: getCyl(values.givenRight),
-                    gprAxis: getAxis(values.givenRight),
-                    gplSphere: getSph(values.givenLeft),
-                    gplCylinder: getCyl(values.givenLeft),
-                    gplAxis: getAxis(values.givenLeft),
-                    gpInterAdd: parseInt(values.givenInterAdd),
-                    gpNearAdd: parseInt(values.givenNearAdd)
-                },
-                refetchQueries: [
-                    {query: GET_PATIENT},
-                    GET_PATIENT
-                ]
-            });
-        }
+                gprSphere: values.givenRight ? getSph(values.givenRight) : undefined,
+                gprCylinder: values.givenRight ? getCyl(values.givenRight) : undefined,
+                gprAxis: values.givenRight ? getAxis(values.givenRight) : undefined,
+                gplSphere: values.givenLeft ? getSph(values.givenLeft) : undefined,
+                gplCylinder: values.givenLeft ? getCyl(values.givenLeft) : undefined,
+                gplAxis: values.givenLeft ? getAxis(values.givenLeft) : undefined,
+                gpInterAdd: parseFloat(values.givenInterAdd) || 0,
+                gpNearAdd: parseFloat(values.givenNearAdd) || 0
+            },
+            refetchQueries: [
+                {query: GET_PATIENT},
+                GET_PATIENT
+            ]
+        });
         
         props.modalVis(false);
     };
@@ -401,28 +399,6 @@ const ViewClinicalFile = (props) => {
                 />
             </Form.Item>
         </Card>
-
-        <Form.Item
-            label="Expiry"
-            name="expiry"
-            rules={[
-            {
-                required: conditionalReq,
-                validator: async (_, value) => {
-                if (!value) return;
-
-                if (value > Date.now()) {
-                    return Promise.resolve(); //resolve to say true or it passed
-                } else {
-                    return Promise.reject(new Error("'title' is must be unique"));
-                }
-                },
-                message: "Please input valid date in the future!"
-            }
-            ]}
-        >
-            <DatePicker disabled={!conditionalReq} />
-        </Form.Item>
 
         <Form.Item
             label="Medicare item code"
