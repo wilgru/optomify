@@ -411,6 +411,7 @@ const resolvers = {
                         medicare_number,
                         medicare_ref, 
                         medicare_exp,
+                        booking_note: booking_note || null,
                         created_by
                     });
     
