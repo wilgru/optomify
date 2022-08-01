@@ -70,6 +70,7 @@ const BookExistingForm = (props) => {
     // search field
     const onSearch = (value) => {
         setSearchTerm(value)
+        setSelectedPatientId("")
     }
 
     return (
@@ -88,7 +89,7 @@ const BookExistingForm = (props) => {
                         marginBottom: 10,
                     }}
                 />
-                {(searchTerm !== "" || selectedPatientId === "") ? (
+                {(selectedPatientId === "" && searchTerm !== "") ? (
                     <>
                         {loading ? (
                             <h1>loading...</h1>
