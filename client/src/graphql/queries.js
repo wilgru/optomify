@@ -99,6 +99,8 @@ export const GET_BOOK_SETUPS = gql`
                 _id
                 first_name
                 last_name
+                email
+                mobile_number
             }
         }
     }
