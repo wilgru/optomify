@@ -16,6 +16,11 @@
 .ant-layout-sider {
   border-radius: @border-radius-base;
   box-shadow: @box-shadow-base;
+  height: 500px;
+}
+
+.ant-layout {
+  min-height: 77vh!important;
 }
 
 .ant-menu-item {
@@ -38,10 +43,19 @@
   margin-left: 10px
 }
 
-// bookingss
+// bookings
+.appt-li {
+  padding: 5px 0!important;
+}
+
+.appt-li:hover {
+  background-color: lightblue;
+}
+
 .past, .past h4 {
-  color: #aaaaaa;
+  color: rgb(70, 70, 70);
   font-style: italic;
+  opacity: 0.75;
 }
 
 .confirmed {
@@ -86,7 +100,10 @@
   flex-direction: column;
 }
 
-.patient-record-li:hover {
+.patient-record-li {
+  padding: 5px 0;
+}
 
+.patient-record-li:hover {
   background-color: lightblue;
 }
