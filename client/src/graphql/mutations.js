@@ -41,8 +41,8 @@ export const CREATE_NEW_BOOKING = gql`
 `
 
 export const CREATE_NEW_PATIENT_AND_BOOKING = gql`
-    mutation CreateNewPatientAndBooking($firstName: String!, $lastName: String!, $dob: String!, $email: String!, $mobileNumber: String, $hasMedicare: Boolean!, $medicareNumber: String, $medicareRef: String, $medicareExp: String, $bookingDate: String!, $bookingStart: String!, $bookingEnd: String!, $bookingType: String!) {
-    createNewPatientAndBooking(first_name: $firstName, last_name: $lastName, dob: $dob, email: $email, mobile_number: $mobileNumber, has_medicare: $hasMedicare, medicare_number: $medicareNumber, medicare_ref: $medicareRef, medicare_exp: $medicareExp, booking_date: $bookingDate, booking_start: $bookingStart, booking_end: $bookingEnd, booking_type: $bookingType) {
+    mutation CreateNewPatientAndBooking($firstName: String!, $lastName: String!, $dob: String!, $email: String!, $mobileNumber: String, $hasMedicare: Boolean!, $medicareNumber: String, $medicareRef: String, $medicareExp: String, $bookingDate: String!, $bookingStart: String!, $bookingEnd: String!, $bookingType: String!, $bookingNote: String) {
+    createNewPatientAndBooking(first_name: $firstName, last_name: $lastName, dob: $dob, email: $email, mobile_number: $mobileNumber, has_medicare: $hasMedicare, medicare_number: $medicareNumber, medicare_ref: $medicareRef, medicare_exp: $medicareExp, booking_date: $bookingDate, booking_start: $bookingStart, booking_end: $bookingEnd, booking_type: $bookingType, booking_note: $bookingNote) {
         _id
         date
         open_time

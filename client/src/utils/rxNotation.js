@@ -13,6 +13,11 @@ export const getAxis = (rx) => {
 }
 
 export const createRxNotation = (sph, cyl, axis) => {
+
+    if (sph === null, cyl == null, axis === null) {
+        return ''
+    }
+
     let prefix = ""
     if (sph >= 0) {
         prefix = "+"

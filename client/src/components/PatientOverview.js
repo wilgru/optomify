@@ -160,10 +160,10 @@ const PatientOverview = (props) => {
                 }}
             >
                 <Checkbox             
-                onChange={(value) => {
-                    value.target.checked === true
-                    ? setEligableForMedicare(true)
-                    : setEligableForMedicare(false);
+                    onChange={(value) => {
+                        value.target.checked === true
+                        ? setEligableForMedicare(true)
+                        : setEligableForMedicare(false);
                 }}>
                     Eligable for Medicare
                 </Checkbox>
@@ -174,7 +174,8 @@ const PatientOverview = (props) => {
                 name="medicare_number"
                 rules={[
                 {
-                    required: eligableForMedicare
+                    required: eligableForMedicare,
+                    message: "please provide medicare"
                 }
                 ]}
             >
@@ -186,7 +187,8 @@ const PatientOverview = (props) => {
                 name="medicare_ref"
                 rules={[
                 {
-                    required: eligableForMedicare
+                    required: eligableForMedicare,
+                    message: "please provide medicare"
                 }
                 ]}
             >
@@ -198,7 +200,8 @@ const PatientOverview = (props) => {
                 name="medicare_exp"
                 rules={[
                 {
-                    required: eligableForMedicare
+                    required: eligableForMedicare,
+                    message: "please provide medicare"
                 }
                 ]}
             >

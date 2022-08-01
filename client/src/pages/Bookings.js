@@ -36,11 +36,15 @@ const Bookings = () => {
     const [startDate, setStartDate] = useState(getWeek().firstDay);
     const [endDate, setEndDate] = useState(getWeek().lastDay);
 
+    // console.log("start/end")
+    // console.log(startDate, endDate)
+
     // for booking modal
     const [bookingDate, setBookingDate] = useState('')
     const [bookingStart, setbookingStart] = useState('')
     const [bookingEnd, setbookingEnd] = useState('')
 
+    // mutations for updating bookings and deleteing bookings
     const [updateBooking, { updateError }] = useMutation(UPDATE_BOOKING);
     const [deleteBooking, { deletError }] = useMutation(DELETE_BOOKING);
 
@@ -53,7 +57,7 @@ const Bookings = () => {
         fetchPolicy: "no-cache"
     });
     const bookSetupData = data?.getBookSetups || [];
-    const bookingList = []
+    // const bookingList = []
 
     // update bookinng function
     const updateBookingFn = (event, action) => {
@@ -138,96 +142,149 @@ const Bookings = () => {
         optomBreak: [],
     };
 
+    // get teh bookings and booksetup from given time range
+    const [bookingList, setBookingList] = useState([])
+
     // populate bookingList
-    bookSetupData.forEach((day) => {
-        // console.log("DAY HERE")
-        // console.log(day)
-        let todaysList = {}
-        const today = new Date(parseInt(day.open_time)).toISOString()
-        const todayUTC = moment.utc(today).subtract(10, 'h');
-        todaysList.date = todayUTC;
-        todaysList.list = [];
+    useEffect(() => {
+        setBookingList([])
+        console.log('bookSetupData')
+        console.log(bookSetupData)
 
-        // find static times
-        const opening = new Date(parseInt(day.open_time)).toISOString()
-        const openingUTC = moment.utc(opening).subtract(10, 'h');
+        // populate bookingList
+        bookSetupData.forEach((day) => {
+            // console.log("DAY HERE")
+            // console.log(day)
 
-        const closing = new Date(parseInt(day.closing_time)).toISOString()
-        const closingUTC = moment.utc(closing).subtract(10, 'h');
+            // the current time to check whether appt is in the past or future
+            const beforeNow = new Date().toISOString()
+            const beforeNowUTC = moment(beforeNow);
 
-        const optomBreak = new Date(parseInt(day.optom_break_start)).toISOString()
-        const optomBreakUTC = moment.utc(optomBreak).subtract(10, 'h');
+            let todaysList = {}
+            const today = new Date(parseInt(day.open_time)).toISOString()
+            const todayUTC = moment.utc(today).subtract(10, 'h');
+            todaysList.date = todayUTC;
+            todaysList.list = [];
 
-        // init cursor
-        let cursorUTC = moment(openingUTC)
-        
-        while (moment(cursorUTC).isBefore(closingUTC)) {
+            // find static times
+            const opening = new Date(parseInt(day.open_time)).toISOString()
+            const openingUTC = moment.utc(opening).subtract(10, 'h');
 
-            let titleTime = `${cursorUTC.hour()+10}:${String(cursorUTC.minute()).padStart(2, '0')}`
-            let slotTaken = false
+            const closing = new Date(parseInt(day.closing_time)).toISOString()
+            const closingUTC = moment.utc(closing).subtract(10, 'h');
 
-            // first check for optom break
-            if (moment(cursorUTC).isSame(optomBreakUTC)) {
-                // console.log("OPTOM BREAK HERE")
-                todaysList.list.push({
-                    time: optomBreakUTC,
-                    titleTime: titleTime,
-                    titleText: "Optometrist break",
-                    subTitle: "",
-                    bookingType: "optom break",
-                    bookingStatus: "blocked",
-                    firstName: "",
-                    lastName: ""
-                })
-                slotTaken = true
-            }
+            const optomBreak = new Date(parseInt(day.optom_break_start)).toISOString()
+            const optomBreakUTC = moment.utc(optomBreak).subtract(10, 'h');
 
-            // now check bookings
-            day.bookings.forEach((booking) => {
-                const bookingTime = new Date(parseInt(booking.booking_start)).toISOString()
-                const bookingTimeUTC = moment.utc(bookingTime).subtract(10, 'h');
+            // init cursor
+            let cursorUTC = moment(openingUTC)
+            
+            // begin iterating
+            while (moment(cursorUTC).isBefore(closingUTC)) {
+                let titleTime = `${cursorUTC.hour()+10}:${String(cursorUTC.minute()).padStart(2, '0')}`
+                let slotTaken = false
 
-                if (moment(cursorUTC).isSame(bookingTimeUTC)) {
-                    // console.log("BOOKING HERE")
+                // first check for optom break
+                if (moment(cursorUTC).isSame(optomBreakUTC)) {
+                    // console.log("OPTOM BREAK HERE")
                     todaysList.list.push({
-                        time: bookingTimeUTC,
+                        time: optomBreakUTC,
                         titleTime: titleTime,
-                        titleText:`${booking.patient.first_name} ${booking.patient.last_name}` ,
-                        subTitle: booking.booking_type,
-                        bookingId: booking._id,
-                        bookingType: booking.booking_type,
-                        bookingStatus: booking.booking_status,
-                        firstName: booking.patient.first_name,
-                        lastName: booking.patient.last_name,
+                        titleText: "Optometrist break",
+                        subTitle: "",
+                        bookingType: "optom break",
+                        bookingStatus: "blocked",
+                        hasPassed: (moment(optomBreakUTC).isBefore(beforeNowUTC)),
+                        firstName: "",
+                        lastName: ""
                     })
                     slotTaken = true
                 }
-            })
 
-            if (!slotTaken) {
-                // console.log("EMPTY")
-                todaysList.list.push({
-                    time: moment(cursorUTC),
-                    titleTime: titleTime,
-                    titleText: "Available slot",
-                    subTitle: "",
-                    bookingType: "empty",
-                    bookingStatus: "empty",
-                    firstName: "",
-                    lastName: ""
+                // now check bookings
+                day.bookings.forEach((booking) => {
+                    const bookingTime = new Date(parseInt(booking.booking_start)).toISOString()
+                    const bookingTimeUTC = moment.utc(bookingTime).subtract(10, 'h');
+
+                    if (moment(cursorUTC).isSame(bookingTimeUTC)) {
+                        // console.log("BOOKING HERE")
+                        todaysList.list.push({
+                            time: bookingTimeUTC,
+                            titleTime: titleTime,
+                            titleText:`${booking.patient.first_name} ${booking.patient.last_name}` ,
+                            subTitle: booking.booking_type,
+                            bookingId: booking._id,
+                            bookingType: booking.booking_type,
+                            bookingStatus: booking.booking_status,
+                            bookingNote: booking.booking_note,
+                            hasPassed: (moment(bookingTimeUTC).isBefore(beforeNowUTC)),
+                            firstName: booking.patient.first_name,
+                            lastName: booking.patient.last_name,
+                        })
+                        slotTaken = true
+                    }
                 })
+
+                if (!slotTaken) {
+                    // console.log("EMPTY")
+                    todaysList.list.push({
+                        time: moment(cursorUTC),
+                        titleTime: titleTime,
+                        titleText: "Available slot",
+                        subTitle: "",
+                        bookingType: "empty",
+                        bookingStatus: "empty",
+                        hasPassed: (moment(cursorUTC).isBefore(moment(beforeNowUTC))),
+                        firstName: "",
+                        lastName: ""
+                    })
+                }
+                cursorUTC = cursorUTC.add(30, 'm')
+                // console.log(cursorUTC._d)
             }
-            cursorUTC = cursorUTC.add(30, 'm')
-            // console.log(cursorUTC._d)
-        }
 
-        bookingList.push(todaysList);
+            setBookingList(current => [...current, todaysList])
 
-    })
-    console.log(bookingList);
+            // bookingList.push(todaysList);
+        })
+        console.log('bookingList');
+        console.log(bookingList);
+    }, [data])
 
     // listener for date range picker
-    const onPanelChange = (value, mode) => {
+    const onPanelChangeShowRange = (value, mode) => {
+        // console.log('Start date:', value[0].format('YYYY-MM-DDT00:00:00+00.00'));
+        // console.log('End date:', value[1].format('YYYY-MM-DDT00:00:00+00.00'));
+        // console.log('Start date:', value[0].toDate());
+        // console.log('End date:', value[1].toDate());
+
+        setStartDate(value[0].toDate());
+        setEndDate(value[1].toDate());
+
+        // // https://stackoverflow.com/questions/563406/how-to-add-days-to-date
+        // function addDays(date, days) {
+        //     var result = new Date(date);
+        //     result.setDate(result.getDate() + days);
+        //     return result;
+        // }
+        
+        // // https://stackoverflow.com/questions/4413590/javascript-get-array-of-dates-between-2-dates
+        // function getDates(startDate, stopDate) {
+        //     var dateArray = new Array();
+        //     var currentDate = startDate;
+        //     while (currentDate <= stopDate) {
+        //         dateArray.push(new Date (currentDate));
+        //         currentDate = addDays(currentDate, 1);
+        //     }
+        //     return dateArray;
+        // }
+
+        // console.log(value[0].format('YYYY-MM-DD'), mode);
+        // console.log(value[1].format('YYYY-MM-DD'), mode);
+    };
+
+    // listener for date range picker for a new book
+    const onPanelChangeNewBook = (value, mode) => {
         console.log('Start date:', value[0].format('YYYY-MM-DDT00:00:00+00.00'));
         console.log('End date:', value[1].format('YYYY-MM-DDT00:00:00+00.00'));
 
@@ -263,7 +320,7 @@ const Bookings = () => {
                     key: 'sub1option1',
                     label: (    
                         <div>
-                            <RangePicker size={"small"} format={[ "DD MMM", "YYYY-MM-DDTHH:mm:ss"]} defaultValue={[moment(startDate, "YYYY-MM-DDT00:00:00+00.00"), moment(endDate, "YYYY-MM-DDT00:00:00+00.00")]} onChange={onPanelChange}/>
+                            <RangePicker size={"small"} format={[ "DD MMM", "YYYY-MM-DDTHH:mm:ss"]} defaultValue={[moment(startDate, "YYYY-MM-DDT00:00:00+00.00"), moment(endDate, "YYYY-MM-DDT00:00:00+00.00")]} onChange={onPanelChangeShowRange}/>
                             <Button type="primary">Button</Button>
                         </div>
                     )
@@ -292,7 +349,7 @@ const Bookings = () => {
                     key: 'sub3option1',
                     label: (    
                         <div>
-                            <DatePicker size={"small"} format={[ "DD MMM", "YYYY-MM-DDTHH:mm:ss"]} defaultValue={moment(startDate, "YYYY-MM-DDT00:00:00+00.00")} onChange={onPanelChange}/>
+                            <DatePicker size={"small"} format={[ "DD MMM", "YYYY-MM-DDTHH:mm:ss"]} defaultValue={moment(startDate, "YYYY-MM-DDT00:00:00+00.00")} onChange={onPanelChangeNewBook}/>
                             <Button type="primary">Button</Button>
                         </div>
                     )
@@ -386,6 +443,8 @@ const Bookings = () => {
                             <h1>loading</h1>
                         ) : (
                             <div style={{display:"flex"}}>
+                                {console.log('bookingList in return component')}
+                                {console.log(bookingList)}
                                 {bookingList.map((day) => {
                                     return (
                                         <List
@@ -425,13 +484,21 @@ const Bookings = () => {
                                             //     </div>
                                             // </List.Item>
                                             <List.Item className={item.bookingStatus}>
+                                                {/* {console.log("buttonSet in component")}
+                                                {console.log(buttonSet[item.bookingStatus])}
+                                                {buttonSet[item.bookingStatus].map(btn => {
+                                                    return <h1>hello</h1>
+                                                })} */}
                                                 <Popover
                                                     content={
                                                     <div className={"booking-card"}>
                                                         {item.bookingNote ? (
-                                                            <Card className={"booking-note"}>
-                                                                {item.bookingNote}
-                                                            </Card>
+                                                            <>
+                                                                <h4>Bookings notes:</h4>
+                                                                <Card className={"booking-note"}>
+                                                                    {item.bookingNote}
+                                                                </Card>
+                                                            </>
                                                         ) : (
                                                             <></>
                                                         )}
@@ -482,7 +549,7 @@ const Bookings = () => {
                                                 >
                                                     <div className={"fill-container"} style={{display:"flex", width: "100%", padding: "0"}}> 
                                                         <ConditionalIcon type={item.bookingType} />
-                                                        <div className='booking'>
+                                                        <div className={`booking ${item.hasPassed ? "past" : "future"}`}>
                                                             {<h4>{`${item.titleTime} - ${item.titleText}`}</h4>}
                                                             {item.subTitle} 
                                                         </div>
