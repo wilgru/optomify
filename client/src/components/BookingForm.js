@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 // antd
-import { Button, Checkbox, Form, Input, DatePicker, Select } from 'antd';
+import { Button, Checkbox, Form, Input, DatePicker, Select, Card } from 'antd';
 import moment from 'moment';
 
 // utils
@@ -13,22 +13,23 @@ import { GET_BOOK_SETUPS } from '../graphql/queries';
 import { useMutation } from '@apollo/client';
 
 const { Option } = Select;
+const { TextArea } = Input;
 
 const BookingForm = (props) => {
     const [form] = Form.useForm();
-    const hasMedicare = Form.useWatch('has_medicare', form);
 
     const [createNewPatientAndBooking, { data, loading, error }] = useMutation(CREATE_NEW_PATIENT_AND_BOOKING);
 
-    // const [hasMedicare, setHasMedicare] = useState(true);
+    // conditionally required if prescription is selected
+    const [hasMedicare, setEligableForMedicare] = useState(true);
 
     const onFinish = (values) => {
         console.log('Success:', values);
 
-        console.log(new Date(values.dob.toISOString()))
-        console.log(dateWorker(new Date(values.dob.toISOString())))
-        console.log(new Date(values.medicare_exp.toISOString()))
-        console.log(dateWorker(new Date(values.medicare_exp.toISOString())))
+        // console.log(new Date(values.dob.toISOString()))
+        // console.log(dateWorker(new Date(values.dob.toISOString())))
+        // console.log(new Date(values.medicare_exp.toISOString()))
+        // console.log(dateWorker(new Date(values.medicare_exp.toISOString())))
         // addNewPatient({ variables: {
         //     firstName: values.first_name,
         //     lastName: values.last_name,
@@ -66,7 +67,8 @@ const BookingForm = (props) => {
                 bookingDate: props.bookingDate,
                 bookingStart: props.bookingStart,
                 bookingEnd: props.bookingEnd,
-                bookingType: values.bookingType
+                bookingType: values.bookingType,
+                bookingNote: values.bookingNote
             },
             refetchQueries: [
                 {query: GET_BOOK_SETUPS},
@@ -91,7 +93,7 @@ const BookingForm = (props) => {
                 span: 16,
             }}
             initialValues={{
-                remember: true,
+                has_medicare: true,
             }}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
@@ -185,54 +187,74 @@ const BookingForm = (props) => {
                 <Input />
             </Form.Item>
 
+            <Card style={{marginBottom: 20}}>
+                <Form.Item
+                    name="has_medicare"
+                    valuePropName="checked"
+                    wrapperCol={{
+                    offset: 8,
+                    span: 16,
+                    }}
+                >
+                    <Checkbox
+                        onChange={(value) => {
+                            value.target.checked === true
+                            ? setEligableForMedicare(true)
+                            : setEligableForMedicare(false);
+                        }}
+                    >Eligable for Medicare</Checkbox>
+                </Form.Item>
+
+                <Form.Item
+                    label="medicare number"
+                    name="medicare_number"
+                    rules={[
+                    {
+                        required: hasMedicare,
+                        message: "please provide medicare"
+                    }
+                    ]}
+                >
+                    <Input disabled={!hasMedicare}/>
+                </Form.Item>
+
+                <Form.Item
+                    label="reference number"
+                    name="medicare_ref"
+                    rules={[
+                    {
+                        required: hasMedicare,
+                        message: "please provide medicare"
+                    }
+                    ]}
+                >
+                    <Input disabled={!hasMedicare}/>
+                </Form.Item>
+
+                <Form.Item
+                    label="expiry date"
+                    name="medicare_exp"
+                    rules={[
+                    {
+                        required: hasMedicare,
+                        message: "please provide medicare"
+                    }
+                    ]}
+                >
+                    <DatePicker disabled={!hasMedicare}/>
+                </Form.Item>
+            </Card>
+
             <Form.Item
-                name="has_medicare"
-                valuePropName="checked"
+                label="Booking Notes"
+                name="bookingNote"
+                hasFeedback
                 wrapperCol={{
-                offset: 8,
-                span: 16,
-                }}
+                    offset: 0,
+                    span: 16
+                    }}
             >
-                <Checkbox>Eligable for Medicare</Checkbox>
-            </Form.Item>
-
-            <Form.Item
-                label="medicare number"
-                name="medicare_number"
-                rules={[
-                {
-                    required: hasMedicare,
-                    message: '',
-                },
-                ]}
-            >
-                <Input />
-            </Form.Item>
-
-            <Form.Item
-                label="reference number"
-                name="medicare_ref"
-                rules={[
-                {
-                    required: hasMedicare,
-                    message: '',
-                },
-                ]}
-            >
-                <Input />
-            </Form.Item>
-
-            <Form.Item
-                label="expiry date"
-                name="medicare_exp"
-                rules={[
-                {
-                    required: hasMedicare,
-                    message: '',
-                },
-                ]}
-            >
-                <DatePicker />
+                <TextArea />
             </Form.Item>
 
             <Form.Item

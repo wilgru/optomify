@@ -2,11 +2,7 @@ import React, { useEffect, useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 // antd
-import { Button, Checkbox, Form, Input, Skeleton, Select, Divider, List, Card } from 'antd';
-import moment from 'moment';
-
-// utils
-import { dateWorker } from '../utils/date'
+import { Button, Form, Input, Skeleton, Select, Divider, List, Card } from 'antd';
 
 // grpahQL
 import { CREATE_NEW_BOOKING } from '../graphql/mutations';
@@ -44,11 +40,6 @@ const BookExistingForm = (props) => {
         console.log('Values:', values);
         console.log('id:', selectedPatientId);
         console.log('Props:', props);
-
-        // console.log(new Date(values.dob.toISOString()))
-        // console.log(dateWorker(new Date(values.dob.toISOString())))
-        // console.log(new Date(values.medicare_exp.toISOString()))
-        // console.log(dateWorker(new Date(values.medicare_exp.toISOString())))
 
         createNewBooking({
             variables: {
@@ -97,7 +88,7 @@ const BookExistingForm = (props) => {
                         marginBottom: 10,
                     }}
                 />
-                {(searchTerm != "" || selectedPatientId === "") ? (
+                {(searchTerm !== "" || selectedPatientId === "") ? (
                     <>
                         {loading ? (
                             <h1>loading...</h1>

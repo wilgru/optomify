@@ -186,7 +186,7 @@ const AddClinicalFile = (props) => {
             <span className="ant-form-text">(-/+)0.00/-0.00x000</span>
         </Form.Item>
 
-        <Card>
+        <Card style={{marginBottom: 20}}>
             <Form.Item
                 label="Previous R"
                 name="previousRight"
@@ -280,7 +280,7 @@ const AddClinicalFile = (props) => {
             </Form.Item>
         </Card>
 
-        <Card>
+        <Card style={{marginBottom: 20}}>
             <Form.Item
                 label="Given R"
                 name="givenRight"

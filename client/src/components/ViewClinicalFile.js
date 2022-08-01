@@ -32,6 +32,8 @@ const ViewClinicalFile = (props) => {
         "[-,+]\\d+\\.(00|25|50|75)\\/-(\\d+.(00|25|50|75)x[1-9][0-8]?[0-9]?|0\\.00x000)$"
     );
 
+    console.log(props.selectedClinicalFileData)
+
     const onFinish = (values) => {
         console.log('Success:', values);
         console.log(props)
@@ -103,8 +105,8 @@ const ViewClinicalFile = (props) => {
                     props.selectedClinicalFileData.prev_prescription.left_os.cylinder,
                     props.selectedClinicalFileData.prev_prescription.left_os.axis,
                 ),
-                previousInterAdd: props.selectedClinicalFileData.prev_prescription.inter_add,
-                previousNearAdd: props.selectedClinicalFileData.prev_prescription.near_add,
+                previousInterAdd: props.selectedClinicalFileData.prev_prescription.inter_add || '',
+                previousNearAdd: props.selectedClinicalFileData.prev_prescription.near_add || '',
 
                 givenRight: createRxNotation(
                     props.selectedClinicalFileData.given_prescription.right_od.sphere,
@@ -210,7 +212,7 @@ const ViewClinicalFile = (props) => {
             <span className="ant-form-text">(-/+)0.00/-0.00x000</span>
         </Form.Item>
 
-        <Card>
+        <Card style={{marginBottom: 20}}>
             <Form.Item
                 label="Previous R"
                 name="previousRight"
@@ -304,7 +306,7 @@ const ViewClinicalFile = (props) => {
             </Form.Item>
         </Card>
 
-        <Card>
+        <Card style={{marginBottom: 20}}>
             <Form.Item
                 label="Given R"
                 name="givenRight"
