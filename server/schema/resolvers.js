@@ -342,12 +342,6 @@ const resolvers = {
         createNewBooking: async (parent, { booking_date, booking_start, booking_end, on_patient_id, booking_note, booking_type }, context) => {
             if (context.user) {
                 try {
-                    const patient = await Patient.findById(on_patient_id);
-
-                    if (!patient) {
-                        throw new Error("could not find patient");
-                    }
-
                     const convBookingDate = new Date(booking_date);
                     const convBookingStart = new Date(booking_start);
                     const convBookingEnd = new Date(booking_end);
@@ -370,19 +364,29 @@ const resolvers = {
                         booking_date: convBookingDate, 
                         booking_start: convBookingStart, 
                         booking_end: convBookingEnd, 
-                        patient: on_patient_id, 
+                        patient: on_patient_id || null, 
                         booking_note, 
                         booking_type,
                         created_by
                     })
 
-                    patient.bookings.push(newBooking);
-                    await patient.save();
+                    if (on_patient_id) {
+                        const patient = await Patient.findById(on_patient_id);
+
+                        if (!patient) {
+                            throw new Error("could not find patient");
+                        }
+
+                        patient.bookings.push(newBooking);
+                        await patient.save();
+
+                        // return patient.populate('bookings');
+                    }
 
                     bookSetup.bookings.push(newBooking);
                     await bookSetup.save();
-
-                    return patient.populate('bookings');
+                    
+                    return newBooking;
 
                 } catch(e) {
                     throw new Error(`${e.message}`);
@@ -478,6 +482,9 @@ const resolvers = {
 
                     console.log(update_action)
                     switch (update_action) {
+                        case "booked":
+                            booking.booking_status = "booked"
+                            break;
                         case "confirmed":
                             booking.booking_status = "confirmed"
                             break;
