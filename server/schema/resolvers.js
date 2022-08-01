@@ -386,7 +386,14 @@ const resolvers = {
                     bookSetup.bookings.push(newBooking);
                     await bookSetup.save();
                     
-                    return newBooking;
+                    // return newBooking;
+                    return bookSetup.populate({
+                        path: 'bookings',
+                        populate: {
+                            path: 'patient',
+                            model: 'Patient'
+                        } 
+                    });
 
                 } catch(e) {
                     throw new Error(`${e.message}`);
