@@ -111,7 +111,7 @@ const Patient = () => {
                 <Menu mode="inline" defaultSelectedKeys={['overview']} defaultOpenKeys={['overview']} style={{height: '100%'}} items={subNav} onClick={(item, key, keyPath)=>{console.log(item.key); setChosenContent(item.key)}}/>
             </Sider>
             <Layout style={{padding: '0 24px 24px'}}>
-                <Content className="site-layout-background" style={{ padding: 24, margin: 0, minHeight: 280 }}>
+                <Content className="site-layout-background" style={{ padding: 20, margin: 0, minHeight: 280 }}>
                   {loading ? (
                     <></>
                   ) : (
