@@ -78,7 +78,7 @@ const PatientNotes = (props) => {
                         itemLayout="horizontal"
                         dataSource={parsedPatientNotes}
                         renderItem={(item) => (
-                            <List.Item className={"patient-record-li"}>
+                            <List.Item className={"patient-file-record-li"}>
                                 <div className={"patient-record"} onClick={() => {
                                     setSelectedNote(item)
                                     showModal()

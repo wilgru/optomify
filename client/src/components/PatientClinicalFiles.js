@@ -89,7 +89,7 @@ const Patients = (props) => {
                         itemLayout="horizontal"
                         dataSource={clinicalFiles}
                         renderItem={(item) => (
-                            <List.Item className={"patient-record-li"}>
+                            <List.Item className={"patient-file-record-li"}>
                                 <div className={"patient-record"} 
                                 onClick={() => {
                                     setSelectedClinicalFile(item)
