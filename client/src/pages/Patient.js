@@ -15,6 +15,7 @@ import PatientClinicalFiles from '../components/PatientClinicalFiles'
 // antd
 import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal } from 'antd';
 import moment from 'moment';
+import PatientNotes from '../components/PatientNotes';
 const { Content, Sider } = Layout;
 
 const Patient = () => {
@@ -83,10 +84,10 @@ const Patient = () => {
           key: 'notes',
           label: 'Notes',
       },
-      {
-          key: 'bookings',
-          label: 'Bookings',
-      }
+      // {
+      //     key: 'bookings',
+      //     label: 'Bookings',
+      // }
   ]
 
   function PatientContent(props) {
@@ -97,6 +98,9 @@ const Patient = () => {
         break;
       case "clinical_files":
         return <PatientClinicalFiles patient={patient}/>
+        break;
+      case "notes":
+        return <PatientNotes patient={patient}/>
         break;
     
       default:
