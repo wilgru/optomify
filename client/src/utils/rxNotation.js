@@ -31,10 +31,10 @@ export const createRxNotation = (sph, cyl, axis) => {
     }
 
     let cylPad = ""
-    if (sph % 1 === 0) {
+    if (cyl % 1 === 0) {
         cylPad = ".00"
     } else if (cyl % 1 === 0.5) {
-        sphPad = "0"
+        cylPad = "0"
     }
 
     let cylPrefix = ""
