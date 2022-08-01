@@ -57,6 +57,8 @@ query GetPatient($id: ID!) {
     }
     notes {
       _id
+      title
+      text_field
     }
     date_created 
     created_by {

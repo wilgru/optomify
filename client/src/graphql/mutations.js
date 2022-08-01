@@ -294,3 +294,25 @@ mutation SetupBook($date: String!, $openTime: String!, $closingTime: String!, $o
   }
 }
 `
+
+export const CREATE_NEW_NOTE = gql`
+mutation CreateNewNote($onPatientId: ID!, $title: String!, $textField: String!) {
+  createNewNote(on_patient_id: $onPatientId, title: $title, text_field: $textField) {
+    _id
+    notes {
+      title
+      text_field
+    }
+  }
+}`
+
+export const UPDATE_NOTE = gql`
+mutation updateNote($onPatientId: ID!, $title: String!, $textField: String!, $noteToUpdateId: ID!) {
+  updateNote(on_patient_id: $onPatientId, title: $title, text_field: $textField, note_to_update_id: $noteToUpdateId) {
+    _id
+    notes {
+      title
+      text_field
+    }
+  }
+}`
