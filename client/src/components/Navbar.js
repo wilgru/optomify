@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // import Auth from '../utils/auth';
 
@@ -14,6 +14,7 @@ import Login from './Login';
 const { Header } = Layout;
 
 const AppNavbar = () => {
+    const { location } = useLocation()
     
     // if the current token in local storage is exired log it out
     if (auth.isTokenExpired(auth.getToken())) {
@@ -28,7 +29,7 @@ const AppNavbar = () => {
     //
     const items1 = [
         {
-            key: 2,
+            key: 1,
             label: (            
                 <Link to="/dashboard">
                     Dashboard
@@ -36,7 +37,7 @@ const AppNavbar = () => {
             ),
         },
         {
-            key: 3,
+            key: 2,
             label: (            
                 <Link to="/bookings">
                     Bookings
@@ -44,7 +45,7 @@ const AppNavbar = () => {
             ),
         },
         {
-            key: 4,
+            key: 3,
             label: (            
                 <Link to="/patients">
                     Patients
