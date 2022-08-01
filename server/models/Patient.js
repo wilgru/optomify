@@ -27,15 +27,15 @@ const patientSchema = new Schema({
   },
   medicare_number: {
     type: String,
-    required: () => this.has_medicare
+    required: function() { return this.has_medicare }
   },
   medicare_ref: {
     type: String,
-    required: () => this.has_medicare
+    required: function() { return this.has_medicare }
   },
   medicare_exp: {
     type: Date,
-    required: () => this.has_medicare
+    required: function() { return this.has_medicare }
   },
   bookings: [{
     type: Schema.Types.ObjectId, 

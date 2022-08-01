@@ -15,7 +15,7 @@ const prescriptionSet = new Schema({
     },
     axis: {
         type: Number,
-        required: () => this.cylinder,
+        required: function() {return !!this.cylinder},
         validate: validateAxisDegree
     }
 });

@@ -20,18 +20,18 @@ const bookingSchema = new Schema({
     unique: true,
     validate: validate30MinBlock
   },
-  patient: {
-    type: Schema.Types.ObjectId, 
-    required: true,
-    ref: 'Patient'
-  },
-  booking_note: {
-    type: String
-  },
   booking_type: {
     type: String,
     validate: validateBookingType,
     required: true,
+  },
+  patient: {
+    type: Schema.Types.ObjectId, 
+    required: function() {return this.booking_type !== "blocked"}, 
+    ref: 'Patient'
+  },
+  booking_note: {
+    type: String
   },
   booking_status: {
     type: String,

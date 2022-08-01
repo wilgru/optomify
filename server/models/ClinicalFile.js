@@ -25,7 +25,7 @@ const clinicalFileSchema = new Schema({
   },
   medicare_item_code: {
     type: String,
-    required: () => this.type === "prescription" || this.type === "clinical note"
+    required: function() {return this.file_type === "prescription" || this.file_type === "clinical note"}
   },
   recall: {
     type: Date
