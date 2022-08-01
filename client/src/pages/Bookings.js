@@ -11,7 +11,7 @@ import {
     SyncOutlined,
     ExclamationCircleOutlined,
     SmallDashOutlined,
-    ClockCircleOutlined
+    StopOutlined
   } from '@ant-design/icons';
 
 import moment from 'moment';
@@ -23,11 +23,12 @@ import SetupBook from '../components/SetupBook';
 
 // grpahQL
 import { GET_BOOK_SETUPS } from '../graphql/queries';
-import { UPDATE_BOOKING, DELETE_BOOKING } from '../graphql/mutations';
+import { UPDATE_BOOKING, DELETE_BOOKING, CREATE_NEW_BOOKING } from '../graphql/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 
 // Utils
 import { getWeek } from '../utils/date';
+import BookBlocked from '../components/BookBlocked';
 
 // Ant Design from components
 const { Content, Sider } = Layout;
@@ -42,13 +43,16 @@ const Bookings = () => {
     // console.log(startDate, endDate)
 
     // for booking modal
-    const [bookingDate, setBookingDate] = useState('')
-    const [bookingStart, setbookingStart] = useState('')
-    const [bookingEnd, setbookingEnd] = useState('')
+    const [bookingDate, setBookingDate] = useState('');
+    const [bookingStart, setbookingStart] = useState('');
+    const [bookingEnd, setbookingEnd] = useState('');
 
     // mutations for updating bookings and deleteing bookings
     const [updateBooking, { updateError }] = useMutation(UPDATE_BOOKING);
     const [deleteBooking, { deletError }] = useMutation(DELETE_BOOKING);
+
+    // create booking mution, only used for creating blocked bookings
+    const [createNewBooking, { createBookingError }] = useMutation(CREATE_NEW_BOOKING);
 
     // get booksetup and bookings
     const { loading, data, err} = useQuery(GET_BOOK_SETUPS, {
@@ -63,7 +67,7 @@ const Bookings = () => {
 
     // update bookinng function
     const updateBookingFn = (event, action) => {
-        console.log(startDate, endDate)
+        // console.log(startDate, endDate)
         updateBooking({
             variables: {
                 bookingToUpdateId: event.target.parentNode.getAttribute('data-booking-id'),
@@ -80,7 +84,7 @@ const Bookings = () => {
 
     // delete bookinng function
     const deleteBookingFn = (event) => {
-        console.log(startDate, endDate)
+        // console.log(startDate, endDate)
         deleteBooking({
             variables: {
                 bookingToDeleteId: event.target.parentNode.getAttribute('data-booking-id'),
@@ -110,9 +114,30 @@ const Bookings = () => {
                 showModalExistingPatient();
             }}, 
             {text: "Block", clickFn: function(event){
+                setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
+                setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                showModalBlocked();
             }}
         ],
         booked: [
+            {text: "Confirm", clickFn: function(event){
+                updateBookingFn(event, "confirmed")
+            }}, 
+            {text: "Arrive", clickFn: function(event){
+                updateBookingFn(event, "arrived")
+            }}, 
+            {text: "Absent", clickFn: function(event){
+                updateBookingFn(event, "absent")
+            }}, 
+            {text: "Cancel", clickFn: function(event){
+                deleteBookingFn(event)
+            }}
+        ],
+        absent: [
+            {text: "Booked", clickFn: function(event){
+                updateBookingFn(event, "booked")
+            }}, 
             {text: "Confirm", clickFn: function(event){
                 updateBookingFn(event, "confirmed")
             }}, 
@@ -127,11 +152,17 @@ const Bookings = () => {
             {text: "Arrive", clickFn: function(event){
                 updateBookingFn(event, "arrived")
             }}, 
+            {text: "Absent", clickFn: function(event){
+                updateBookingFn(event, "absent")
+            }}, 
             {text: "Cancel", clickFn: function(event){
                 deleteBookingFn(event)
             }}
         ],
         arrived: [
+            {text: "Absent", clickFn: function(event){
+                updateBookingFn(event, "absent")
+            }}, 
             {text: "Cancel", clickFn: function(event){
                 deleteBookingFn(event)
             }}
@@ -145,14 +176,14 @@ const Bookings = () => {
     };
 
     // get the bookings and booksetup from given time range
-    const [bookingList, setBookingList] = useState([])
-    const [nextPatient, setNextPatient] = useState({})
+    const [bookingList, setBookingList] = useState([]);
+    const [nextPatient, setNextPatient] = useState({});
 
     // populate bookingList
     useEffect(() => {
         setBookingList([])
-        console.log('bookSetupData')
-        console.log(bookSetupData)
+        // console.log('bookSetupData')
+        // console.log(bookSetupData)
 
         // populate bookingList
         bookSetupData.forEach((day) => {
@@ -167,6 +198,7 @@ const Bookings = () => {
             const today = new Date(parseInt(day.open_time)).toISOString()
             const todayUTC = moment.utc(today).subtract(10, 'h');
             todaysList.date = todayUTC;
+            todaysList.isToday = todayUTC.date() === rightNowUTC.date();
             todaysList.list = [];
 
             // find static times
@@ -194,9 +226,10 @@ const Bookings = () => {
                         time: optomBreakUTC,
                         titleTime: titleTime,
                         titleText: "Optometrist break",
+                        popoverTitleText: "Optometrist break",
                         subTitle: "",
                         bookingType: "optom break",
-                        bookingStatus: "blocked",
+                        bookingStatus: "optomBreak",
                         hasPassed: (moment(optomBreakUTC).isBefore(rightNowUTC)),
                         firstName: "",
                         lastName: ""
@@ -211,8 +244,8 @@ const Bookings = () => {
 
                     if (moment(cursorUTC).isSame(bookingTimeUTC)) {
                         // set the next patient
-                        if (moment(bookingTimeUTC).isAfter(rightNowUTC) && Object.keys(nextPatient).length === 0) {
-                            console.log('\n\n', booking.patient.first_name,'\n\n')
+                        if (moment(bookingTimeUTC).isAfter(rightNowUTC) && Object.keys(nextPatient).length === 0 && booking.booking_type !== "blocked") {
+                            // console.log('\n\n', booking.patient.first_name,'\n\n')
                             setNextPatient({
                                 id: booking.patient._id,
                                 firstName: booking.patient.first_name,
@@ -222,19 +255,21 @@ const Bookings = () => {
                             })
                         }
 
+                        // now go and push the current booking
                         // console.log("BOOKING HERE")
                         todaysList.list.push({
                             time: bookingTimeUTC,
                             titleTime: titleTime,
-                            titleText:`${booking.patient.first_name} ${booking.patient.last_name}` ,
-                            subTitle: booking.booking_type,
+                            titleText: booking.booking_type !== "blocked" ? `${booking.patient.first_name} ${booking.patient.last_name}` : "Blocked",
+                            popoverTitleText: booking.booking_type !== "blocked" ? `${booking.patient.first_name} ${booking.patient.last_name}` : "Blocked",
+                            subTitle: booking.booking_type !== 'blocked' ? booking.booking_type : "",
                             bookingId: booking._id,
                             bookingType: booking.booking_type,
-                            bookingStatus: booking.booking_status,
+                            bookingStatus: booking.booking_type !== 'blocked' ? booking.booking_status : "blocked",
                             bookingNote: booking.booking_note,
                             hasPassed: (moment(bookingTimeUTC).isBefore(rightNowUTC)),
-                            firstName: booking.patient.first_name,
-                            lastName: booking.patient.last_name,
+                            firstName: booking.patient?.first_name || "blocked",
+                            lastName: booking.patient?.last_name || "blocked",
                         })
                         slotTaken = true
                     }
@@ -245,7 +280,8 @@ const Bookings = () => {
                     todaysList.list.push({
                         time: moment(cursorUTC),
                         titleTime: titleTime,
-                        titleText: "Available slot",
+                        titleText: "",
+                        popoverTitleText: "",
                         subTitle: "",
                         bookingType: "empty",
                         bookingStatus: "empty",
@@ -262,11 +298,11 @@ const Bookings = () => {
 
             // bookingList.push(todaysList);
         })
-        console.log('bookingList');
-        console.log(bookingList);
+        // console.log('bookingList');
+        // console.log(bookingList);
 
-        console.log('nextPatient')
-        console.log(nextPatient)
+        // console.log('nextPatient')
+        // console.log(nextPatient)
     }, [data])
 
     // listener for date range picker
@@ -303,8 +339,8 @@ const Bookings = () => {
 
     // listener for date range picker for a new book
     const onPanelChangeNewBook = (value, mode) => {
-        console.log('Start date:', value[0].format('YYYY-MM-DDT00:00:00+00.00'));
-        console.log('End date:', value[1].format('YYYY-MM-DDT00:00:00+00.00'));
+        // console.log('Start date:', value[0].format('YYYY-MM-DDT00:00:00+00.00'));
+        // console.log('End date:', value[1].format('YYYY-MM-DDT00:00:00+00.00'));
 
         // https://stackoverflow.com/questions/563406/how-to-add-days-to-date
         function addDays(date, days) {
@@ -388,6 +424,8 @@ const Bookings = () => {
             return <SmallDashOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         } else if (props.type === 'optom break') {
             return <CoffeeOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
+        } else if (props.type === 'blocked') {
+            return <StopOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         } else {
             // return <ClockCircleOutlined style={{fontSize: '20px', margin: 'auto 10px'}}/>
         }
@@ -425,6 +463,22 @@ const Bookings = () => {
     };
     // END MODAL - EXISTING PATIENT
 
+    // MODAL - BLOCKED
+    const [isModalVisibleBlocked, setIsModalVisibleBlocked] = useState(false);
+
+    const showModalBlocked = () => {
+      setIsModalVisibleBlocked(true);
+    };
+  
+    const handleOkBlocked = () => {
+      setIsModalVisibleBlocked(false);
+    };
+  
+    const handleCancelBlocked = () => {
+      setIsModalVisibleBlocked(false);
+    };
+    // END MODAL - BLOCKED
+
     // date working
     function dateWorker(date) {
         let b = String(date)
@@ -449,6 +503,9 @@ const Bookings = () => {
             <Modal title="Book existing patient" visible={isModalVisibleExistingPatient} onOk={handleOkExistingPatient} onCancel={handleCancelExistingPatient}>
                 <BookExistingForm bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} modalVis={setIsModalVisibleExistingPatient}/>
             </Modal>
+            <Modal title="Block this time out" visible={isModalVisibleBlocked} onOk={handleOkBlocked} onCancel={handleCancelBlocked}>
+                <BookBlocked bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} modalVis={setIsModalVisibleBlocked}/>
+            </Modal>
             <Layout>
                 <Sider width={220} className="site-layout-background">
                     <Menu mode="inline" style={{height: '100%'}} items={subNav} />
@@ -462,12 +519,12 @@ const Bookings = () => {
                                 display:"flex",
                                 // justifyContent: "space-evenly"
                             }}>
-                                {console.log('bookingList in return component')}
-                                {console.log(bookingList)}
+                                {/* {console.log('bookingList in return component')}
+                                {console.log(bookingList)} */}
                                 {bookingList.map((day) => {
                                     return (
                                         <List
-                                            header={<div>{day.date.format('ddd MMM Do, YYYY')}</div>}
+                                            header={<div style={{ fontStyle: day.isToday ? "italic" : "initial", fontWeight: day.isToday ? "bold" : "initial" }}>{day.date.format('ddd MMM Do, YYYY')}</div>}
                                             bordered
                                             itemLayout="horizontal"
                                             dataSource={day.list}
@@ -514,63 +571,63 @@ const Bookings = () => {
                                                 })} */}
                                                 <Popover
                                                     content={
-                                                    <div className={"booking-card"}>
-                                                        {item.bookingNote ? (
-                                                            <>
-                                                                <h4>Bookings notes:</h4>
-                                                                <Card className={"booking-note"}>
-                                                                    {item.bookingNote}
-                                                                </Card>
-                                                            </>
-                                                        ) : (
-                                                            <></>
-                                                        )}
+                                                        <div className={"booking-card"}>
+                                                            {item.bookingNote ? (
+                                                                <>
+                                                                    <h4>Bookings notes:</h4>
+                                                                    <Card className={"booking-note"}>
+                                                                        {item.bookingNote}
+                                                                    </Card>
+                                                                </>
+                                                            ) : (
+                                                                <></>
+                                                            )}
 
-                                                        <div
-                                                            style={{
-                                                                display: "flex",
-                                                                justifyContent: "space-between"
-                                                            }}
-                                                        >
-                                                            {buttonSet[item.bookingStatus].map((btn) => {
-                                                                // if (btn === "Book New") {
-                                                                //     return (
-                                                                //         <Button
-                                                                //             data-date={new Date(day.date.toISOString())}
-                                                                //             data-start-time={new Date(item.time.toISOString())}
-                                                                //             onClick={(event) => {
-                                                                //                 setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
-                                                                //                 setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
-                                                                //                 setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
-                                                                //                 showModalNewPatient();
-                                                                //             }}
-                                                                //         >
-                                                                //             {btn}   
-                                                                //         </Button>
-                                                                //     );
-                                                                // } else {
-                                                                //     return <Button >{btn}</Button>;
-                                                                // }
+                                                            <div
+                                                                style={{
+                                                                    display: "flex",
+                                                                    justifyContent: "space-between"
+                                                                }}
+                                                            >
+                                                                {buttonSet[item.bookingStatus].map((btn) => {
+                                                                    // if (btn === "Book New") {
+                                                                    //     return (
+                                                                    //         <Button
+                                                                    //             data-date={new Date(day.date.toISOString())}
+                                                                    //             data-start-time={new Date(item.time.toISOString())}
+                                                                    //             onClick={(event) => {
+                                                                    //                 setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
+                                                                    //                 setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                                                                    //                 setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                                                                    //                 showModalNewPatient();
+                                                                    //             }}
+                                                                    //         >
+                                                                    //             {btn}   
+                                                                    //         </Button>
+                                                                    //     );
+                                                                    // } else {
+                                                                    //     return <Button >{btn}</Button>;
+                                                                    // }
 
-                                                                return (
-                                                                    <Button
-                                                                        data-date={new Date(day.date.toISOString())}
-                                                                        data-start-time={new Date(item.time.toISOString())}
-                                                                        data-booking-id={item.bookingId}
-                                                                        data-booking-action={btn.text}
-                                                                        onClick={btn.clickFn}
-                                                                    >
-                                                                        {btn.text}   
-                                                                    </Button>
-                                                                );
-                                                            })}
+                                                                    return (
+                                                                        <Button
+                                                                            data-date={new Date(day.date.toISOString())}
+                                                                            data-start-time={new Date(item.time.toISOString())}
+                                                                            data-booking-id={item.bookingId}
+                                                                            data-booking-action={btn.text}
+                                                                            onClick={btn.clickFn}
+                                                                        >
+                                                                            {btn.text}   
+                                                                        </Button>
+                                                                    );
+                                                                })}
+                                                            </div>
                                                         </div>
-                                                    </div>
                                                     }
                                                     title={`${item.titleTime} - ${item.titleText}`}
                                                     placement="right"
                                                 >
-                                                    <div style={{display:"flex", width: "100%", padding: "0"}}> 
+                                                    <div style={{display:"flex", width: "100%", padding: item.bookingType === "empty" ? "0 0 0 10px" : "0"}}> 
                                                         <ConditionalIcon type={item.bookingType} />
                                                         {/* <div style={{display:"flex", flexDirection:"column", width: "100%", padding: "0"}} className={`booking ${item.hasPassed ? "past" : "future"}`}> */}
                                                         <div style={{display:"flex", flexDirection:"column", width: "100%", padding: "0"}}>
