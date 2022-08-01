@@ -194,6 +194,7 @@ const Bookings = () => {
             const rightNow = new Date().toISOString()
             const rightNowUTC = moment(rightNow);
 
+            // the dya of this current iteration
             let todaysList = {}
             const today = new Date(parseInt(day.open_time)).toISOString()
             const todayUTC = moment.utc(today).subtract(10, 'h');
@@ -219,7 +220,7 @@ const Bookings = () => {
                 let titleTime = `${cursorUTC.hour()+10}:${String(cursorUTC.minute()).padStart(2, '0')}`
                 let slotTaken = false
 
-                // first check for optom break
+                // first check for optom break ======================================================================
                 if (moment(cursorUTC).isSame(optomBreakUTC)) {
                     // console.log("OPTOM BREAK HERE")
                     todaysList.list.push({
@@ -232,12 +233,14 @@ const Bookings = () => {
                         bookingStatus: "optomBreak",
                         hasPassed: (moment(optomBreakUTC).isBefore(rightNowUTC)),
                         firstName: "",
-                        lastName: ""
+                        lastName: "",
+                        mobileNumber: "",
+                        email: ""
                     })
                     slotTaken = true
                 }
 
-                // now check bookings
+                // now check bookings ======================================================================
                 day.bookings.forEach((booking) => {
                     const bookingTime = new Date(parseInt(booking.booking_start)).toISOString()
                     const bookingTimeUTC = moment.utc(bookingTime).subtract(10, 'h');
@@ -250,12 +253,14 @@ const Bookings = () => {
                                 id: booking.patient._id,
                                 firstName: booking.patient.first_name,
                                 lastName: booking.patient.last_name,
+                                mobileNumber: booking.patient.mobile_number,
+                                email: booking.patient.email,
                                 time: titleTime,
                                 bookingType: booking.booking_type
                             })
                         }
 
-                        // now go and push the current booking
+                        // now go and push the current booking 
                         // console.log("BOOKING HERE")
                         todaysList.list.push({
                             time: bookingTimeUTC,
@@ -270,24 +275,29 @@ const Bookings = () => {
                             hasPassed: (moment(bookingTimeUTC).isBefore(rightNowUTC)),
                             firstName: booking.patient?.first_name || "blocked",
                             lastName: booking.patient?.last_name || "blocked",
+                            mobileNumber: booking.patient?.mobile_number || "",
+                            email: booking.patient?.email || "",
                         })
                         slotTaken = true
                     }
                 })
 
+                // else just put in empties ======================================================================
                 if (!slotTaken) {
                     // console.log("EMPTY")
                     todaysList.list.push({
                         time: moment(cursorUTC),
                         titleTime: titleTime,
                         titleText: "",
-                        popoverTitleText: "",
+                        popoverTitleText: "available for booking",
                         subTitle: "",
                         bookingType: "empty",
                         bookingStatus: "empty",
                         hasPassed: (moment(cursorUTC).isBefore(moment(rightNowUTC))),
                         firstName: "",
-                        lastName: ""
+                        lastName: "",
+                        mobileNumber: "",
+                        email: ""
                     })
                 }
                 cursorUTC = cursorUTC.add(30, 'm')
@@ -387,11 +397,17 @@ const Bookings = () => {
             children: [
                 {
                     key: 'sub2option1',
-                    label: (    
-                        <Link to={{ pathname: `/patients/${nextPatient.id}` }} className="patient-record-li">
-                            <h4>{`${nextPatient.time} - ${nextPatient.firstName} ${nextPatient.lastName}`}</h4>
-                            <h5>{nextPatient.bookingType}</h5>
-                        </Link>
+                    label: (  
+                        <Card className='appt-li'>
+                            <Link to={{ pathname: `/patients/${nextPatient.id}` }} className="patient-record-li">
+                                <h4>{nextPatient.time}</h4>
+                                <h4>{`${nextPatient.firstName} ${nextPatient.lastName}`}</h4>
+                                <p>{nextPatient.mobileNumber}</p>
+                                <p>{nextPatient.email}</p>
+                                <br/>
+                                <h5>{nextPatient.bookingType}</h5>
+                            </Link>
+                        </Card>  
                     )
                 }
             ]
@@ -572,6 +588,17 @@ const Bookings = () => {
                                                 <Popover
                                                     content={
                                                         <div className={"booking-card"}>
+                                                            {item.email !== "" ? (
+                                                                <>
+                                                                <div style={{marginBottom: '10px'}}>
+                                                                    <p>{`Number: ${item.mobileNumber}`}</p>
+                                                                    <p>{`Email: ${item.email}`}</p>
+                                                                </div>
+                                                                </>
+                                                            ) : (
+                                                                <></>
+                                                            )}
+                                                            
                                                             {item.bookingNote ? (
                                                                 <>
                                                                     <h4>Bookings notes:</h4>
@@ -624,15 +651,16 @@ const Bookings = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    title={`${item.titleTime} - ${item.titleText}`}
+                                                    title={`${item.titleTime} - ${item.popoverTitleText}`}
                                                     placement="right"
                                                 >
                                                     <div style={{display:"flex", width: "100%", padding: item.bookingType === "empty" ? "0 0 0 10px" : "0"}}> 
                                                         <ConditionalIcon type={item.bookingType} />
                                                         {/* <div style={{display:"flex", flexDirection:"column", width: "100%", padding: "0"}} className={`booking ${item.hasPassed ? "past" : "future"}`}> */}
+                                                        {console.log(item.bookingNote)}
                                                         <div style={{display:"flex", flexDirection:"column", width: "100%", padding: "0"}}>
                                                             {<h4 style={{margin: 0}}>{item.titleTime}</h4>}
-                                                            {<h4 style={{margin: 0}}>{item.titleText}</h4>}
+                                                            {<h4 style={{margin: 0}}>{`${item.titleText}${!!item.bookingNote ? '*' : ''}`}</h4>}
                                                             {item.subTitle}
                                                         </div>
                                                     </div>
