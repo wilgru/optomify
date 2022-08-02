@@ -6,9 +6,9 @@ import './App.less';
 // import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
 import { Layout, Menu } from 'antd';
 
-// react router
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+// react and react router
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 
 // components
 import Navbar from './components/Navbar';
@@ -18,6 +18,7 @@ import Dashboard from './pages/Dashboard';
 import Bookings from './pages/Bookings';
 import Patients from './pages/Patients';
 import Patient from './pages/Patient';
+import PleaseLogIn from './pages/PleaseLogIn';
 import Login from './components/Login';
 
 // Apollo imports
@@ -28,6 +29,7 @@ import {
   createHttpLink,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
+import auth from './utils/auth';
 
 // Construct the main GraphQL API endpoint to /graphql 
 const httpLink = createHttpLink({
@@ -59,23 +61,34 @@ const client = new ApolloClient({
 const { Footer } = Layout;
 
 // App
-const App = () => (
-  <ApolloProvider client={client}>
-     <Router>
-      <Layout style={{height: 'fit-content'}}>
-        <Navbar />
-        <Routes>
-          <Route path='/dashboard' element={<Dashboard />}/>
-          <Route path='/bookings' element={<Bookings />}/>
-          <Route path='/patients' element={<Patients />}/>
-          <Route path='/patients/:id' element={<Patient />}/>
-        </Routes>
-        <Footer style={{textAlign: 'center'}}>
-          Ant Design ©2018 Created by Ant UED
-        </Footer>
-      </Layout>
-     </Router>
-  </ApolloProvider>
-);
+const App = () => {
+  const [loggedIn, setLoggedIn] = useState(auth.loggedIn())
+
+  return (
+    <ApolloProvider client={client}>
+      <Router>
+        <Layout style={{height: 'fit-content'}}>
+          <Navbar setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>
+          <Routes>
+            {loggedIn ? (
+              <>
+                {/* <Route path='/dashboard' element={<Dashboard />}/> */}
+                <Route path='/bookings' element={<Bookings />}/>
+                <Route path='/patients' element={<Patients />}/>
+                <Route path='/patients/:id' element={<Patient />}/>
+                <Route path='/*' element={ <Navigate to="/bookings" /> }/>
+              </>
+            ) : (
+              <Route path='/*' element={<PleaseLogIn />}/>
+            )}
+          </Routes>
+          <Footer style={{textAlign: 'center'}}>
+            Omptomify ©2022 Created by William Gruszka
+          </Footer>
+        </Layout>
+      </Router>
+    </ApolloProvider>
+  )
+};
 
 export default App;
