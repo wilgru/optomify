@@ -1,13 +1,13 @@
 const jwt = require('jsonwebtoken');
 
 const secret = 'mysecretsshhhhh';
-const expiration = '4h';
+const expiration = '12h';
 
 module.exports = {
   authMiddleware({ req }) {
     // Allows token to be sent via req.body, req.query, or headers
     // there are lots of different ways to send token to backend
-    let token = req.body.token || req.query.token || req.headers.authorization;
+    let token = req.headers?.authorization || req.body?.token || req.query?.token;
 
     // if came from header, then it would have the word bearer with a space and then the actual token.
     // ["Bearer", "<tokenvalue>"]
@@ -28,7 +28,7 @@ module.exports = {
       console.log('Invalid token');
     }
 
-    return req; // return the rq with the new user attached
+    return req; // return the req with the new user attached
   },
   signToken({ firstName, email, _id }) {
     const payload = { firstName, email, _id };
