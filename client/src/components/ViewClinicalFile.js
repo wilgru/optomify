@@ -9,7 +9,7 @@ import { Editor } from "@tinymce/tinymce-react";
 
 
 // utils
-import { getSph, getCyl, getAxis, createRxNotation } from '../utils/rxNotation'
+import { getSph, getCyl, getAxis, createRxNotation, rxNotationRegex } from '../utils/rxNotation'
 
 // grpahQL
 import { UPDATE_CLINICAL_FILE } from '../graphql/mutations';
@@ -29,9 +29,9 @@ const ViewClinicalFile = (props) => {
     // conditionally required if prescription is selected
     const [isPrescription, setIsPrescription] = useState(props.selectedClinicalFileData.file_type === "prescription");
 
-    const rxNotationRegex = new RegExp(
-        "[-,+]\\d+\\.(00|25|50|75)\\/-(\\d+.(00|25|50|75)x[1-9][0-8]?[0-9]?|0\\.00x000)$"
-    );
+    // const rxNotationRegex = new RegExp(
+    //     "[-,+]\\d+\\.(00|25|50|75)\\/-(\\d+.(00|25|50|75)x[1-9][0-8]?[0-9]?|0\\.00x000)$"
+    // );
 
     console.log(props.selectedClinicalFileData)
 

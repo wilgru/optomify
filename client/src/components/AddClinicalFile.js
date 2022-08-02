@@ -10,7 +10,7 @@ import { Editor } from "@tinymce/tinymce-react";
 
 // utils
 import { dateWorker } from '../utils/date'
-import { getSph, getCyl, getAxis } from '../utils/rxNotation'
+import { getSph, getCyl, getAxis, rxNotationRegex } from '../utils/rxNotation'
 
 // grpahQL
 import { CREATE_NEW_CLINICAL_FILE } from '../graphql/mutations';
@@ -30,12 +30,8 @@ const AddClinicalFile = (props) => {
     // conditionally required if prescription is selected
     const [isPrescription, setIsPrescription] = useState(true);
 
-    const rxNotationRegex = new RegExp(
-        "[-,+]\\d+\\.(00|25|50|75)\\/-(\\d+.(00|25|50|75)x[1-9][0-8]?[0-9]?|0\\.00x000)$"
-    );
-
     // const rxNotationRegex = new RegExp(
-    //     "[-,+]\\d+\\.(00|25|75)\\/-\\d+.(00|25|75)x[1-9][0-8]?[0-9]?$"
+    //     "[-,+]\\d+\\.(00|25|50|75)\\/-(\\d+.(00|25|50|75)x[1-9][0-8]?[0-9]?|0\\.00x000)$"
     // );
 
     const onFinish = (values) => {
