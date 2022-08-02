@@ -31,7 +31,7 @@
 }
 
 .ant-form-item-feedback-icon-success {
-  color: lightblue;
+  color: @success-color;
 }
 
 .ant-form-item-feedback-icon-error {
@@ -133,15 +133,23 @@ p {
   display: flex;
 }
 
-.patient-record-li {
-  padding: 0 15px!important;
-}
-
 .patient-file-record-li {
   padding: 5px 0!important;
 }
 
-.patient-record-li:hover, .patient-file-record-li:hover {
+.patient-record-li {
+  padding: 10px!important;
+}
+
+.next-patient-card {
+  padding: 0px!important;
+}
+
+.next-patient-card div {
+  padding: 10px!important;
+}
+
+.patient-record-li:hover, .patient-file-record-li:hover, .next-patient-card:hover {
   background-color: lightblue;
   cursor: pointer;
 }
