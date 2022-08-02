@@ -1,0 +1,153 @@
+@import '~antd/dist/antd.less';
+
+/* antd override */
+.login-signout {
+  position: absolute;
+  right: 20px;
+  top: 0px;
+  font-size: large;
+}
+
+.ant-list {
+  background-color: white;
+}
+
+.ant-layout-sider {
+  border-radius: 4px;
+  box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
+  height: 500px;
+}
+
+.ant-layout {
+  min-height: 80vh!important;
+}
+
+.ant-menu-item {
+  height: fit-content!important;
+  padding-right: 8px!important;
+  padding-left: 8px!important;
+}
+
+.ant-form-item-feedback-icon-success {
+  color: #CAF0C1;
+}
+
+.ant-form-item-feedback-icon-error {
+  color: salmon;
+}
+
+
+
+/* header nav */
+.header {
+  padding: 0;
+}
+
+.navbar {
+  padding-left: 70px;
+}
+
+.logo {
+  position: absolute;
+  margin-left: 10px
+}
+
+
+
+/* bookings */
+p {
+  margin: 0;
+}
+
+.appt-li {
+  padding: 5px 0!important;
+}
+
+.appt-li:hover {
+  background-color: lightblue;
+}
+
+.confirmed {
+  background-color: orange;
+}
+
+.arrived {
+  background-color: green;
+  color: darkgreen
+}
+
+.booked {
+  background-color: khaki;
+}
+
+.absent {
+  background-color: lavender;
+  color: rgb(129, 129, 143);
+}
+.absent h4 {
+  color: rgb(129, 129, 143);
+}
+
+.blocked {
+  background-color: gray;
+  color: salmon;
+}
+
+.optomBreak {
+  background-color: gray;
+  color: ghostwhite;
+}
+
+.past, .past h4 {
+  color: rgb(70, 70, 70);
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.current, .current h4 {
+  font-style: italic;
+  font-weight: bold;
+}
+
+.booking-note {
+  background-color: lightblue;
+  margin-bottom: 10px;
+}
+
+.booking-card {
+  width: 300px;
+}
+
+.ant-popover-content p {
+  margin: 0;
+}
+
+
+
+ /* patients */
+.patient-record {
+  padding: none;
+  width: 100%;
+  display: flex;
+}
+
+.patient-file-record-li {
+  padding: 5px 0!important;
+}
+
+.patient-record-li {
+  padding: 10px!important;
+}
+
+.next-patient-card {
+  padding: 0px!important;
+}
+
+.next-patient-card div {
+  padding: 10px!important;
+}
+
+.patient-record-li:hover, .patient-file-record-li:hover, .next-patient-card:hover {
+  background-color: lightblue;
+  cursor: pointer;
+}
