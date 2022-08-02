@@ -1,5 +1,6 @@
 import { Button, Checkbox, Form, Input, DatePicker, Alert } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { Navigate } from 'react-router-dom'
 
 // grpahQL
 import { LOGIN } from '../graphql/mutations';
@@ -28,6 +29,8 @@ const Login = (props) => {
             }
 
             auth.login(data.login.token);
+
+            props.setLoggedIn(true);
             props.hideModal(false);
         } catch(e) {
         
