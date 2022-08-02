@@ -44,3 +44,7 @@ export const createRxNotation = (sph, cyl, axis) => {
 
     return prefix+sph+sphPad+'/'+cylPrefix+cyl+cylPad+'x'+axis
 }
+
+export const rxNotationRegex = new RegExp(
+    "[-+]\d+\.(00|25|50|75)\/-([1-9]\d*\.(00|25|50|75)x([1-9]{1,2}|1[0-7][0-9]|180)|0\.00x000|0\.(25|50|75)x([1-9]{1,2}|1[0-7][0-9]|180))$"
+);
