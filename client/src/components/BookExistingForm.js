@@ -76,23 +76,26 @@ const BookExistingForm = (props) => {
     return (
         <>
             <Card
-                title="Search for existing patient"
+                // title="Search for existing patient"
+                title={
+                    <Search
+                        placeholder="search by name, email or mobile number"
+                        allowClear
+                        onSearch={onSearch}
+                        style={{
+                            marginBottom: '10px',
+                        }}
+                    />
+                }
                 style={{
-                    marginBottom: 10,
+                    marginBottom: '10px',
+                    padding: '0'
                 }}
             >
-                <Search
-                    placeholder="search by name, email or mobile number"
-                    allowClear
-                    onSearch={onSearch}
-                    style={{
-                        marginBottom: 10,
-                    }}
-                />
                 {(selectedPatientId === "" && searchTerm !== "") ? (
                     <>
                         {loading ? (
-                            <h1>loading...</h1>
+                            <p>loading...</p>
                         ) : (
                             <>
                                 <h3>
@@ -101,26 +104,16 @@ const BookExistingForm = (props) => {
                                 <div
                                     id="scrollableDiv"
                                     style={{
-                                        height: 200,
+                                        minHeight: 'fit-content',
+                                        maxHeight: '200px',
                                         overflow: 'auto',
-                                        padding: '0 8px',
-                                        marginBottom: 10,
+                                        padding: '0px',
+                                        marginBottom: '10px',
                                         border: '1px solid rgba(140, 140, 140, 0.35)',
                                     }}
                                 >
                                     <InfiniteScroll
                                         dataLength={patientData.length}
-                                        // next={loadMoreData}
-                                        // hasMore={patientData.length < 50}
-                                        // loader={
-                                        // <Skeleton
-                                        //     paragraph={{
-                                        //     rows: 1,
-                                        //     }}
-                                        //     active
-                                        // />
-                                        // }
-                                        // endMessage={<Divider plain>It is all, nothing more 🤐</Divider>}
                                         scrollableTarget="scrollableDiv"
                                     >
                                         <List
@@ -133,12 +126,12 @@ const BookExistingForm = (props) => {
                                                     data-patient-name={`${item.first_name} ${item.last_name}`}
                                                     onClick={(event)=>{
                                                         console.log(selectedPatientId)
-                                                        setSelectedPatientId(event.target.getAttribute('data-patient-id'))
-                                                        setSelectedPatientName(event.target.getAttribute('data-patient-name'))
+                                                        setSelectedPatientId(event.target.closest('li').getAttribute('data-patient-id'))
+                                                        setSelectedPatientName(event.target.closest('li').getAttribute('data-patient-name'))
                                                         setSearchTerm("")
                                                     }}
                                                 >
-                                                    <div>
+                                                    <div style={{width: '100%'}}>
                                                         <h3>{`${item.first_name} ${item.last_name}`}</h3>
                                                         <h4>{item.email} </h4>
                                                     </div>
@@ -152,9 +145,10 @@ const BookExistingForm = (props) => {
                     </>
                 ) : (
                     <>
-                        <h4>
-                            Booking for: {selectedPatientName}
-                        </h4>
+                        <div>
+                            Booking for:
+                            <h3>{selectedPatientName}</h3>
+                        </div>
                     </>
                 )}
             </Card>

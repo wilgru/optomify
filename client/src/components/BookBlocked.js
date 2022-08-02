@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 // antd
-import { Button, Form, Input, Skeleton, Select, Divider, List, Card } from 'antd';
+import { Button, Form, Input } from 'antd';
 
 // grpahQL
 import { CREATE_NEW_BOOKING } from '../graphql/mutations';
@@ -9,8 +9,7 @@ import { GET_BOOK_SETUPS } from '../graphql/queries';
 import { useMutation, useQuery } from '@apollo/client';
 
 // inputs 
-const { Option } = Select;
-const { Search, TextArea } = Input;
+const { TextArea } = Input;
 
 // component
 const BookBlocked = (props) => {

@@ -9,7 +9,6 @@ import { Editor } from "@tinymce/tinymce-react";
 
 
 // utils
-import { dateWorker } from '../utils/date'
 import { getSph, getCyl, getAxis, createRxNotation } from '../utils/rxNotation'
 
 // grpahQL

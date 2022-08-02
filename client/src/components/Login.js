@@ -1,10 +1,8 @@
 import { Button, Checkbox, Form, Input, DatePicker, Alert } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { Navigate } from 'react-router-dom'
+import React from 'react';
 
 // grpahQL
 import { LOGIN } from '../graphql/mutations';
-import { GET_BOOK_SETUPS } from '../graphql/queries';
 import { useMutation } from '@apollo/client';
 import auth from '../utils/auth';
 

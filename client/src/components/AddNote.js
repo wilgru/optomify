@@ -7,11 +7,6 @@ import moment from 'moment';
 // tinyMCE
 import { Editor } from "@tinymce/tinymce-react";
 
-
-// utils
-import { dateWorker } from '../utils/date'
-import { getSph, getCyl, getAxis } from '../utils/rxNotation'
-
 // grpahQL
 import { CREATE_NEW_NOTE } from '../graphql/mutations';
 import { GET_PATIENT } from '../graphql/queries';

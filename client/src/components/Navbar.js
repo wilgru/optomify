@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useParams, useHref } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 // utils
 import auth from '../utils/auth';
@@ -55,41 +55,14 @@ const AppNavbar = (props) => {
         },
     ]
 
-    // if (!auth.loggedIn()) {
-    //     navItem.push(
-    //         {
-    //             key:5,
-    //             label: (            
-    //                 <Link to="/patients">
-    //                     Login
-    //                 </Link>
-    //             ),
-    //         }
-    //     )
-    // } else {
-    //     navItem.push(
-    //         {
-    //             key:5,
-    //             label: (            
-    //                 <Link to="/patients">
-    //                     Sign out
-    //                 </Link>
-    //             ),
-    //         }
-    //     )
-    // }
-
     // LOGIN MODAL
     const [isModalVisible, setIsModalVisible] = useState(false);
-
     const showModal = () => {
         setIsModalVisible(true);
     };
-
     const handleOk = () => {
         setIsModalVisible(false);
     };
-
     const handleCancel = () => {
         setIsModalVisible(false);
     };
@@ -97,15 +70,12 @@ const AppNavbar = (props) => {
 
     // LOGIN MODAL
     const [isCreateAccountModalVisible, setIsCreateAccountModalVisible] = useState(false);
-
     const showCreateAccountModal = () => {
         setIsCreateAccountModalVisible(true);
     };
-
     const handleCreateAccountOk = () => {
         setIsCreateAccountModalVisible(false);
     };
-
     const handleCreateAccountCancel = () => {
         setIsCreateAccountModalVisible(false);
     };

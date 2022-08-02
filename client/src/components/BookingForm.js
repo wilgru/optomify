@@ -26,33 +26,6 @@ const BookingForm = (props) => {
     const onFinish = (values) => {
         console.log('Success:', values);
 
-        // console.log(new Date(values.dob.toISOString()))
-        // console.log(dateWorker(new Date(values.dob.toISOString())))
-        // console.log(new Date(values.medicare_exp.toISOString()))
-        // console.log(dateWorker(new Date(values.medicare_exp.toISOString())))
-        // addNewPatient({ variables: {
-        //     firstName: values.first_name,
-        //     lastName: values.last_name,
-        //     dob: values.dob,
-        //     email: values.email,
-        //     mobileNumber: values.mobile_number,
-        //     hasMedicare: values.has_medicare,
-        //     medicareNumber: values.medicare_number,
-        //     medicare_Ref: values.medicare_ref,
-        //     medicare_Exp: values.medicare_exp
-        // }});
-
-        // console.log(data.createNewPatient._id);
-        // const patientId = data.createNewPatient._id
-
-        // createNewBooking({ variables: {
-        //     bookingDate: props.bookingDate,
-        //     bookingStart: props.bookingStart,
-        //     bookingEnd: props.bookingEnd,
-        //     onPatientId: patientId,
-        //     bookingType: "General eye test"
-        // }})
-
         createNewPatientAndBooking({
             variables: {
                 firstName: values.first_name,
