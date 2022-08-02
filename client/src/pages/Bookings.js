@@ -569,7 +569,7 @@ const Bookings = (props) => {
                                                             <div className={"booking-card"}>
                                                                 {item.email !== "" ? (
                                                                     <>
-                                                                        {item.subTitle}
+                                                                        <h4>Booking reason:</h4> {item.subTitle.charAt(0).toUpperCase() + item.subTitle.slice(1)}
                                                                         <br/>
                                                                         <br/>
                                                                         <div style={{marginBottom: '10px'}}>
