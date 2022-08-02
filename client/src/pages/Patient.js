@@ -3,7 +3,7 @@ import { useQuery, useMutation } from '@apollo/client';
 import { useParams, Link } from 'react-router-dom';
 
 // utils
-import { loggedin } from '../utils/auth';
+import auth from '../utils/auth';
 
 // GraphQL
 import { GET_PATIENT } from '../graphql/queries';
@@ -18,7 +18,14 @@ import moment from 'moment';
 import PatientNotes from '../components/PatientNotes';
 const { Content, Sider } = Layout;
 
-const Patient = () => {
+const Patient = (props) => {
+
+  // check if loggedin first
+  if (!auth.loggedIn()) {
+    auth.logout()
+    props.setLoggedIn(false)
+  }
+
   let { id } = useParams();
   const [chosenContent, setChosenContent] = useState('overview');
 
@@ -26,31 +33,7 @@ const Patient = () => {
     variables: { id },
     fetchPolicy: "no-cache"
   });
-
   const patient = data?.getPatient || [];
-  console.log(patient)
-
-//   const [createPatient, { error }] = useMutation(CREATE_VOTE);
-
-  const handleCreateNewNote = async (techNum) => {
-    // try {
-    //   await createNewNote({
-    //     variables: { _id: id, techNum: techNum },
-    //   });
-    // } catch (err) {
-    //   console.error(err);
-    // }
-  };
-
-  const handleCreateClinicalFile = async (techNum) => {
-    // try {
-    //   await createPatient({
-    //     variables: { _id: id, techNum: techNum },
-    //   });
-    // } catch (err) {
-    //   console.error(err);
-    // }
-  };
 
   // MODAL
 
@@ -73,21 +56,17 @@ const Patient = () => {
   // sub nav options
   const subNav = [
       {
-          key: 'overview',
-          label: 'Overview',
+        key: 'overview',
+        label: 'Overview',
       },
       {
-          key: 'clinical_files',
-          label: 'Clinical Files',
+        key: 'clinical_files',
+        label: 'Clinical Files',
       },
       {
-          key: 'notes',
-          label: 'Notes',
+        key: 'notes',
+        label: 'Notes',
       },
-      // {
-      //     key: 'bookings',
-      //     label: 'Bookings',
-      // }
   ]
 
   function PatientContent(props) {

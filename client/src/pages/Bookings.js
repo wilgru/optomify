@@ -11,7 +11,9 @@ import {
     ReloadOutlined,
     ExclamationCircleOutlined,
     SmallDashOutlined,
-    StopOutlined
+    StopOutlined,
+    PhoneOutlined,
+    MailOutlined
   } from '@ant-design/icons';
 
 import moment from 'moment';
@@ -29,18 +31,23 @@ import { useMutation, useQuery } from '@apollo/client';
 // Utils
 import { getWeek } from '../utils/date';
 import BookBlocked from '../components/BookBlocked';
+import auth from '../utils/auth';
 
 // Ant Design from components
 const { Content, Sider } = Layout;
 const { RangePicker } = DatePicker;
 
-const Bookings = () => {
+const Bookings = (props) => {
+
+    // check if loggedin first
+    if (!auth.loggedIn()) {
+        auth.logout()
+        props.setLoggedIn(false)
+    }
+
     //start date and end date for bookings to show
     const [startDate, setStartDate] = useState(getWeek().firstDay);
     const [endDate, setEndDate] = useState(getWeek().lastDay);
-
-    // console.log("start/end")
-    // console.log(startDate, endDate)
 
     // for booking modal
     const [bookingDate, setBookingDate] = useState('');
@@ -180,13 +187,9 @@ const Bookings = () => {
     useEffect(() => {
         let nextPatientSet = false;
         setBookingList([])
-        // console.log('bookSetupData')
-        // console.log(bookSetupData)
 
         // populate bookingList
         bookSetupData.forEach((day) => {
-            // console.log("DAY HERE")
-            // console.log(day)
 
             // the current time to check whether appt is in the past or future
             const rightNow = new Date().toISOString()
@@ -230,7 +233,6 @@ const Bookings = () => {
 
                 // first check for optom break ======================================================================
                 if (moment(cursorUTC).isSame(optomBreakUTC)) {
-                    // console.log("OPTOM BREAK HERE")
                     todaysList.list.push({
                         time: optomBreakUTC,
                         titleTime: titleTime,
@@ -256,7 +258,6 @@ const Bookings = () => {
                     if (moment(cursorUTC).isSame(bookingTimeUTC)) {
                         // set the next patient
                         if (moment(bookingTimeUTC).isAfter(rightNowUTC) && !nextPatientSet && booking.booking_type !== "blocked") {
-                            // console.log('\n\n', booking.patient.first_name,'\n\n')
                             setNextPatient({
                                 id: booking.patient._id,
                                 firstName: booking.patient.first_name,
@@ -271,7 +272,6 @@ const Bookings = () => {
                         }
 
                         // now go and push the current booking 
-                        // console.log("BOOKING HERE")
                         todaysList.list.push({
                             time: bookingTimeUTC,
                             titleTime: titleTime,
@@ -295,7 +295,6 @@ const Bookings = () => {
 
                 // else just put in empties ======================================================================
                 if (!slotTaken) {
-                    // console.log("EMPTY")
                     todaysList.list.push({
                         time: moment(cursorUTC),
                         titleTime: titleTime,
@@ -312,18 +311,10 @@ const Bookings = () => {
                     })
                 }
                 cursorUTC = cursorUTC.add(30, 'm')
-                // console.log(cursorUTC._d)
             }
 
             setBookingList(current => [...current, todaysList])
-
-            // bookingList.push(todaysList);
         })
-        // console.log('bookingList');
-        // console.log(bookingList);
-
-        // console.log('nextPatient')
-        // console.log(nextPatient)
     }, [data])
 
     // listener for date range picker
@@ -409,14 +400,14 @@ const Bookings = () => {
                 {
                     key: 'sub2option1',
                     label: (  
-                        <Card className='appt-li'>
-                            <Link to={{ pathname: `/patients/${nextPatient.id}` }} className="patient-record-li">
+                        <Card className="next-patient-card">
+                            <Link to={{ pathname: `/patients/${nextPatient.id}` }}>
                                 <h4>{nextPatient.time}</h4>
                                 <h4>{`${nextPatient.firstName} ${nextPatient.lastName}`}</h4>
-                                <p>{nextPatient.mobileNumber}</p>
-                                <p>{nextPatient.email}</p>
+                                <p>{nextPatient.bookingType}</p>
                                 <br/>
-                                <h5>{nextPatient.bookingType}</h5>
+                                <p><PhoneOutlined /> {nextPatient.mobileNumber}</p>
+                                <p><MailOutlined/> {nextPatient.email}</p>
                             </Link>
                         </Card>  
                     )
@@ -460,15 +451,12 @@ const Bookings = () => {
 
     // MODAL - NEW PATIENT
     const [isModalVisibleNewPatient, setIsModalVisibleNewPatient] = useState(false);
-
     const showModalNewPatient = () => {
       setIsModalVisibleNewPatient(true);
     };
-  
     const handleOkNewPatient = () => {
       setIsModalVisibleNewPatient(false);
     };
-  
     const handleCancelNewPatient = () => {
         setIsModalVisibleNewPatient(false);
         setBookingDate('')
@@ -479,15 +467,12 @@ const Bookings = () => {
 
     // MODAL - EXISTING PATIENT
     const [isModalVisibleExistingPatient, setIsModalVisibleExistingPatient] = useState(false);
-
     const showModalExistingPatient = () => {
       setIsModalVisibleExistingPatient(true);
     };
-  
     const handleOkExistingPatient = () => {
       setIsModalVisibleExistingPatient(false);
     };
-  
     const handleCancelExistingPatient = () => {
       setIsModalVisibleExistingPatient(false);
       setBookingDate('')
@@ -498,15 +483,12 @@ const Bookings = () => {
 
     // MODAL - BLOCKED
     const [isModalVisibleBlocked, setIsModalVisibleBlocked] = useState(false);
-
     const showModalBlocked = () => {
       setIsModalVisibleBlocked(true);
     };
-  
     const handleOkBlocked = () => {
       setIsModalVisibleBlocked(false);
     };
-  
     const handleCancelBlocked = () => {
       setIsModalVisibleBlocked(false);
       setBookingDate('')
@@ -569,136 +551,81 @@ const Bookings = () => {
                                                 width: '100%'
                                             }}
                                             renderItem={(item) => (
-                                            // <List.Item>
-                                            //     <div style={{display:"flex"}}> 
-                                            //         <ConditionalIcon type={item.bookingType} />
-                                                    
-                                            //         <div className='booking'>
-                                            //             {<h4>{`${item.time.hour()+10}:${item.time.minute()} ${item.firstName} ${item.lastName}`}</h4>}
-                                            //             {item.bookingType} 
-                                            //         </div>
-
-                                            //         {item.bookingType === 'empty' ? (
-                                            //             <a 
-                                            //             data-date={new Date(day.date.toISOString())}
-                                            //             data-start-time={new Date(item.time.toISOString())}
-                                            //             onClick={(event) => {
-                                            //                 showModalNewPatient();
-                                            //                 setBookingDate(dateWorker(event.target.getAttribute('data-date')))
-                                            //                 setbookingStart(dateWorker(event.target.getAttribute('data-start-time')))
-                                            //                 setbookingEnd(dateWorker(event.target.getAttribute('data-start-time')))
-                                            //                 console.log("HELLO??")
-                                            //                 console.log(dateWorker(event.target.getAttribute('data-date')))
-                                            //                 console.log(dateWorker(event.target.getAttribute('data-start-time')))
-
-                                            //             }}>
-                                            //                 Book an Appointment
-                                            //             </a>
-                                            //         ) : (
-                                            //             <a></a>
-                                            //         )}
-                                            //     </div>
-                                            // </List.Item>
-                                            // <List.Item className={`${item.bookingStatus} ${item.hasPassed ? "past" : "future"} appt-li`}>
-                                            <List.Item className={`${item.bookingStatus} ${item.hasPassed} appt-li`}>
-                                                {/* {console.log("buttonSet in component")}
-                                                {console.log(buttonSet[item.bookingStatus])}
-                                                {buttonSet[item.bookingStatus].map(btn => {
-                                                    return <h1>hello</h1>
-                                                })} */}
-                                                <Popover
-                                                    content={
-                                                        <div className={"booking-card"}>
-                                                            {item.email !== "" ? (
+                                                <List.Item className={`${item.bookingStatus} ${item.hasPassed} appt-li`}>
+                                                    <Popover
+                                                        title={
+                                                            item.patientId ? (
                                                                 <>
-                                                                <div style={{marginBottom: '10px'}}>
-                                                                    <p>{`Number: ${item.mobileNumber}`}</p>
-                                                                    <p>{`Email: ${item.email}`}</p>
+                                                                    <span>{item.titleTime} - </span><Link to={{ pathname: `/patients/${item.patientId}` }}>{item.popoverTitleText}</Link>
+                                                                </>
+                                                            ) : (
+                                                                <>
+                                                                    <span>{item.titleTime} - </span><>{item.popoverTitleText}</>
+                                                                </>
+                                                            )
+                                                        }
+                                                        placement="right"
+                                                        content={
+                                                            <div className={"booking-card"}>
+                                                                {item.email !== "" ? (
+                                                                    <>
+                                                                        {item.subTitle}
+                                                                        <br/>
+                                                                        <br/>
+                                                                        <div style={{marginBottom: '10px'}}>
+                                                                            <p><PhoneOutlined /> {item.mobileNumber}</p>
+                                                                            <p><MailOutlined /> {item.email}</p>
+                                                                        </div>
+                                                                    </>
+                                                                ) : (
+                                                                    <></>
+                                                                )}
+                                                                
+                                                                {item.bookingNote ? (
+                                                                    <>
+                                                                        <h4>Bookings notes:</h4>
+                                                                        <Card className={"booking-note"}>
+                                                                            {item.bookingNote}
+                                                                        </Card>
+                                                                    </>
+                                                                ) : (
+                                                                    <></>
+                                                                )}
+
+                                                                <div
+                                                                    style={{
+                                                                        display: "flex",
+                                                                        justifyContent: "space-between"
+                                                                    }}
+                                                                >
+                                                                    {buttonSet[item.bookingStatus].map((btn) => {
+                                                                        return (
+                                                                            <Button
+                                                                                data-date={new Date(day.date.toISOString())}
+                                                                                data-start-time={new Date(item.time.toISOString())}
+                                                                                data-booking-id={item.bookingId}
+                                                                                data-booking-action={btn.text}
+                                                                                onClick={btn.clickFn}
+                                                                            >
+                                                                                {btn.text}   
+                                                                            </Button>
+                                                                        );
+                                                                    })}
                                                                 </div>
-                                                                </>
-                                                            ) : (
-                                                                <></>
-                                                            )}
-                                                            
-                                                            {item.bookingNote ? (
-                                                                <>
-                                                                    <h4>Bookings notes:</h4>
-                                                                    <Card className={"booking-note"}>
-                                                                        {item.bookingNote}
-                                                                    </Card>
-                                                                </>
-                                                            ) : (
-                                                                <></>
-                                                            )}
-
-                                                            <div
-                                                                style={{
-                                                                    display: "flex",
-                                                                    justifyContent: "space-between"
-                                                                }}
-                                                            >
-                                                                {buttonSet[item.bookingStatus].map((btn) => {
-                                                                    // if (btn === "Book New") {
-                                                                    //     return (
-                                                                    //         <Button
-                                                                    //             data-date={new Date(day.date.toISOString())}
-                                                                    //             data-start-time={new Date(item.time.toISOString())}
-                                                                    //             onClick={(event) => {
-                                                                    //                 setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
-                                                                    //                 setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
-                                                                    //                 setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
-                                                                    //                 showModalNewPatient();
-                                                                    //             }}
-                                                                    //         >
-                                                                    //             {btn}   
-                                                                    //         </Button>
-                                                                    //     );
-                                                                    // } else {
-                                                                    //     return <Button >{btn}</Button>;
-                                                                    // }
-
-                                                                    return (
-                                                                        <Button
-                                                                            data-date={new Date(day.date.toISOString())}
-                                                                            data-start-time={new Date(item.time.toISOString())}
-                                                                            data-booking-id={item.bookingId}
-                                                                            data-booking-action={btn.text}
-                                                                            onClick={btn.clickFn}
-                                                                        >
-                                                                            {btn.text}   
-                                                                        </Button>
-                                                                    );
-                                                                })}
+                                                            </div>
+                                                        }
+                                                    >
+                                                        <div style={{display:"flex", width: "100%", padding: item.bookingType === "empty" ? "0 0 0 10px" : "0"}}> 
+                                                            <ConditionalIcon type={item.bookingType} />
+                                                            <div style={{display:"flex", flexDirection:"column", width: "100%", padding: "0"}}>
+                                                                {<h4 style={{margin: 0}}>{item.titleTime}</h4>}
+                                                                {<h4 style={{margin: 0}}>{`${item.titleText}${!!item.bookingNote ? '*' : ''}`}</h4>}
+                                                                {/* {item.subTitle} */}
                                                             </div>
                                                         </div>
-                                                    }
-                                                    title={
-                                                        item.patientId ? (
-                                                            <>
-                                                                <span>{item.titleTime} - </span><Link to={{ pathname: `/patients/${item.patientId}` }}>{item.popoverTitleText}</Link>
-                                                            </>
-                                                        ) : (
-                                                            <>
-                                                                <span>{item.titleTime} - </span><>{item.popoverTitleText}</>
-                                                            </>
-                                                        )
-                                                    }
-                                                    // title={`${item.titleTime} - ${item.popoverTitleText}`}
-                                                    placement="right"
-                                                >
-                                                    <div style={{display:"flex", width: "100%", padding: item.bookingType === "empty" ? "0 0 0 10px" : "0"}}> 
-                                                        <ConditionalIcon type={item.bookingType} />
-                                                        {/* <div style={{display:"flex", flexDirection:"column", width: "100%", padding: "0"}} className={`booking ${item.hasPassed ? "past" : "future"}`}> */}
-                                                        <div style={{display:"flex", flexDirection:"column", width: "100%", padding: "0"}}>
-                                                            {<h4 style={{margin: 0}}>{item.titleTime}</h4>}
-                                                            {<h4 style={{margin: 0}}>{`${item.titleText}${!!item.bookingNote ? '*' : ''}`}</h4>}
-                                                            {item.subTitle}
-                                                        </div>
-                                                    </div>
-                                                </Popover>
-                                            </List.Item>
+                                                    </Popover>
+                                                </List.Item>
                                             )}
-                                            
                                         />
                                     )
                                 })}

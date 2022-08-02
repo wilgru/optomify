@@ -1,31 +1,30 @@
 // React
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // Ant Design
-import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal, Input } from 'antd';
-import BookingForm from '../components/BookingForm';
-import {
-    HomeOutlined,
-    LoadingOutlined,
-    SettingFilled,
-    SmileOutlined,
-    SyncOutlined,
-    EyeOutlined,
-  } from '@ant-design/icons';
-
+import { List, Layout, Input } from 'antd';
 import moment from 'moment';
 
-// grpahQL
+// utils
+import auth from '../utils/auth';
+
+// graphQL
 import { GET_ALL_PATIENTS } from '../graphql/queries';
-import { useMutation, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client';
 import { Link } from 'react-router-dom';
 
-
 // Ant Design from components
-const { Content, Sider } = Layout;
+const { Content } = Layout;
 const { Search } = Input
 
-const Patients = () => {
+const Patients = (props) => {
+
+    // check if loggedin first
+    if (!auth.loggedIn()) {
+        auth.logout()
+        props.setLoggedIn(false)
+    }
+
     const [searchTerm, setSearchTerm] = useState("")
 
     const { loading, data } = useQuery(GET_ALL_PATIENTS, {
@@ -42,21 +41,16 @@ const Patients = () => {
     }
 
     // MODAL
-
     const [isModalVisible, setIsModalVisible] = useState(false);
-
     const showModal = () => {
       setIsModalVisible(true);
     };
-  
     const handleOk = () => {
       setIsModalVisible(false);
     };
-  
     const handleCancel = () => {
       setIsModalVisible(false);
     };
-
     // END MODAL
 
     return (
