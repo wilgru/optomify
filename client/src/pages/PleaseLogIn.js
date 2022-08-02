@@ -2,7 +2,9 @@ import React from 'react';
 
 const PleaseLogIn = () => {
     return (
-        <h1>Please login to view your clinic.</h1>  
+        <div style={{width: '100%', marginTop: "200px"}}>
+            <h2 style={{textAlign: "center"}}>Please login to view your clinic.</h2>  
+        </div>
     )
 }
 
