@@ -29,6 +29,20 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
+// console.log('\n\n')
+// console.log(process.env.TINYMCE_API_KEY)
+// console.log('\n\n')
+
+// app.get('/api/tinymce', (req, res) => {
+//   console.log("req.headers.authorization")
+//   console.log(req.headers.authorization)
+//   if (authMiddleware({req}).user) {
+//     res.json({
+//       tinymce_api_key: process.env.TINYMCE_API_KEY
+//     })
+//   }
+// })
+
 // Create a new instance of an Apollo server with the GraphQL schema
 const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
