@@ -106,3 +106,10 @@ export const GET_BOOK_SETUPS = gql`
     }
 }
 `;
+
+export const GET_TINYMCE_KEY = gql`
+query GetTinyMCEApiKey {
+  getTinyMCEApiKey {
+    key
+  }
+}`
