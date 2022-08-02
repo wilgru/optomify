@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
 
 // antd
-import { Button, TimePicker, Form, Input, Select, DatePicker, Card } from 'antd';
+import { Button, TimePicker, Form, Input, DatePicker, Card } from 'antd';
 import moment from 'moment';
 
 // grpahQL
 import { SETUP_BOOK } from '../graphql/mutations';
-import { GET_PATIENT, GET_BOOK_SETUPS } from '../graphql/queries';
+import { GET_BOOK_SETUPS } from '../graphql/queries';
 import { useMutation } from '@apollo/client';
-
-const { Option } = Select;
 
 // component
 const SetupBook = (props) => {
     const [form] = Form.useForm();
+
+    const [opening, setOpening] = useState(moment('10:00', "HH:mm"))
+    const [closing, setClosing] = useState(moment('19:00', "HH:mm"))
+    const [optomBreak, setOptomBreak] = useState(moment('13:00', "HH:mm"))
 
     const [setupBook, { data, loading, error }] = useMutation(SETUP_BOOK);
 
@@ -25,7 +27,7 @@ const SetupBook = (props) => {
         const closing_time = date+values.closing.format('THH:mm:00+00:00')
         const break_time = date+values.break.format('THH:mm:00+00:00')
 
-        console.log(full_date, open_time, closing_time, break_time)
+        // console.log(full_date, open_time, closing_time, break_time)
 
         setupBook({
             variables: {
@@ -56,6 +58,9 @@ const SetupBook = (props) => {
                 span: 14
             }}
             initialValues={{
+                opening: moment('10:00', "HH:mm"),
+                closing: moment('19:00', "HH:mm"),
+                break: moment('13:00', "HH:mm"),
             }}
             style={{
                 marginTop:'20px'
@@ -82,14 +87,44 @@ const SetupBook = (props) => {
             label="Opening"
             name="opening"
             hasFeedback
-            rules={[
-            {
-                required: true,
-                message: "Select a time"
-            }
+                rules={[
+                {
+                    required: true,
+                    message: "Select a time"
+                },
+                {
+                    validator: async (_, value) => {
+                    if (!value) return;
+
+                    if (value.minutes() % 30 === 0 || value.minutes() === 0) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("30 min blocks only"));
+                    }
+                    },
+                    message: "30 min blocks only"
+                },
+                {
+                    validator: async (_, value) => {
+                    if (!value) return;
+    
+                    if (value < closing && value < optomBreak) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("Should be earliest"));
+                    }
+                    },
+                    message: "Should be earliest"
+                }
             ]}
         >
-            <TimePicker defaultValue={moment('10:00', "HH:mm")} format={"HH:mm"} />
+            <TimePicker 
+                defaultValue={moment('10:00', "HH:mm")} 
+                format={"HH:mm"} 
+                onChange={(value) => {
+                    setOpening(value)
+                }}
+            />
         </Form.Item>
 
         <Form.Item
@@ -97,13 +132,43 @@ const SetupBook = (props) => {
             name="closing"
             hasFeedback
             rules={[
-            {
-                required: true,
-                message: "Select a time"
-            }
+                {
+                    required: true,
+                    message: "Select a time"
+                },
+                {
+                    validator: async (_, value) => {
+                    if (!value) return;
+
+                    if (value.minutes() % 30 === 0 || value.minutes() === 0) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("30 min blocks only"));
+                    }
+                    },
+                    message: "30 min blocks only"
+                },
+                {
+                    validator: async (_, value) => {
+                    if (!value) return;
+
+                    if (value > opening && value > optomBreak) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("Should be last"));
+                    }
+                    },
+                    message: "Should be last"
+                }
             ]}
         >
-            <TimePicker defaultValue={moment('19:00', "HH:mm")} format={"HH:mm"} />
+            <TimePicker 
+                defaultValue={moment('19:00', "HH:mm")} 
+                format={"HH:mm"} 
+                onChange={(value) => {
+                    setClosing(value)
+                }}
+            />
         </Form.Item>
 
         <Form.Item
@@ -113,10 +178,43 @@ const SetupBook = (props) => {
                 {
                     required: true,
                     message: "Select a time"
+                },
+                {
+                    validator: async (_, value) => {
+                        console.log(value.minutes());
+                        console.log(value.minutes() % 30 === 0 );
+                        console.log(value.minutes() === 0);
+                    if (!value) return;
+
+                    if (value.minutes() % 30 === 0 || value.minutes() === 0) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("30 min blocks only"));
+                    }
+                    },
+                    message: "30 min blocks only"
+                },
+                {
+                    validator: async (_, value) => {
+                    if (!value) return;
+
+                    if (value > opening && value < closing) {
+                        return Promise.resolve(); //resolve to say true or it passed
+                    } else {
+                        return Promise.reject(new Error("Should be in between"));
+                    }
+                    },
+                    message: "Should be in between"
                 }
-                ]}
+            ]}
         >
-            <TimePicker defaultValue={moment('12:00', "HH:mm")} format={"HH:mm"} />
+            <TimePicker 
+                defaultValue={moment('12:00', "HH:mm")} 
+                format={"HH:mm"} 
+                onChange={(value) => {
+                    setOptomBreak(value)
+                }}
+            />
         </Form.Item>
 
         <Form.Item
