@@ -26,7 +26,7 @@ const ViewClinicalFile = (props) => {
     const [updateClinicalFile, { data, loading, error }] = useMutation(UPDATE_CLINICAL_FILE);
 
     // conditionally required if prescription is selected
-    const [conditionalReq, setConditionalReq] = useState(true);
+    const [isPrescription, setIsPrescription] = useState(props.selectedClinicalFileData.file_type === "prescription");
 
     const rxNotationRegex = new RegExp(
         "[-,+]\\d+\\.(00|25|50|75)\\/-(\\d+.(00|25|50|75)x[1-9][0-8]?[0-9]?|0\\.00x000)$"
@@ -89,7 +89,7 @@ const ViewClinicalFile = (props) => {
                 span: 16
             }}
             initialValues={{
-                fileType: "prescription",
+                fileType: props.selectedClinicalFileData.file_type,
                 title: props.selectedClinicalFileData.title,
                 medicareItemCode: props.selectedClinicalFileData.medicare_item_code,
 
@@ -139,8 +139,8 @@ const ViewClinicalFile = (props) => {
                 placeholder="File type"
                 onChange={(value) => {
                     value === "prescription"
-                    ? setConditionalReq(true)
-                    : setConditionalReq(false);
+                    ? setIsPrescription(true)
+                    : setIsPrescription(false);
                 }}
             >
                 <Option value="prescription">Prescription</Option>
@@ -229,7 +229,7 @@ const ViewClinicalFile = (props) => {
                 }
                 ]}
             >
-                <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
+                <Input disabled={!isPrescription} placeholder="(-/+)0.00/-0.00x000" />
             </Form.Item>
 
             <Form.Item
@@ -250,7 +250,7 @@ const ViewClinicalFile = (props) => {
                 }
                 ]}
             >
-                <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
+                <Input disabled={!isPrescription} placeholder="(-/+)0.00/-0.00x000" />
             </Form.Item>
 
             <Form.Item
@@ -272,7 +272,7 @@ const ViewClinicalFile = (props) => {
                 ]}
             >
                 <Input
-                    disabled={!conditionalReq}
+                    disabled={!isPrescription}
                     style={{ width: "100px" }}
                     placeholder="Inter Add"
                 />
@@ -297,7 +297,7 @@ const ViewClinicalFile = (props) => {
                 ]}
             >
                 <Input
-                    disabled={!conditionalReq}
+                    disabled={!isPrescription}
                     style={{ width: "100px" }}
                     placeholder="Inter Add"
                 />
@@ -310,7 +310,7 @@ const ViewClinicalFile = (props) => {
                 name="givenRight"
                 rules={[
                 {
-                    required: conditionalReq,
+                    required: isPrescription,
                     validator: async (_, value) => {
                     if (!value) return;
 
@@ -324,7 +324,7 @@ const ViewClinicalFile = (props) => {
                 }
                 ]}
             >
-                <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
+                <Input disabled={!isPrescription} placeholder="(-/+)0.00/-0.00x000" />
             </Form.Item>
 
             <Form.Item
@@ -332,7 +332,7 @@ const ViewClinicalFile = (props) => {
                 name="givenLeft"
                 rules={[
                 {
-                    required: conditionalReq,
+                    required: isPrescription,
                     validator: async (_, value) => {
                     if (!value) return;
 
@@ -346,7 +346,7 @@ const ViewClinicalFile = (props) => {
                 }
                 ]}
             >
-                <Input disabled={!conditionalReq} placeholder="(-/+)0.00/-0.00x000" />
+                <Input disabled={!isPrescription} placeholder="(-/+)0.00/-0.00x000" />
             </Form.Item>
 
             <Form.Item
@@ -368,7 +368,7 @@ const ViewClinicalFile = (props) => {
                 ]}
             >
                 <Input
-                disabled={!conditionalReq}
+                disabled={!isPrescription}
                 style={{ width: "100px" }}
                 placeholder="Inter Add"
                 />
@@ -393,7 +393,7 @@ const ViewClinicalFile = (props) => {
                 ]}
             >
                 <Input
-                    disabled={!conditionalReq}
+                    disabled={!isPrescription}
                     style={{ width: "100px" }}
                     placeholder="Inter Add"
                 />
