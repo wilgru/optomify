@@ -47,12 +47,10 @@ const Bookings = () => {
     const [bookingStart, setbookingStart] = useState('');
     const [bookingEnd, setbookingEnd] = useState('');
 
-    // mutations for updating bookings and deleteing bookings
+    // mutations for updating bookings and deleteing bookings and creating blockec booking
     const [updateBooking, { updateError }] = useMutation(UPDATE_BOOKING);
     const [deleteBooking, { deletError }] = useMutation(DELETE_BOOKING);
-
-    // create booking mution, only used for creating blocked bookings
-    const [createNewBooking, { createBookingError }] = useMutation(CREATE_NEW_BOOKING);
+    const [createNewBooking, { createBookingError }] = useMutation(CREATE_NEW_BOOKING); // only used for creating blocked bookings
 
     // get booksetup and bookings
     const { loading, data, err} = useQuery(GET_BOOK_SETUPS, {
@@ -63,7 +61,6 @@ const Bookings = () => {
         fetchPolicy: "no-cache"
     });
     const bookSetupData = data?.getBookSetups || [];
-    // const bookingList = []
 
     // update bookinng function
     const updateBookingFn = (event, action) => {
@@ -181,6 +178,7 @@ const Bookings = () => {
 
     // populate bookingList
     useEffect(() => {
+        let nextPatientSet = false;
         setBookingList([])
         // console.log('bookSetupData')
         // console.log(bookSetupData)
@@ -257,7 +255,7 @@ const Bookings = () => {
 
                     if (moment(cursorUTC).isSame(bookingTimeUTC)) {
                         // set the next patient
-                        if (moment(bookingTimeUTC).isAfter(rightNowUTC) && Object.keys(nextPatient).length === 0 && booking.booking_type !== "blocked") {
+                        if (moment(bookingTimeUTC).isAfter(rightNowUTC) && !nextPatientSet && booking.booking_type !== "blocked") {
                             // console.log('\n\n', booking.patient.first_name,'\n\n')
                             setNextPatient({
                                 id: booking.patient._id,
@@ -268,6 +266,8 @@ const Bookings = () => {
                                 time: titleTime,
                                 bookingType: booking.booking_type
                             })
+
+                            nextPatientSet = true
                         }
 
                         // now go and push the current booking 
