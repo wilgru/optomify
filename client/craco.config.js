@@ -10,6 +10,8 @@ module.exports = {
             modifyVars: { 
                 '@layout-header-background': '#FAFCFC',
                 '@primary-color': '#00ACB1',
+                '@success-color': '#CAF0C1',
+                '@error-color': 'salmon',
                 '@text-color': '#015D67',
                 // '@menu-item-height': 'fit-content',
                 // '@menu-item-padding': 'none'
