@@ -122,7 +122,7 @@ const AppNavbar = (props) => {
         <div className="logo">
             <img
                 width={50}
-                src="./optomify_logo.png"
+                src="/optomify_logo.png"
             />
         </div>
         <Menu className="navbar" mode="horizontal" defaultSelectedKeys={[page || 'bookings']} items={props.loggedIn ? navItem : []}/>
@@ -133,17 +133,7 @@ const AppNavbar = (props) => {
                     <Button onClick={showModal}>Login</Button>
                 </>
             ) : (
-                <>
-                    {/* <p>{"helpp"}</p> */}
-                    <Button 
-                        onClick={() => {
-                            auth.logout(); 
-                            // window.location = '/';
-                        }
-                    }>
-                        Sign out
-                    </Button>
-                </>
+                <Button onClick={auth.logout}> Sign out </Button>
             )}
         </div>
     </Header>
