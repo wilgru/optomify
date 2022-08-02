@@ -1,6 +1,0 @@
-<List.Item  className={"patient-record-li"}>
-  <div className={"patient-record"} onClick={()=> console.log(item.first_name)}>
-    {`${item.time} - ${item.first_name} ${item.last_name}`}
-  </div>
-</List.Item>
-
