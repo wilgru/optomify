@@ -113,7 +113,7 @@ const resolvers = {
             if (context.user) {
                 try {
                     const key = process.env.TINYMCE_API_KEY
-                    console.log(key)
+                    // console.log(key)
 
                     return { key }
                 } catch(e) {
@@ -157,7 +157,7 @@ const resolvers = {
                 }
           
                 const token = signToken(user);
-                console.log(token)
+                // console.log(token)
           
                 return { token, user }; // return Auth
             } catch(e) {
@@ -503,7 +503,7 @@ const resolvers = {
                         throw new Error("could not find booking");
                     }
 
-                    console.log(update_action)
+                    // console.log(update_action)
                     switch (update_action) {
                         case "booked":
                             booking.booking_status = "booked"
