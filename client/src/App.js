@@ -14,12 +14,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import Navbar from './components/Navbar';
 
 // Pages
-import Dashboard from './pages/Dashboard';
 import Bookings from './pages/Bookings';
 import Patients from './pages/Patients';
 import Patient from './pages/Patient';
 import PleaseLogIn from './pages/PleaseLogIn';
-import Login from './components/Login';
 
 // Apollo imports
 import {
@@ -72,10 +70,9 @@ const App = () => {
           <Routes>
             {loggedIn ? (
               <>
-                {/* <Route path='/dashboard' element={<Dashboard />}/> */}
-                <Route path='/bookings' element={<Bookings />}/>
-                <Route path='/patients' element={<Patients />}/>
-                <Route path='/patients/:id' element={<Patient />}/>
+                <Route path='/bookings' element={<Bookings setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>}/>
+                <Route path='/patients' element={<Patients setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>}/>
+                <Route path='/patients/:id' element={<Patient setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>}/>
                 <Route path='/*' element={ <Navigate to="/bookings" /> }/>
               </>
             ) : (
