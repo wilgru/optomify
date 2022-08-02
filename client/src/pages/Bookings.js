@@ -70,7 +70,7 @@ const Bookings = () => {
         // console.log(startDate, endDate)
         updateBooking({
             variables: {
-                bookingToUpdateId: event.target.parentNode.getAttribute('data-booking-id'),
+                bookingToUpdateId: event.target.closest("button").getAttribute('data-booking-id'),
                 updateAction: action,
                 startDate,
                 endDate
@@ -87,7 +87,7 @@ const Bookings = () => {
         // console.log(startDate, endDate)
         deleteBooking({
             variables: {
-                bookingToDeleteId: event.target.parentNode.getAttribute('data-booking-id'),
+                bookingToDeleteId: event.target.closest("button").getAttribute('data-booking-id'),
                 startDate,
                 endDate
             },
@@ -102,21 +102,21 @@ const Bookings = () => {
     const buttonSet = {
         empty: [
             {text: "Book New", clickFn: function(event){
-                setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
-                setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
-                setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                setBookingDate(dateWorker(event.target.closest("button").getAttribute('data-date')))
+                setbookingStart(dateWorker(event.target.closest("button").getAttribute('data-start-time')))
+                setbookingEnd(dateWorker(event.target.closest("button").getAttribute('data-start-time')))
                 showModalNewPatient();
             }}, 
             {text: "Book Existing", clickFn: function(event){
-                setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
-                setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
-                setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                setBookingDate(dateWorker(event.target.closest("button").getAttribute('data-date')))
+                setbookingStart(dateWorker(event.target.closest("button").getAttribute('data-start-time')))
+                setbookingEnd(dateWorker(event.target.closest("button").getAttribute('data-start-time')))
                 showModalExistingPatient();
             }}, 
             {text: "Block", clickFn: function(event){
-                setBookingDate(dateWorker(event.target.parentNode.getAttribute('data-date')))
-                setbookingStart(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
-                setbookingEnd(dateWorker(event.target.parentNode.getAttribute('data-start-time')))
+                setBookingDate(dateWorker(event.target.closest("button").getAttribute('data-date')))
+                setbookingStart(dateWorker(event.target.closest("button").getAttribute('data-start-time')))
+                setbookingEnd(dateWorker(event.target.closest("button").getAttribute('data-start-time')))
                 showModalBlocked();
             }}
         ],
@@ -214,6 +214,16 @@ const Bookings = () => {
 
             // init cursor
             let cursorUTC = moment(openingUTC)
+
+            const getTimeRelation = (nowTime, checkingTime) => {
+                if (moment(checkingTime).isBefore(nowTime) && moment(nowTime).isBefore(moment(checkingTime).add(30, 'm'))) {
+                    return "current"
+                } else if (moment(checkingTime).isBefore(nowTime)) {
+                    return "past"
+                } else {
+                    return "future"
+                }
+            }
             
             // begin iterating
             while (moment(cursorUTC).isBefore(closingUTC)) {
@@ -231,7 +241,7 @@ const Bookings = () => {
                         subTitle: "",
                         bookingType: "optom break",
                         bookingStatus: "optomBreak",
-                        hasPassed: (moment(optomBreakUTC).isBefore(rightNowUTC)),
+                        hasPassed: getTimeRelation(rightNowUTC, optomBreakUTC), //(moment(optomBreakUTC).isBefore(rightNowUTC)),
                         firstName: "",
                         lastName: "",
                         mobileNumber: "",
@@ -272,7 +282,7 @@ const Bookings = () => {
                             bookingType: booking.booking_type,
                             bookingStatus: booking.booking_type !== 'blocked' ? booking.booking_status : "blocked",
                             bookingNote: booking.booking_note,
-                            hasPassed: (moment(bookingTimeUTC).isBefore(rightNowUTC)),
+                            hasPassed: getTimeRelation(rightNowUTC, bookingTimeUTC), //(moment(bookingTimeUTC).isBefore(rightNowUTC)),
                             firstName: booking.patient?.first_name || "blocked",
                             lastName: booking.patient?.last_name || "blocked",
                             mobileNumber: booking.patient?.mobile_number || "",
@@ -294,7 +304,7 @@ const Bookings = () => {
                         subTitle: "",
                         bookingType: "empty",
                         bookingStatus: "empty",
-                        hasPassed: (moment(cursorUTC).isBefore(moment(rightNowUTC))),
+                        hasPassed: getTimeRelation(rightNowUTC, cursorUTC), //(moment(cursorUTC).isBefore(moment(rightNowUTC))),
                         firstName: "",
                         lastName: "",
                         mobileNumber: "",
@@ -460,7 +470,10 @@ const Bookings = () => {
     };
   
     const handleCancelNewPatient = () => {
-      setIsModalVisibleNewPatient(false);
+        setIsModalVisibleNewPatient(false);
+        setBookingDate('')
+        setbookingStart('')
+        setbookingEnd('')
     };
     // END MODAL - NEW PATIENT
 
@@ -477,6 +490,9 @@ const Bookings = () => {
   
     const handleCancelExistingPatient = () => {
       setIsModalVisibleExistingPatient(false);
+      setBookingDate('')
+      setbookingStart('')
+      setbookingEnd('')
     };
     // END MODAL - EXISTING PATIENT
 
@@ -493,6 +509,9 @@ const Bookings = () => {
   
     const handleCancelBlocked = () => {
       setIsModalVisibleBlocked(false);
+      setBookingDate('')
+      setbookingStart('')
+      setbookingEnd('')
     };
     // END MODAL - BLOCKED
 
@@ -580,7 +599,8 @@ const Bookings = () => {
                                             //         )}
                                             //     </div>
                                             // </List.Item>
-                                            <List.Item className={`${item.bookingStatus} ${item.hasPassed ? "past" : "future"} appt-li`}>
+                                            // <List.Item className={`${item.bookingStatus} ${item.hasPassed ? "past" : "future"} appt-li`}>
+                                            <List.Item className={`${item.bookingStatus} ${item.hasPassed} appt-li`}>
                                                 {/* {console.log("buttonSet in component")}
                                                 {console.log(buttonSet[item.bookingStatus])}
                                                 {buttonSet[item.bookingStatus].map(btn => {
@@ -669,7 +689,6 @@ const Bookings = () => {
                                                     <div style={{display:"flex", width: "100%", padding: item.bookingType === "empty" ? "0 0 0 10px" : "0"}}> 
                                                         <ConditionalIcon type={item.bookingType} />
                                                         {/* <div style={{display:"flex", flexDirection:"column", width: "100%", padding: "0"}} className={`booking ${item.hasPassed ? "past" : "future"}`}> */}
-                                                        {console.log(item.bookingNote)}
                                                         <div style={{display:"flex", flexDirection:"column", width: "100%", padding: "0"}}>
                                                             {<h4 style={{margin: 0}}>{item.titleTime}</h4>}
                                                             {<h4 style={{margin: 0}}>{`${item.titleText}${!!item.bookingNote ? '*' : ''}`}</h4>}
