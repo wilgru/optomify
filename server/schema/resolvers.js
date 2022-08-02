@@ -113,7 +113,7 @@ const resolvers = {
             if (context.user) {
                 try {
                     const key = process.env.TINYMCE_API_KEY
-                    // console.log(key)
+                    console.log(key)
 
                     return { key }
                 } catch(e) {
