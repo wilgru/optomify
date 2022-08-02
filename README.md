@@ -9,7 +9,7 @@
 
 <!-- ## Deployed web address -->
 
-You can visit a deployed demo web application [here](https://projecthub-crm.herokuapp.com/)
+You can visit a deployed demo web application [here](https://optomify.herokuapp.com/bookings)
 <br>
 
 ## Project Description
