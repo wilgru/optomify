@@ -1,43 +1,44 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useParams, useHref } from 'react-router-dom';
 
-// import Auth from '../utils/auth';
-
+// utils
 import auth from '../utils/auth';
 
 // Ant Design
 import { Layout, Menu, Image, Button, Modal } from 'antd';
 import 'antd/dist/antd.css';
+
+// componenets
 import Login from './Login';
+import CreateAccount from './CreateAccount';
 
 // Antd Layout components
 const { Header } = Layout;
 
-const AppNavbar = () => {
-    const { location } = useLocation()
+const AppNavbar = (props) => {
+    const [page, setPage] = useState(
+        window.location.href.substring(
+            window.location.href.lastIndexOf('/')+1
+        )
+    )
     
     // if the current token in local storage is exired log it out
     if (auth.isTokenExpired(auth.getToken())) {
         localStorage.removeItem('id_token');
     }
-    
-    // const items1old = ['1', '2', '3'].map((key) => ({
-    //     key,
-    //     label: `nav ${key}`,
-    // }));
 
     //
-    const items1 = [
+    const navItem = [
+        // {
+        //     key: 'dashboard',
+        //     label: (            
+        //         <Link to="/dashboard">
+        //             Dashboard
+        //         </Link>
+        //     ),
+        // },
         {
-            key: 1,
-            label: (            
-                <Link to="/dashboard">
-                    Dashboard
-                </Link>
-            ),
-        },
-        {
-            key: 2,
+            key: 'bookings',
             label: (            
                 <Link to="/bookings">
                     Bookings
@@ -45,7 +46,7 @@ const AppNavbar = () => {
             ),
         },
         {
-            key: 3,
+            key: 'patients',
             label: (            
                 <Link to="/patients">
                     Patients
@@ -55,7 +56,7 @@ const AppNavbar = () => {
     ]
 
     // if (!auth.loggedIn()) {
-    //     items1.push(
+    //     navItem.push(
     //         {
     //             key:5,
     //             label: (            
@@ -66,7 +67,7 @@ const AppNavbar = () => {
     //         }
     //     )
     // } else {
-    //     items1.push(
+    //     navItem.push(
     //         {
     //             key:5,
     //             label: (            
@@ -78,8 +79,7 @@ const AppNavbar = () => {
     //     )
     // }
 
-    // MODAL
-
+    // LOGIN MODAL
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     const showModal = () => {
@@ -93,14 +93,31 @@ const AppNavbar = () => {
     const handleCancel = () => {
         setIsModalVisible(false);
     };
+    // LOGIN END MODAL
 
-    // END MODAL
+    // LOGIN MODAL
+    const [isCreateAccountModalVisible, setIsCreateAccountModalVisible] = useState(false);
 
+    const showCreateAccountModal = () => {
+        setIsCreateAccountModalVisible(true);
+    };
+
+    const handleCreateAccountOk = () => {
+        setIsCreateAccountModalVisible(false);
+    };
+
+    const handleCreateAccountCancel = () => {
+        setIsCreateAccountModalVisible(false);
+    };
+    // LOGIN END MODAL
 
   return (
     <Header className="header">
-        <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-            <Login hideModal={setIsModalVisible}/>
+        <Modal title="Login" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+            <Login hideModal={setIsModalVisible} setLoggedIn={props.setLoggedIn}/>
+        </Modal>
+        <Modal title="Create account" visible={isCreateAccountModalVisible} onOk={handleCreateAccountOk} onCancel={handleCreateAccountCancel}>
+            <CreateAccount hideModal={setIsCreateAccountModalVisible} setLoggedIn={props.setLoggedIn}/>
         </Modal>
         <div className="logo">
             <img
@@ -108,12 +125,25 @@ const AppNavbar = () => {
                 src="./optomify_logo.png"
             />
         </div>
-        <Menu className="navbar" mode="horizontal" defaultSelectedKeys={['2']} items={items1}/>
+        <Menu className="navbar" mode="horizontal" defaultSelectedKeys={[page || 'bookings']} items={props.loggedIn ? navItem : []}/>
         <div className="login-signout">
             {!auth.loggedIn() ? (
-                <Button onClick={showModal}>Login</Button>
+                <>
+                    <Button type='primary' style={{marginRight: "18px"}} onClick={showCreateAccountModal}>Create account</Button>
+                    <Button onClick={showModal}>Login</Button>
+                </>
             ) : (
-                <Button onClick={auth.logout}>Sign out</Button>
+                <>
+                    {/* <p>{"helpp"}</p> */}
+                    <Button 
+                        onClick={() => {
+                            auth.logout(); 
+                            // window.location = '/';
+                        }
+                    }>
+                        Sign out
+                    </Button>
+                </>
             )}
         </div>
     </Header>
