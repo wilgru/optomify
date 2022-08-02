@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // antd
 import { Button, Checkbox, Form, Input, Select, DatePicker, Card } from 'antd';
@@ -9,8 +9,8 @@ import { Editor } from "@tinymce/tinymce-react";
 
 // grpahQL
 import { CREATE_NEW_NOTE } from '../graphql/mutations';
-import { GET_PATIENT } from '../graphql/queries';
-import { useMutation } from '@apollo/client';
+import { GET_PATIENT, GET_TINYMCE_KEY } from '../graphql/queries';
+import { useMutation, useQuery } from '@apollo/client';
 
 const { Option } = Select;
 
@@ -18,7 +18,18 @@ const { Option } = Select;
 const AddNote = (props) => {
     const [form] = Form.useForm();
 
-    const [createNewClinicalFile, { data, loading, error }] = useMutation(CREATE_NEW_NOTE);
+    const { loading, data } = useQuery(GET_TINYMCE_KEY);
+    // if (data){
+    //     console.log(data[Object.keys(data)[0]].key)
+    //     console.log(data.getTinyMCEApiKey.key)
+    // }
+
+    // const tinyMceKey = ""
+    // useEffect(() => {
+    //     const tinyMceKey = data.getTinyMCEApiKey.key;
+    // }, [data])
+
+    const [createNewClinicalFile] = useMutation(CREATE_NEW_NOTE);
 
     const onFinish = (values) => {
         console.log('Success:', values);
@@ -85,16 +96,20 @@ const AddNote = (props) => {
             }
             ]}
         >
-            <Editor
-                apiKey={process.env.REACT_APP_TINYMCEAPIKEY}
-                init={{
-                    menubar: false,
-                    plugins: "link image code autoresize lists",
-                    toolbar:
-                    "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help"
-                }}
-                initialValue="<p>Your notes here</p>"
-            />
+            {loading ? (
+                <></>
+            ) : (
+                <Editor
+                    apiKey={data.getTinyMCEApiKey.key}
+                    init={{
+                        menubar: false,
+                        plugins: "link image code autoresize lists",
+                        toolbar:
+                        "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help"
+                    }}
+                    initialValue="<p>Your notes here</p>"
+                />
+            )}
         </Form.Item>
 
         <Form.Item

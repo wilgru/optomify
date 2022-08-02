@@ -14,8 +14,8 @@ import { getSph, getCyl, getAxis } from '../utils/rxNotation'
 
 // grpahQL
 import { CREATE_NEW_CLINICAL_FILE } from '../graphql/mutations';
-import { GET_PATIENT } from '../graphql/queries';
-import { useMutation } from '@apollo/client';
+import { GET_PATIENT, GET_TINYMCE_KEY } from '../graphql/queries';
+import { useMutation, useQuery } from '@apollo/client';
 
 const { Option } = Select;
 
@@ -23,7 +23,9 @@ const { Option } = Select;
 const AddClinicalFile = (props) => {
     const [form] = Form.useForm();
 
-    const [createNewClinicalFile, { data, loading, error }] = useMutation(CREATE_NEW_CLINICAL_FILE);
+    const { data, loading } = useQuery(GET_TINYMCE_KEY);
+
+    const [createNewClinicalFile] = useMutation(CREATE_NEW_CLINICAL_FILE);
 
     // conditionally required if prescription is selected
     const [isPrescription, setIsPrescription] = useState(true);
@@ -147,16 +149,20 @@ const AddClinicalFile = (props) => {
             }
             ]}
         >
-            <Editor
-                apiKey={process.env.REACT_APP_TINYMCEAPIKEY}
-                init={{
-                    menubar: false,
-                    plugins: "link image code autoresize lists",
-                    toolbar:
-                    "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help"
-                }}
-                initialValue="<p>Your notes here</p>"
-            />
+            {loading ? (
+                <></>
+            ) : (
+                <Editor
+                    apiKey={data.getTinyMCEApiKey.key}
+                    init={{
+                        menubar: false,
+                        plugins: "link image code autoresize lists",
+                        toolbar:
+                        "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help"
+                    }}
+                    initialValue="<p>Your notes here</p>"
+                />
+            )}
         </Form.Item>
 
         <Form.Item

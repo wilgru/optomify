@@ -9,8 +9,8 @@ import { Editor } from "@tinymce/tinymce-react";
 
 // grpahQL
 import { UPDATE_NOTE } from '../graphql/mutations';
-import { GET_PATIENT } from '../graphql/queries';
-import { useMutation } from '@apollo/client';
+import { GET_PATIENT, GET_TINYMCE_KEY } from '../graphql/queries';
+import { useMutation, useQuery } from '@apollo/client';
 
 const { Option } = Select;
 
@@ -18,7 +18,9 @@ const { Option } = Select;
 const ViewClinicalFile = (props) => {
     const [form] = Form.useForm();
 
-    const [createNewClinicalFile, { data, loading, error }] = useMutation(UPDATE_NOTE);
+    const { data, loading } = useQuery(GET_TINYMCE_KEY);
+
+    const [createNewClinicalFile] = useMutation(UPDATE_NOTE);
 
     console.log(props.selectedNoteData)
 
@@ -90,16 +92,20 @@ const ViewClinicalFile = (props) => {
             }
             ]}
         >
-            <Editor
-                apiKey={process.env.REACT_APP_TINYMCEAPIKEY}
-                init={{
-                    menubar: false,
-                    plugins: "link image code autoresize lists",
-                    toolbar:
-                    "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help"
-                }}
-                initialValue={props.selectedNoteData.text_field}
-            />
+            {loading ? (
+                <></>
+            ) : (
+                <Editor
+                    apiKey={data.getTinyMCEApiKey.key}
+                    init={{
+                        menubar: false,
+                        plugins: "link image code autoresize lists",
+                        toolbar:
+                        "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help"
+                    }}
+                    initialValue={props.selectedNoteData.text_field}
+                />
+            )}
         </Form.Item>
 
         <Form.Item

@@ -13,8 +13,8 @@ import { getSph, getCyl, getAxis, createRxNotation } from '../utils/rxNotation'
 
 // grpahQL
 import { UPDATE_CLINICAL_FILE } from '../graphql/mutations';
-import { GET_PATIENT } from '../graphql/queries';
-import { useMutation } from '@apollo/client';
+import { GET_PATIENT, GET_TINYMCE_KEY } from '../graphql/queries';
+import { useMutation, useQuery } from '@apollo/client';
 
 const { Option } = Select;
 
@@ -22,7 +22,9 @@ const { Option } = Select;
 const ViewClinicalFile = (props) => {
     const [form] = Form.useForm();
 
-    const [updateClinicalFile, { data, loading, error }] = useMutation(UPDATE_CLINICAL_FILE);
+    const { data, loading } = useQuery(GET_TINYMCE_KEY);
+
+    const [updateClinicalFile] = useMutation(UPDATE_CLINICAL_FILE);
 
     // conditionally required if prescription is selected
     const [isPrescription, setIsPrescription] = useState(props.selectedClinicalFileData.file_type === "prescription");
@@ -172,16 +174,20 @@ const ViewClinicalFile = (props) => {
             }
             ]}
         >
-            <Editor
-                apiKey={process.env.REACT_APP_TINYMCEAPIKEY}
-                init={{
-                    menubar: false,
-                    plugins: "link image code autoresize lists",
-                    toolbar:
-                    "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help"
-                }}
-                initialValue={props.selectedClinicalFileData.text_field}
-            />
+            {loading ? (
+                <></>
+            ) : (
+                <Editor
+                    apiKey={data.getTinyMCEApiKey.key}
+                    init={{
+                        menubar: false,
+                        plugins: "link image code autoresize lists",
+                        toolbar:
+                        "undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | removeformat | help"
+                    }}
+                    initialValue={props.selectedClinicalFileData.text_field}
+                />
+            )}
         </Form.Item>
 
         <Form.Item
