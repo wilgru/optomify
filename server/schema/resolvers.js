@@ -2,6 +2,8 @@ const { Booking, BookSetup, ClinicalFile, Note, Patient, User } = require('../mo
 const { signToken } = require('../utils/auth');
 const { AuthenticationError } = require('apollo-server-express');
 
+require('dotenv').config();
+
 const resolvers = {
     Query: {
         getPatient: async (parent, { _id }, context) => {
@@ -100,6 +102,20 @@ const resolvers = {
                     })
 
                     return populateBookSetup; // return [BookSetup]
+                } catch(e) {
+                    throw new Error(`${e.message}`);
+                }
+            } else {
+                throw new AuthenticationError('You must be signed in!');
+            }
+        },
+        getTinyMCEApiKey: async (parent, args, context) => {
+            if (context.user) {
+                try {
+                    const key = process.env.TINYMCE_API_KEY
+                    console.log(key)
+
+                    return { key }
                 } catch(e) {
                     throw new Error(`${e.message}`);
                 }

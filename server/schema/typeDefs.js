@@ -91,11 +91,16 @@ module.exports = gql`
         user: User
     }
 
+    type ApiKey {
+        key: String!
+    }
+
     type Query {
         getPatient(_id: ID!): Patient
         getAllPatients(search_term: String!): [Patient]
         getBookings(date: String!): Booking
         getBookSetups(start_date: String!, end_date: String!): [BookSetup]
+        getTinyMCEApiKey: ApiKey
     }
 
     type Mutation {
