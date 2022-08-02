@@ -277,6 +277,7 @@ const Bookings = () => {
                             lastName: booking.patient?.last_name || "blocked",
                             mobileNumber: booking.patient?.mobile_number || "",
                             email: booking.patient?.email || "",
+                            patientId: booking.patient?._id || "",
                         })
                         slotTaken = true
                     }
@@ -651,7 +652,18 @@ const Bookings = () => {
                                                             </div>
                                                         </div>
                                                     }
-                                                    title={`${item.titleTime} - ${item.popoverTitleText}`}
+                                                    title={
+                                                        item.patientId ? (
+                                                            <>
+                                                                <span>{item.titleTime} - </span><Link to={{ pathname: `/patients/${item.patientId}` }}>{item.popoverTitleText}</Link>
+                                                            </>
+                                                        ) : (
+                                                            <>
+                                                                <span>{item.titleTime} - </span><>{item.popoverTitleText}</>
+                                                            </>
+                                                        )
+                                                    }
+                                                    // title={`${item.titleTime} - ${item.popoverTitleText}`}
                                                     placement="right"
                                                 >
                                                     <div style={{display:"flex", width: "100%", padding: item.bookingType === "empty" ? "0 0 0 10px" : "0"}}> 
