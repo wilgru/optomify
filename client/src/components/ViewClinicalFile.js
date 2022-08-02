@@ -23,6 +23,7 @@ const ViewClinicalFile = (props) => {
     const [form] = Form.useForm();
 
     const { data, loading } = useQuery(GET_TINYMCE_KEY);
+    const tinyMceKey = data?.getTinyMCEApiKey?.key || ""
 
     const [updateClinicalFile] = useMutation(UPDATE_CLINICAL_FILE);
 
@@ -178,7 +179,7 @@ const ViewClinicalFile = (props) => {
                 <></>
             ) : (
                 <Editor
-                    apiKey={data.getTinyMCEApiKey.key}
+                    apiKey={tinyMceKey}
                     init={{
                         menubar: false,
                         plugins: "link image code autoresize lists",

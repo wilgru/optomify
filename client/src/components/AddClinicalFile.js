@@ -24,6 +24,7 @@ const AddClinicalFile = (props) => {
     const [form] = Form.useForm();
 
     const { data, loading } = useQuery(GET_TINYMCE_KEY);
+    const tinyMceKey = data?.getTinyMCEApiKey?.key || ""
 
     const [createNewClinicalFile] = useMutation(CREATE_NEW_CLINICAL_FILE);
 
@@ -149,7 +150,7 @@ const AddClinicalFile = (props) => {
                 <></>
             ) : (
                 <Editor
-                    apiKey={data.getTinyMCEApiKey.key}
+                    apiKey={tinyMceKey}
                     init={{
                         menubar: false,
                         plugins: "link image code autoresize lists",

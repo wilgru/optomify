@@ -19,6 +19,7 @@ const AddNote = (props) => {
     const [form] = Form.useForm();
 
     const { loading, data } = useQuery(GET_TINYMCE_KEY);
+    const tinyMceKey = data?.getTinyMCEApiKey?.key || ""
     // if (data){
     //     console.log(data[Object.keys(data)[0]].key)
     //     console.log(data.getTinyMCEApiKey.key)
@@ -100,7 +101,7 @@ const AddNote = (props) => {
                 <></>
             ) : (
                 <Editor
-                    apiKey={data.getTinyMCEApiKey.key}
+                    apiKey={tinyMceKey}
                     init={{
                         menubar: false,
                         plugins: "link image code autoresize lists",
