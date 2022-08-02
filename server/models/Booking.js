@@ -1,6 +1,5 @@
 const { Schema, model } = require('mongoose');
 const { validateBookingType, validateBookSettedUp, validate30MinBlock, validateBookingStatus } = require('../utils/Validators');
-const BookSetup = require('./BookSetup');
 
 const bookingSchema = new Schema({
   booking_date: {
