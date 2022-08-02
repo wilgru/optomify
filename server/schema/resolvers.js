@@ -1,5 +1,5 @@
 const { Booking, BookSetup, ClinicalFile, Note, Patient, User } = require('../models');
-const { signToken } = require('../utils/auth');
+const { signToken } = require('../utils/Auth');
 const { AuthenticationError } = require('apollo-server-express');
 
 require('dotenv').config();
