@@ -1,20 +1,29 @@
 {
-  "name": "optomify",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server/server.js",
-  "scripts": {
-    "start": "node server/server.js --ignore client",
-    "develop": "concurrently \"cd server && npm run watch\" \"cd client && npm start\"",
-    "install": "cd server && npm i --legacy-peer-deps && cd ../client && npm i --legacy-peer-deps",
-    "seed": "cd server && npm run seed",
-    "build": "cd client && npm run build"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "concurrently": "^5.3.0"
-  },
-  "dependencies": {
+    "name": "server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+      "start": "server.js --ignore client",
+      "watch": "nodemon server.js",
+      "develop": "concurrently \"npm run watch\" \"cd client && npm start\"",
+      "install": "npm i --legacy-peer-deps && cd client && npm i --legacy-peer-deps",
+      "build": "cd client && npm run build"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "apollo-server-express": "^3.6.2",
+      "bcrypt": "^5.0.1",
+      "dotenv": "^16.0.1",
+      "express": "^4.17.2",
+      "graphql": "^16.3.0",
+      "jsonwebtoken": "^8.5.1",
+      "mongoose": "^6.1.8"
+    },
+    "devDependencies": {
+      "nodemon": "^2.0.6",
+      "concurrently": "^5.3.0"
+    }
   }
-}
+  

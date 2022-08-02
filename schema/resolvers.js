@@ -1,4 +1,4 @@
-const { Booking, BookSetup, ClinicalFile, Note, Patient, User } = require('../models');
+const { Booking, BookSetup, ClinicalFile, Note, Patient, User } = require('../server/models');
 const { signToken } = require('../utils/auth');
 const { AuthenticationError } = require('apollo-server-express');
 
