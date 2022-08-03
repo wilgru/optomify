@@ -6,12 +6,12 @@ export const getWeek = (date) => {
     
     const firstCurr = new Date(curr) // create a copy otherwise itll mess uo the original
     const firstDayWithHour = new Date(firstCurr.setDate(first));
-    const firstDay = new Date(firstDayWithHour.setHours(0));
+    const firstDay = new Date(firstDayWithHour.setHours(10, 0, 0, 0));
     // console.log(firstDay)
 
     const lastCurr = new Date(curr) // create a copy otherwise itll mess uo the original
     const lastDayWithHour = new Date(lastCurr.setDate(last));
-    const lastDay = new Date(lastDayWithHour.setHours(23));
+    const lastDay = new Date(lastDayWithHour.setHours(10, 0, 0, 0));
     // console.log(lastDay)
 
     return {
