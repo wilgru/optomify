@@ -2,9 +2,8 @@
 
 ![TinyMCE](https://img.shields.io/badge/API-TinyMCE-Blue)
 ![Ant Design](https://img.shields.io/badge/CSS-AntDesign-green)
-![lodash](https://img.shields.io/badge/node-debounce-orange)
 ![GraphQL](https://img.shields.io/badge/node-GraphQL-orange)
-![GraphQL](https://img.shields.io/badge/node-Apollo-orange)
+![Apollo](https://img.shields.io/badge/node-Apollo-orange)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <!-- ## Deployed web address -->
@@ -25,7 +24,7 @@ Optomify is a booking system web application built for use in optometry practice
 [Testing](#Testing)  
 [Future Development](#Future)  
 [Gallery](#Gallery)  
-[Alternatives Considered](#Alternatives) 
+[Contact](#Contact) 
 
 <a name="Functionality"></a>
 
@@ -68,9 +67,9 @@ Apollo - https://www.apollographql.com/
 TinyMCE -https://www.tiny.cloud/
 <br>
 
-### Other:
+[comment]: <> (### Other:)
 
-Debounce - https://www.npmjs.com/package/debounce
+[comment]: <> (Debounce - https://www.npmjs.com/package/debounce)
 
 <a name="Installation"></a>
 
@@ -127,11 +126,34 @@ You can use the follwing data to test the web app, especially if you may not kno
 
 Users 
 ```
+username: wilgru@testmail.com
+pass: password123
+```
+
+Medicare Detials
+```
+Medicare number: 1234 1234 1234 5
+medicare ref: 1
+medicare expiry: (any date in the future)
 ```
 
 Prescritions
 ```
 -1.25/-0.75x82
+-0.50/-1.00x105
++2.00/-0.00x000
+```
+
+inter adds/ near adds
+```
++0.75
++1.00
+```
+
+medicare item codes
+```
+10190
+10191
 ```
 <br>
 
@@ -143,21 +165,23 @@ Prescritions
 
 - <strong>Pagination:</strong> pages displaying patients could be paginated so that the webpage can load faster and so that the user is not overwhelmed with information.
 
-- <strong>Print Prescriptions:</strong> Abitliy to print patients prescriptions to a nicelt formated PDF.
+- <strong>Print Prescriptions:</strong> Ability to print patients prescriptions to a nicely formatted PDF.
   <br>
 
-- <strong>Editing Patients:</strong> Option for a user to edit a patient's personal details in the individual patient page.
+- <strong>Debounce:</strong> Use debounce in search fields to automatically fetch using the user's input as soon as they stop typing.
   <br>
 
 <a name="Gallery"></a>
 
 ## Gallery
 
-![image](https://github.com/wilgru/)
+![image](https://github.com/wilgru/Optomify/blob/main/img_1.png)
 <br>
 
-<a name="Alternatives"></a>
+<a name="Contact"></a>
 
-## Alternatives Considered
+## Contact Me
 
+Github: https://github.com/wilgru/
+LinkedIn: https://www.linkedin.com/in/william-gruszka-a03373227/
 
