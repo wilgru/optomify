@@ -65,7 +65,7 @@ const App = () => {
   return (
     <ApolloProvider client={client}>
       <Router>
-        <Layout style={{height: 'fit-content'}}>
+        <Layout>
           <Navbar setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>
           <Routes>
             {loggedIn ? (
@@ -80,7 +80,7 @@ const App = () => {
             )}
           </Routes>
           <Footer style={{textAlign: 'center'}}>
-            Omptomify ©2022 Created by William Gruszka
+            Optomify ©2022 Created by William Gruszka
           </Footer>
         </Layout>
       </Router>
