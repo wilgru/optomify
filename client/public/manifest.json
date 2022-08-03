@@ -4,22 +4,22 @@
   "icons": [
     {
       "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
+      "sizes": "64x64",
       "type": "image/x-icon"
     },
     {
       "src": "optomify_logo.png",
       "type": "image/png",
-      "sizes": "192x192"
+      "sizes": "800x800"
     },
     {
       "src": "optomify_logo.png",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "800x800"
     }
   ],
   "start_url": "/",
-  "display": "standalone",
-  "theme_color": "#ffffff",
+  "display": "minimal-ui",
+  "theme_color": "#00ACB1",
   "background_color": "#ffffff"
 }
