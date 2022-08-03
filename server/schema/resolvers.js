@@ -80,11 +80,11 @@ const resolvers = {
             if (context.user) {
                 try {
 
-                    console.log('\n')
-                    console.log(start_date)
-                    console.log('\n')
-                    console.log(end_date)
-                    console.log('\n')
+                    // console.log('\n')
+                    // console.log(start_date)
+                    // console.log('\n')
+                    // console.log(end_date)
+                    // console.log('\n')
 
                     const bookSetup = await BookSetup.find({
                         date: {
