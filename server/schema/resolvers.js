@@ -79,6 +79,13 @@ const resolvers = {
         getBookSetups: async (parent, { start_date, end_date }, context) => {
             if (context.user) {
                 try {
+
+                    console.log('\n')
+                    console.log(start_date)
+                    console.log('\n')
+                    console.log(end_date)
+                    console.log('\n')
+
                     const bookSetup = await BookSetup.find({
                         date: {
                             $gte: start_date,
