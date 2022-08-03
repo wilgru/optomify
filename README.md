@@ -9,7 +9,7 @@
 
 <!-- ## Deployed web address -->
 
-You can visit a deployed demo web application [here](https://optomify.herokuapp.com/bookings)
+You can visit a deployed demo web application [here](https://optomify.herokuapp.com/)
 <br>
 
 ## Project Description
@@ -25,7 +25,7 @@ Optomify is a booking system web application built for use in optometry practice
 [Testing](#Testing)  
 [Future Development](#Future)  
 [Gallery](#Gallery)  
-[Alternatives](#Alternatives) 
+[Alternatives Considered](#Alternatives) 
 
 <a name="Functionality"></a>
 
@@ -153,9 +153,6 @@ Prescritions
 
 ## Gallery
 
-![image](https://github.com/wilgru/)
-![image](https://github.com/wilgru/)
-![image](https://github.com/wilgru/)
 ![image](https://github.com/wilgru/)
 <br>
 
