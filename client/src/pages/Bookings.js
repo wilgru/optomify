@@ -193,30 +193,36 @@ const Bookings = (props) => {
 
             // the current time to check whether appt is in the past or future
             const rightNow = new Date().toISOString()
-            const rightNowUTC = moment(rightNow);
+            // const rightNowUTC = moment(rightNow);
+            const rightNowUTC = moment();
 
             // the dya of this current iteration
             let todaysList = {}
             const today = new Date(parseInt(day.open_time)).toISOString()
-            const todayUTC = moment.utc(today).subtract(10, 'h');
+            // const todayUTC = moment.utc(today).subtract(10, 'h');
+            const todayUTC = moment(parseInt(day.open_time)).subtract(10, 'h');
             todaysList.date = todayUTC;
             todaysList.isToday = todayUTC.date() === rightNowUTC.date();
             todaysList.list = [];
 
             // find static times
             const opening = new Date(parseInt(day.open_time)).toISOString()
-            const openingUTC = moment.utc(opening).subtract(10, 'h');
+            // const openingUTC = moment.utc(opening).subtract(10, 'h');
+            const openingUTC = moment(parseInt(day.open_time)).subtract(10, 'h');
 
             const closing = new Date(parseInt(day.closing_time)).toISOString()
-            const closingUTC = moment.utc(closing).subtract(10, 'h');
+            // const closingUTC = moment.utc(closing).subtract(10, 'h');
+            const closingUTC =  moment(parseInt(day.closing_time)).subtract(10, 'h');
 
             const optomBreak = new Date(parseInt(day.optom_break_start)).toISOString()
-            const optomBreakUTC = moment.utc(optomBreak).subtract(10, 'h');
+            // const optomBreakUTC = moment.utc(optomBreak).subtract(10, 'h');
+            const optomBreakUTC = moment(parseInt(day.optom_break_start)).subtract(10, 'h');
 
             // init cursor
             let cursorUTC = moment(openingUTC)
 
             const getTimeRelation = (nowTime, checkingTime) => {
+                // console.log(nowTime, checkingTime)
                 if (moment(checkingTime).isBefore(nowTime) && moment(nowTime).isBefore(moment(checkingTime).add(30, 'm'))) {
                     return "current"
                 } else if (moment(checkingTime).isBefore(nowTime)) {
@@ -228,7 +234,7 @@ const Bookings = (props) => {
             
             // begin iterating
             while (moment(cursorUTC).isBefore(closingUTC)) {
-                let titleTime = `${cursorUTC.hour()+10}:${String(cursorUTC.minute()).padStart(2, '0')}`
+                let titleTime = `${cursorUTC.hour()}:${String(cursorUTC.minute()).padStart(2, '0')}`
                 let slotTaken = false
 
                 // first check for optom break ======================================================================
@@ -315,38 +321,21 @@ const Bookings = (props) => {
 
             setBookingList(current => [...current, todaysList])
         })
+
+        console.log(bookingList);
     }, [data])
 
     // listener for date range picker
     const onPanelChangeShowRange = (value, mode) => {
-        // console.log('Start date:', value[0].format('YYYY-MM-DDT00:00:00+00.00'));
-        // console.log('End date:', value[1].format('YYYY-MM-DDT00:00:00+00.00'));
-        // console.log('Start date:', value[0].toDate());
-        // console.log('End date:', value[1].toDate());
+        setStartDate(value[0].hour(10).minute(0).second(0).millisecond(0).toDate());
+        setEndDate(value[1].hour(10).minute(0).second(0).millisecond(0).toDate());
+        // setStartDate(value[0].toDate());
+        // setEndDate(value[1].add(23, 'h').toDate());
 
-        setStartDate(value[0].toDate());
-        setEndDate(value[1].toDate());
-
-        // // https://stackoverflow.com/questions/563406/how-to-add-days-to-date
-        // function addDays(date, days) {
-        //     var result = new Date(date);
-        //     result.setDate(result.getDate() + days);
-        //     return result;
-        // }
-        
-        // // https://stackoverflow.com/questions/4413590/javascript-get-array-of-dates-between-2-dates
-        // function getDates(startDate, stopDate) {
-        //     var dateArray = new Array();
-        //     var currentDate = startDate;
-        //     while (currentDate <= stopDate) {
-        //         dateArray.push(new Date (currentDate));
-        //         currentDate = addDays(currentDate, 1);
-        //     }
-        //     return dateArray;
-        // }
-
-        // console.log(value[0].format('YYYY-MM-DD'), mode);
-        // console.log(value[1].format('YYYY-MM-DD'), mode);
+        console.log(startDate)
+        // console.log(startDate.toISOString())
+        console.log(endDate)
+        // console.log(endDate.toISOString())
     };
 
     // listener for date range picker for a new book
@@ -499,14 +488,17 @@ const Bookings = (props) => {
 
     // date working
     function dateWorker(date) {
-        let b = String(date)
-        let c = b.split(" ", 5)
-        let d = c.join(" ")
-        let e = d+" UTC" 
-        let f = new Date(e)
-        let g = f.toISOString()
+        // should get a date string, and is essentially just adding 10hrs. will return same type of string just 10 hours in the future.
+        return moment(date).add(10, 'h').toDate()
 
-        return g
+        // let b = String(date)
+        // let c = b.split(" ", 5)
+        // let d = c.join(" ")
+        // let e = d+" UTC" 
+        // let f = new Date(e)
+        // let g = f.toISOString()
+
+        // return g
         // let h = g.split(".")[0]
         // let i = h+"+00.00"
 
