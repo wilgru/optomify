@@ -3,9 +3,9 @@
   "name": "Optomify - Optometry Practice Management System",
   "icons": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64",
-      "type": "image/x-icon"
+      "src": "optomify_logo.png",
+      "sizes": "800x800",
+      "type": "image/png"
     },
     {
       "src": "optomify_logo.png",
@@ -20,6 +20,6 @@
   ],
   "start_url": "/",
   "display": "minimal-ui",
-  "theme_color": "#00ACB1",
+  "theme_color": "#ffffff",
   "background_color": "#ffffff"
 }
