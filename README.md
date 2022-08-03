@@ -165,10 +165,10 @@ medicare item codes
 
 - <strong>Pagination:</strong> pages displaying patients could be paginated so that the webpage can load faster and so that the user is not overwhelmed with information.
 
-- <strong>Print Prescriptions:</strong> Abitliy to print patients prescriptions to a nicelt formated PDF.
+- <strong>Print Prescriptions:</strong> Ability to print patients prescriptions to a nicely formatted PDF.
   <br>
 
-- <strong>Debounce:</strong> Use debounce in search fields to automatically fetch using the users input as soonn as they stop typing.
+- <strong>Debounce:</strong> Use debounce in search fields to automatically fetch using the user's input as soon as they stop typing.
   <br>
 
 <a name="Gallery"></a>
