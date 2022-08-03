@@ -6,7 +6,7 @@ import { Button, Form, Input } from 'antd';
 // grpahQL
 import { CREATE_NEW_BOOKING } from '../graphql/mutations';
 import { GET_BOOK_SETUPS } from '../graphql/queries';
-import { useMutation, useQuery } from '@apollo/client';
+import { useMutation } from '@apollo/client';
 
 // inputs 
 const { TextArea } = Input;

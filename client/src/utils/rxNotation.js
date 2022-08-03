@@ -14,7 +14,7 @@ export const getAxis = (rx) => {
 
 export const createRxNotation = (sph, cyl, axis) => {
 
-    if (sph === null, cyl == null, axis === null) {
+    if (sph === null || cyl == null || axis === null) {
         return ''
     }
 

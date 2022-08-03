@@ -25,7 +25,7 @@ import SetupBook from '../components/SetupBook';
 
 // grpahQL
 import { GET_BOOK_SETUPS } from '../graphql/queries';
-import { UPDATE_BOOKING, DELETE_BOOKING, CREATE_NEW_BOOKING } from '../graphql/mutations';
+import { UPDATE_BOOKING, DELETE_BOOKING } from '../graphql/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 
 // Utils
@@ -55,12 +55,11 @@ const Bookings = (props) => {
     const [bookingEnd, setbookingEnd] = useState('');
 
     // mutations for updating bookings and deleteing bookings and creating blockec booking
-    const [updateBooking, { updateError }] = useMutation(UPDATE_BOOKING);
-    const [deleteBooking, { deletError }] = useMutation(DELETE_BOOKING);
-    const [createNewBooking, { createBookingError }] = useMutation(CREATE_NEW_BOOKING); // only used for creating blocked bookings
+    const [updateBooking] = useMutation(UPDATE_BOOKING);
+    const [deleteBooking] = useMutation(DELETE_BOOKING);
 
     // get booksetup and bookings
-    const { loading, data, err} = useQuery(GET_BOOK_SETUPS, {
+    const { loading, data} = useQuery(GET_BOOK_SETUPS, {
         variables: {
             startDate,
             endDate
@@ -192,13 +191,13 @@ const Bookings = (props) => {
         bookSetupData.forEach((day) => {
 
             // the current time to check whether appt is in the past or future
-            const rightNow = new Date().toISOString()
+            // const rightNow = new Date().toISOString()
             // const rightNowUTC = moment(rightNow);
             const rightNowUTC = moment();
 
             // the dya of this current iteration
             let todaysList = {}
-            const today = new Date(parseInt(day.open_time)).toISOString()
+            // const today = new Date(parseInt(day.open_time)).toISOString()
             // const todayUTC = moment.utc(today).subtract(10, 'h');
             const todayUTC = moment(parseInt(day.open_time)).subtract(10, 'h');
             todaysList.date = todayUTC;
@@ -206,15 +205,15 @@ const Bookings = (props) => {
             todaysList.list = [];
 
             // find static times
-            const opening = new Date(parseInt(day.open_time)).toISOString()
+            // const opening = new Date(parseInt(day.open_time)).toISOString()
             // const openingUTC = moment.utc(opening).subtract(10, 'h');
             const openingUTC = moment(parseInt(day.open_time)).subtract(10, 'h');
 
-            const closing = new Date(parseInt(day.closing_time)).toISOString()
+            // const closing = new Date(parseInt(day.closing_time)).toISOString()
             // const closingUTC = moment.utc(closing).subtract(10, 'h');
             const closingUTC =  moment(parseInt(day.closing_time)).subtract(10, 'h');
 
-            const optomBreak = new Date(parseInt(day.optom_break_start)).toISOString()
+            // const optomBreak = new Date(parseInt(day.optom_break_start)).toISOString()
             // const optomBreakUTC = moment.utc(optomBreak).subtract(10, 'h');
             const optomBreakUTC = moment(parseInt(day.optom_break_start)).subtract(10, 'h');
 
@@ -339,31 +338,31 @@ const Bookings = (props) => {
     };
 
     // listener for date range picker for a new book
-    const onPanelChangeNewBook = (value, mode) => {
-        // console.log('Start date:', value[0].format('YYYY-MM-DDT00:00:00+00.00'));
-        // console.log('End date:', value[1].format('YYYY-MM-DDT00:00:00+00.00'));
+    // const onPanelChangeNewBook = (value, mode) => {
+    //     // console.log('Start date:', value[0].format('YYYY-MM-DDT00:00:00+00.00'));
+    //     // console.log('End date:', value[1].format('YYYY-MM-DDT00:00:00+00.00'));
 
-        // https://stackoverflow.com/questions/563406/how-to-add-days-to-date
-        function addDays(date, days) {
-            var result = new Date(date);
-            result.setDate(result.getDate() + days);
-            return result;
-        }
+    //     // https://stackoverflow.com/questions/563406/how-to-add-days-to-date
+    //     function addDays(date, days) {
+    //         var result = new Date(date);
+    //         result.setDate(result.getDate() + days);
+    //         return result;
+    //     }
         
-        // https://stackoverflow.com/questions/4413590/javascript-get-array-of-dates-between-2-dates
-        function getDates(startDate, stopDate) {
-            var dateArray = new Array();
-            var currentDate = startDate;
-            while (currentDate <= stopDate) {
-                dateArray.push(new Date (currentDate));
-                currentDate = addDays(currentDate, 1);
-            }
-            return dateArray;
-        }
+    //     // https://stackoverflow.com/questions/4413590/javascript-get-array-of-dates-between-2-dates
+    //     function getDates(startDate, stopDate) {
+    //         var dateArray = new Array();
+    //         var currentDate = startDate;
+    //         while (currentDate <= stopDate) {
+    //             dateArray.push(new Date (currentDate));
+    //             currentDate = addDays(currentDate, 1);
+    //         }
+    //         return dateArray;
+    //     }
 
-        // console.log(value[0].format('YYYY-MM-DD'), mode);
-        // console.log(value[1].format('YYYY-MM-DD'), mode);
-    };
+    //     // console.log(value[0].format('YYYY-MM-DD'), mode);
+    //     // console.log(value[1].format('YYYY-MM-DD'), mode);
+    // };
 
     // sub nav options
     const subNav = [

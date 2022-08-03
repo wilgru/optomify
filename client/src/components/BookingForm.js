@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // antd
 import { Button, Checkbox, Form, Input, DatePicker, Select, Card } from 'antd';
-import moment from 'moment';
-
-// utils
-import { dateWorker } from '../utils/date'
 
 // grpahQL
 import { CREATE_NEW_PATIENT_AND_BOOKING } from '../graphql/mutations';
@@ -18,7 +14,7 @@ const { TextArea } = Input;
 const BookingForm = (props) => {
     const [form] = Form.useForm();
 
-    const [createNewPatientAndBooking, { data, loading, error }] = useMutation(CREATE_NEW_PATIENT_AND_BOOKING);
+    const [createNewPatientAndBooking] = useMutation(CREATE_NEW_PATIENT_AND_BOOKING);
 
     // conditionally required if prescription is selected
     const [hasMedicare, setEligableForMedicare] = useState(true);

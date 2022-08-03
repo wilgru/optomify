@@ -1,6 +1,6 @@
 import { Button, Checkbox, Form, Input, DatePicker, Alert } from 'antd';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // grpahQL
 // import { UPDATE_PATIENT } from '../graphql/mutations';
@@ -13,7 +13,7 @@ const PatientOverview = (props) => {
 
     const [eligableForMedicare, setEligableForMedicare] = useState(props.patient.has_medicare)
 
-    const [updatePatient, { data, loading, error }] = useMutation(UPDATE_PATIENT);
+    const [updatePatient, { error }] = useMutation(UPDATE_PATIENT);
 
     const onFinish = (values) => {
         console.log('Success:', values);

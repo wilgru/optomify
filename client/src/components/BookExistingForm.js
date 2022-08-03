@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 // antd
-import { Button, Form, Input, Skeleton, Select, Divider, List, Card } from 'antd';
+import { Button, Form, Input, Select, List, Card } from 'antd';
 
 // grpahQL
 import { CREATE_NEW_BOOKING } from '../graphql/mutations';

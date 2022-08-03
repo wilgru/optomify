@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 
 // antd
-import { Button, Checkbox, Form, Input, Select, DatePicker, Card } from 'antd';
-import moment from 'moment';
+import { Button, Form, Input, Select, DatePicker, Card } from 'antd';
 
 // tinyMCE
 import { Editor } from "@tinymce/tinymce-react";

@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 
 // Ant Design
 import { List, Layout, Input } from 'antd';
-import moment from 'moment';
 
 // utils
 import auth from '../utils/auth';
@@ -41,16 +40,16 @@ const Patients = (props) => {
     }
 
     // MODAL
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const showModal = () => {
-      setIsModalVisible(true);
-    };
-    const handleOk = () => {
-      setIsModalVisible(false);
-    };
-    const handleCancel = () => {
-      setIsModalVisible(false);
-    };
+    // const [isModalVisible, setIsModalVisible] = useState(false);
+    // const showModal = () => {
+    //   setIsModalVisible(true);
+    // };
+    // const handleOk = () => {
+    //   setIsModalVisible(false);
+    // };
+    // const handleCancel = () => {
+    //   setIsModalVisible(false);
+    // };
     // END MODAL
 
     return (

@@ -4,7 +4,6 @@ const PleaseLogIn = () => {
     return (
         <div style={{
             width: '100%',
-            margin: 'auto', 
             margin: '40vh 0'
         }}>
             <h2 style={{textAlign: "center"}}>Please login to view your clinic.</h2>  

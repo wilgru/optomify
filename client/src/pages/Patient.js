@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation } from '@apollo/client';
-import { useParams, Link } from 'react-router-dom';
+import { useQuery } from '@apollo/client';
+import { useParams } from 'react-router-dom';
 
 // utils
 import auth from '../utils/auth';
@@ -13,8 +13,7 @@ import PatientOverview from '../components/PatientOverview'
 import PatientClinicalFiles from '../components/PatientClinicalFiles'
 
 // antd
-import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal } from 'antd';
-import moment from 'moment';
+import { Layout, Menu } from 'antd';
 import PatientNotes from '../components/PatientNotes';
 const { Content, Sider } = Layout;
 
@@ -36,21 +35,16 @@ const Patient = (props) => {
   const patient = data?.getPatient || [];
 
   // MODAL
-
-  const [isModalVisible, setIsModalVisible] = useState(false);
-
-  const showModal = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
+  // const [isModalVisible, setIsModalVisible] = useState(false);
+  // const showModal = () => {
+  //   setIsModalVisible(true);
+  // };
+  // const handleOk = () => {
+  //   setIsModalVisible(false);
+  // };
+  // const handleCancel = () => {
+  //   setIsModalVisible(false);
+  // };
   // END MODAL
 
   // sub nav options
@@ -74,14 +68,10 @@ const Patient = (props) => {
     switch (props.choice) {
       case "overview":
         return <PatientOverview patient={patient}/>
-        break;
       case "clinical_files":
         return <PatientClinicalFiles patient={patient}/>
-        break;
       case "notes":
         return <PatientNotes patient={patient}/>
-        break;
-    
       default:
         break;
     }

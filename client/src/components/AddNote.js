@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 // antd
-import { Button, Checkbox, Form, Input, Select, DatePicker, Card } from 'antd';
-import moment from 'moment';
+import { Button, Form, Input } from 'antd';
 
 // tinyMCE
 import { Editor } from "@tinymce/tinymce-react";
@@ -11,8 +10,6 @@ import { Editor } from "@tinymce/tinymce-react";
 import { CREATE_NEW_NOTE } from '../graphql/mutations';
 import { GET_PATIENT, GET_TINYMCE_KEY } from '../graphql/queries';
 import { useMutation, useQuery } from '@apollo/client';
-
-const { Option } = Select;
 
 // component
 const AddNote = (props) => {

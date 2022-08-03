@@ -1,8 +1,8 @@
 // React
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // Ant Design
-import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal } from 'antd';
+import { List, Layout, Button, Modal } from 'antd';
 import {
     ReconciliationOutlined,
     HeartOutlined,
@@ -13,12 +13,8 @@ import {
 import AddClinicalFile from './AddClinicalFile'
 import ViewClinicalFile from './ViewClinicalFile'
 
-// graphQL
-import { useMutation, useQuery } from '@apollo/client';
-import { Link } from 'react-router-dom';
-
 // Ant Design from components
-const { Content, Sider } = Layout;
+const { Content } = Layout;
 
 const Patients = (props) => {
     const clinicalFiles = props.patient.clinical_files

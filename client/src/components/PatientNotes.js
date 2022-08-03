@@ -1,24 +1,18 @@
 // React
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 // Ant Design
-import { List, Layout, DatePicker, Menu, Space, Button, Card, Modal } from 'antd';
+import { List, Layout, Button, Modal } from 'antd';
 import {
     EditOutlined
   } from '@ant-design/icons';
 
-// Components
-import AddClinicalFile from './AddClinicalFile'
-import ViewClinicalFile from './ViewClinicalFile'
-
 // graphQL
-import { useMutation, useQuery } from '@apollo/client';
-import { Link } from 'react-router-dom';
 import AddNote from './AddNote';
 import ViewNote from './ViewNote';
 
 // Ant Design from components
-const { Content, Sider } = Layout;
+const { Content } = Layout;
 
 const PatientNotes = (props) => {
     const parsedPatientNotes = props.patient.notes

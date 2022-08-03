@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import auth from '../utils/auth';
 
 // Ant Design
-import { Layout, Menu, Image, Button, Modal } from 'antd';
+import { Layout, Menu, Button, Modal } from 'antd';
 import 'antd/dist/antd.css';
 
 // componenets
@@ -91,6 +91,7 @@ const AppNavbar = (props) => {
         </Modal>
         <div className="logo">
             <img
+                alt='logo'
                 width={50}
                 src="/optomify_logo.png"
             />

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // antd
-import { Button, TimePicker, Form, Input, DatePicker, Card } from 'antd';
+import { Button, TimePicker, Form, DatePicker } from 'antd';
 import moment from 'moment';
 
 // grpahQL
@@ -17,7 +17,7 @@ const SetupBook = (props) => {
     const [closing, setClosing] = useState(moment('19:00', "HH:mm"))
     const [optomBreak, setOptomBreak] = useState(moment('13:00', "HH:mm"))
 
-    const [setupBook, { data, loading, error }] = useMutation(SETUP_BOOK);
+    const [setupBook] = useMutation(SETUP_BOOK);
 
     const onFinish = (values) => {
         // console.log('Success:', values);

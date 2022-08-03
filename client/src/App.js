@@ -4,7 +4,7 @@ import './App.less';
 
 // Ant Design
 // import { LaptopOutlined, NotificationOutlined, UserOutlined } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
+import { Layout } from 'antd';
 
 // react and react router
 import React, { useState } from 'react';

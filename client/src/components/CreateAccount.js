@@ -1,5 +1,5 @@
-import { Button, Checkbox, Form, Input, DatePicker, Alert } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Button, Form, Input, Alert } from 'antd';
+import React, { useState } from 'react';
 
 // grpahQL
 import { CREATE_ACCOUNT } from '../graphql/mutations';
