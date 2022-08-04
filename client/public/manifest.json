@@ -1,6 +1,5 @@
 {
-  "short_name": "Optomify",
-  "name": "Optomify - Optometry Practice Management System",
+  "name": "Optomify",
   "icons": [
     {
       "src": "optomify_logo.png",
