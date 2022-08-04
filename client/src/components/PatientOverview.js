@@ -214,6 +214,16 @@ const PatientOverview = (props) => {
                 span: 16,
                 }}
             >
+                <p className="created-by-details">Created by {props.patient.created_by.username}</p>
+                <p className="created-by-details">{new Date(parseInt(props.patient.date_created)).toDateString()}</p>
+            </Form.Item>
+
+            <Form.Item
+                wrapperCol={{
+                offset: 5,
+                span: 16,
+                }}
+            >
                 <Button type="primary" htmlType="submit">
                     Update patient details
                 </Button>
