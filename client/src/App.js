@@ -63,10 +63,8 @@ const App = () => {
   const [loggedIn, setLoggedIn] = useState(auth.loggedIn())
 
   const [page, setPage] = useState(
-    // window.location.href.substring(
-    //   window.location.href.lastIndexOf('/')+1
-    // )
-    window.location.pathname.split('/')[1]
+    // window.location.pathname.split('/')[1]
+    'bookings'
   )
   console.log(page)
 
