@@ -25,7 +25,8 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // send index.html file at root
-app.get('*', (req, res) => {
+app.get('*', (req, res, next) => {
+  if (req.url === '/graphql') return next();
   res.sendFile(path.join(__dirname, '../client/build/index.html'));
 });
 
