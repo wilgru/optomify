@@ -33,7 +33,7 @@ const Patient = (props) => {
     fetchPolicy: "no-cache"
   });
   const patient = data?.getPatient || [];
-
+  
   // MODAL
   // const [isModalVisible, setIsModalVisible] = useState(false);
   // const showModal = () => {
@@ -88,7 +88,6 @@ const Patient = (props) => {
                   items={subNav} 
                   onClick={
                     (item, key, keyPath)=>{
-                      // console.log(item.key); 
                       setChosenContent(item.key);
                     }
                   }
