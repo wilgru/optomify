@@ -16,16 +16,14 @@ import CreateAccount from './CreateAccount';
 const { Header } = Layout;
 
 const AppNavbar = (props) => {
-    const [page, setPage] = useState(
-        window.location.href.substring(
-            window.location.href.lastIndexOf('/')+1
-        )
-    )
     
     // if the current token in local storage is exired log it out
     if (auth.isTokenExpired(auth.getToken())) {
         localStorage.removeItem('id_token');
     }
+
+    console.log('from nav')
+    console.log(props.page)
 
     //
     const navItem = [
@@ -96,7 +94,14 @@ const AppNavbar = (props) => {
                 src="/optomify_logo.png"
             />
         </div>
-        <Menu className="navbar" mode="horizontal" defaultSelectedKeys={[page || 'bookings']} items={props.loggedIn ? navItem : []}/>
+        <Menu 
+            className="navbar" 
+            mode="horizontal" 
+            // defaultSelectedKeys={[props.page]} 
+            selectedKeys={[props.page]} 
+            onClick={(item)=>{props.setPage(item.key); console.log(item.key)}} 
+            items={props.loggedIn ? navItem : []}
+        />
         <div className="login-signout">
             {!auth.loggedIn() ? (
                 <>
