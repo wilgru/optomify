@@ -37,44 +37,36 @@ const Patients = (props) => {
 
     // ADD MODAL
     const [isModalVisible, setIsModalVisible] = useState(false);
-
     const showModal = () => {
       setIsModalVisible(true);
     };
-  
     const handleOk = () => {
       setIsModalVisible(false);
     };
-  
     const handleCancel = () => {
       setIsModalVisible(false);
     };
-
     // END VIEW MODAL
 
     // ADD MODAL
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-
     const showAddModal = () => {
         setIsAddModalVisible(true);
     };
-    
     const handleAddOk = () => {
         setIsAddModalVisible(false);
     };
-    
     const handleAddCancel = () => {
         setIsAddModalVisible(false);
     };
-
     // END ADD MODAL
 
     return (
         <Content>
-            <Modal title="View file" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} width={1000}>
+            <Modal title="View file" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} width={1000} footer={null}>
                 <ViewClinicalFile patientId={patientId} selectedClinicalFileData={selectedClinicalFile} modalVis={setIsModalVisible}/>
             </Modal>
-            <Modal title="Add new clinical file" visible={isAddModalVisible} onOk={handleAddOk} onCancel={handleAddCancel} width={1000}>
+            <Modal title="Add new clinical file" visible={isAddModalVisible} onOk={handleAddOk} onCancel={handleAddCancel} width={1000} footer={null}>
                 <AddClinicalFile patientId={patientId} modalVis={setIsModalVisible}/>
             </Modal>
             <Layout>
@@ -94,7 +86,7 @@ const Patients = (props) => {
                                     <ConditionalIcon type={item.file_type}/>
                                     <div>
                                         <h3>{`${item.title}`}</h3>
-                                        <h4>{Date(item.date_created)} </h4>
+                                        <h4>{new Date(parseInt(item.date_created)).toDateString()} </h4>
                                     </div>
                                 </div>
                             </List.Item>

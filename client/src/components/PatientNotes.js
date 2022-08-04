@@ -41,27 +41,23 @@ const PatientNotes = (props) => {
 
     // ADD MODAL
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
-
     const showAddModal = () => {
         setIsAddModalVisible(true);
     };
-    
     const handleAddOk = () => {
         setIsAddModalVisible(false);
     };
-    
     const handleAddCancel = () => {
         setIsAddModalVisible(false);
     };
-
     // END ADD MODAL
 
     return (
         <Content>
-            <Modal title="View file" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} width={1000}>
+            <Modal title="View file" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} width={1000} footer={null}>
                 <ViewNote patientId={patientId} selectedNoteData={selectedNote} modalVis={setIsModalVisible}/>
             </Modal>
-            <Modal title="Add new clinical file" visible={isAddModalVisible} onOk={handleAddOk} onCancel={handleAddCancel} width={1000}>
+            <Modal title="Add new clinical file" visible={isAddModalVisible} onOk={handleAddOk} onCancel={handleAddCancel} width={1000} footer={null}>
                 <AddNote patientId={patientId} modalVis={setIsModalVisible}/>
             </Modal>
             <Layout>
@@ -80,7 +76,7 @@ const PatientNotes = (props) => {
                                     <EditOutlined style={{fontSize: '40px', margin: 'auto 20px'}}/>
                                     <div>
                                         <h3>{`${item.title}`}</h3>
-                                        <h4>{Date(item.date_created)} </h4>
+                                        <h4>{new Date(parseInt(item.date_created)).toDateString()} </h4>
                                     </div>
                                 </div>
                             </List.Item>

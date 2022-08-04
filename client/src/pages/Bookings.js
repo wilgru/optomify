@@ -29,7 +29,7 @@ import { UPDATE_BOOKING, DELETE_BOOKING } from '../graphql/mutations';
 import { useMutation, useQuery } from '@apollo/client';
 
 // Utils
-import { getWeek } from '../utils/date';
+import { getWeek, dateWorker, getTimeRelation } from '../utils/date';
 import BookBlocked from '../components/BookBlocked';
 import auth from '../utils/auth';
 
@@ -219,17 +219,6 @@ const Bookings = (props) => {
 
             // init cursor
             let cursorUTC = moment(openingUTC)
-
-            const getTimeRelation = (nowTime, checkingTime) => {
-                // console.log(nowTime, checkingTime)
-                if (moment(checkingTime).isBefore(nowTime) && moment(nowTime).isBefore(moment(checkingTime).add(30, 'm'))) {
-                    return "current"
-                } else if (moment(checkingTime).isBefore(nowTime)) {
-                    return "past"
-                } else {
-                    return "future"
-                }
-            }
             
             // begin iterating
             while (moment(cursorUTC).isBefore(closingUTC)) {
@@ -484,33 +473,33 @@ const Bookings = (props) => {
     // END MODAL - BLOCKED
 
     // date working
-    function dateWorker(date) {
-        // should get a date string, and is essentially just adding 10hrs. will return same type of string just 10 hours in the future.
-        return moment(date).add(10, 'h').toDate()
+    // function dateWorker(date) {
+    //     // should get a date string, and is essentially just adding 10hrs. will return same type of string just 10 hours in the future.
+    //     return moment(date).add(10, 'h').toDate()
 
-        // let b = String(date)
-        // let c = b.split(" ", 5)
-        // let d = c.join(" ")
-        // let e = d+" UTC" 
-        // let f = new Date(e)
-        // let g = f.toISOString()
+    //     // let b = String(date)
+    //     // let c = b.split(" ", 5)
+    //     // let d = c.join(" ")
+    //     // let e = d+" UTC" 
+    //     // let f = new Date(e)
+    //     // let g = f.toISOString()
 
-        // return g
-        // let h = g.split(".")[0]
-        // let i = h+"+00.00"
+    //     // return g
+    //     // let h = g.split(".")[0]
+    //     // let i = h+"+00.00"
 
-        // return i
-    }
+    //     // return i
+    // }
 
     return (
         <Content style={{padding: '20px'}}>
-            <Modal title="Book new patient" visible={isModalVisibleNewPatient} onOk={handleOkNewPatient} onCancel={handleCancelNewPatient}>
+            <Modal title="Book new patient" visible={isModalVisibleNewPatient} onOk={handleOkNewPatient} onCancel={handleCancelNewPatient} footer={null}>
                 <BookingForm bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} modalVis={setIsModalVisibleNewPatient}/>
             </Modal>
-            <Modal title="Book existing patient" visible={isModalVisibleExistingPatient} onOk={handleOkExistingPatient} onCancel={handleCancelExistingPatient}>
+            <Modal title="Book existing patient" visible={isModalVisibleExistingPatient} onOk={handleOkExistingPatient} onCancel={handleCancelExistingPatient} footer={null}>
                 <BookExistingForm bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} modalVis={setIsModalVisibleExistingPatient}/>
             </Modal>
-            <Modal title="Block this time out" visible={isModalVisibleBlocked} onOk={handleOkBlocked} onCancel={handleCancelBlocked}>
+            <Modal title="Block this time out" visible={isModalVisibleBlocked} onOk={handleOkBlocked} onCancel={handleCancelBlocked} footer={null}>
                 <BookBlocked bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} modalVis={setIsModalVisibleBlocked}/>
             </Modal>
             <Layout>

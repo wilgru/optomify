@@ -81,10 +81,10 @@ const AppNavbar = (props) => {
 
   return (
     <Header className="header">
-        <Modal title="Login" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <Modal title="Login" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} footer={null}>
             <Login hideModal={setIsModalVisible} setLoggedIn={props.setLoggedIn}/>
         </Modal>
-        <Modal title="Create account" visible={isCreateAccountModalVisible} onOk={handleCreateAccountOk} onCancel={handleCreateAccountCancel}>
+        <Modal title="Create account" visible={isCreateAccountModalVisible} onOk={handleCreateAccountOk} onCancel={handleCreateAccountCancel} footer={null}>
             <CreateAccount hideModal={setIsCreateAccountModalVisible} setLoggedIn={props.setLoggedIn}/>
         </Modal>
         <div className="logo">
