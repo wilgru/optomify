@@ -64,7 +64,6 @@ const Patient = (props) => {
   ]
 
   function PatientContent(props) {
-    console.log(props.choice)
     switch (props.choice) {
       case "overview":
         return <PatientOverview patient={patient}/>
@@ -81,14 +80,25 @@ const Patient = (props) => {
     <Content style={{padding: '20px'}}>
         <Layout>
             <Sider width={220} className="site-layout-background">
-                <Menu mode="inline" defaultSelectedKeys={['overview']} defaultOpenKeys={['overview']} style={{height: '100%'}} items={subNav} onClick={(item, key, keyPath)=>{console.log(item.key); setChosenContent(item.key)}}/>
+                <Menu 
+                  mode="inline" 
+                  defaultSelectedKeys={['overview']} 
+                  defaultOpenKeys={['overview']} 
+                  style={{height: '100%'}} 
+                  items={subNav} 
+                  onClick={
+                    (item, key, keyPath)=>{
+                      // console.log(item.key); 
+                      setChosenContent(item.key);
+                    }
+                  }
+                />
             </Sider>
             <Layout style={{padding: '0 24px 24px'}}>
                 <Content className="site-layout-background" style={{ padding: 20, margin: 0, minHeight: 280 }}>
                   {loading ? (
                     <></>
                   ) : (
-                    // <PatientOverview patient={patient}/>
                     <PatientContent choice={chosenContent} />
                   )}
                     

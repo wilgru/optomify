@@ -320,8 +320,6 @@ const Bookings = (props) => {
 
             setBookingList(current => [...current, todaysList])
         })
-
-        console.log(bookingList);
     }, [data])
 
     // listener for date range picker
@@ -389,7 +387,7 @@ const Bookings = (props) => {
                     key: 'sub2option1',
                     label: (  
                         <Card className="next-patient-card">
-                            <Link to={{ pathname: `/patients/${nextPatient.id}` }}>
+                            <Link to={{ pathname: `/patients/${nextPatient.id}` }} onClick={() => {props.setPage('patients')}}>
                                 <h4>{nextPatient.time}</h4>
                                 <h4>{`${nextPatient.firstName} ${nextPatient.lastName}`}</h4>
                                 <p>{nextPatient.bookingType}</p>
@@ -526,10 +524,7 @@ const Bookings = (props) => {
                         ) : (
                             <div style={{
                                 display:"flex",
-                                // justifyContent: "space-evenly"
                             }}>
-                                {/* {console.log('bookingList in return component')}
-                                {console.log(bookingList)} */}
                                 {bookingList.map((day) => {
                                     return (
                                         <List
@@ -547,7 +542,7 @@ const Bookings = (props) => {
                                                         title={
                                                             item.patientId ? (
                                                                 <>
-                                                                    <span>{item.titleTime} - </span><Link to={{ pathname: `/patients/${item.patientId}` }}>{item.popoverTitleText}</Link>
+                                                                    <span>{item.titleTime} - </span><Link to={{ pathname: `/patients/${item.patientId}` }} onClick={() => {props.setPage('patients')}}>{item.popoverTitleText}</Link>
                                                                 </>
                                                             ) : (
                                                                 <>
@@ -611,7 +606,6 @@ const Bookings = (props) => {
                                                             <div style={{display:"flex", flexDirection:"column", width: "100%", padding: "0"}}>
                                                                 {<h4 style={{margin: 0}}>{item.titleTime}</h4>}
                                                                 {<h4 style={{margin: 0}}>{`${item.titleText}${!!item.bookingNote ? '*' : ''}`}</h4>}
-                                                                {/* {item.subTitle} */}
                                                             </div>
                                                         </div>
                                                     </Popover>
