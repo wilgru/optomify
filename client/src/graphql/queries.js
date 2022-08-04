@@ -59,6 +59,7 @@ query GetPatient($id: ID!) {
       _id
       title
       text_field
+      date_created
     }
     date_created 
     created_by {
