@@ -62,21 +62,29 @@ const { Footer } = Layout;
 const App = () => {
   const [loggedIn, setLoggedIn] = useState(auth.loggedIn())
 
+  const [page, setPage] = useState(
+    // window.location.href.substring(
+    //   window.location.href.lastIndexOf('/')+1
+    // )
+    window.location.pathname.split('/')[1]
+  )
+  console.log(page)
+
   return (
     <ApolloProvider client={client}>
       <Router>
         <Layout>
-          <Navbar setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>
+          <Navbar setLoggedIn={setLoggedIn} loggedIn={loggedIn} page={page} setPage={setPage}/>
           <Routes>
             {loggedIn ? (
               <>
-                <Route path='/bookings' element={<Bookings setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>}/>
+                <Route path='/bookings' element={<Bookings setLoggedIn={setLoggedIn} loggedIn={loggedIn} setPage={setPage}/>}/>
                 <Route path='/patients' element={<Patients setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>}/>
                 <Route path='/patients/:id' element={<Patient setLoggedIn={setLoggedIn} loggedIn={loggedIn}/>}/>
-                <Route path='/*' element={ <Navigate to="/bookings" /> }/>
+                <Route path='*' element={ <Navigate to="/bookings" /> }/>
               </>
             ) : (
-              <Route path='/*' element={<PleaseLogIn />}/>
+              <Route path='*' element={<PleaseLogIn />}/>
             )}
           </Routes>
           <Footer style={{textAlign: 'center'}}>
