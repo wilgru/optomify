@@ -8,7 +8,7 @@
 
 <!-- ## Deployed web address -->
 
-You can visit a deployed demo web application [here](https://optomify.herokuapp.com/)
+You can visit a deployed demo of the web application [here](https://optomify.herokuapp.com/)
 <br>
 
 ## Project Description
