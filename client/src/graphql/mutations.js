@@ -1,15 +1,28 @@
 import { gql } from '@apollo/client';
 
-export const LOGIN_USER = gql`
-    mutation login($email: String!, $password: String!) {
-        login(email: $email, password: $password ) {
-            token,
-            user {
-                username
-            }
-        }
+export const LOGIN = gql`
+  mutation login($email: String!, $password: String!) {
+    login(email: $email, password: $password ) {
+      token
+      user {
+        _id
+        first_name
+        last_name
+        username
+        password
+        email
+      }
     }
+  }
 `
+
+// export const LOGIN = gql`
+//   mutation Login($email: String!, $password: String!) {
+//   login(email: $email, password: $password) {
+//     token
+//   }
+// }
+// `
 
 export const CREATE_NEW_PATIENT = gql`
     mutation CreateNewPatient($firstName: String!, $lastName: String!, $dob: String!, $mobileNumber: String, $email: String!, $hasMedicare: Boolean!, $medicareRef: String, $medicareExp: String) {
@@ -62,14 +75,6 @@ export const CREATE_NEW_PATIENT_AND_BOOKING = gql`
         }
     }
 }`
-
-export const LOGIN = gql`
-  mutation Login($email: String!, $password: String!) {
-  login(email: $email, password: $password) {
-    token
-  }
-}
-`
 
 export const CREATE_ACCOUNT = gql`
 mutation CreateNewUser($firstName: String!, $lastName: String!, $username: String!, $email: String!, $password: String!) {
