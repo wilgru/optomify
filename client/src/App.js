@@ -63,7 +63,6 @@ const App = () => {
   const [loggedIn, setLoggedIn] = useState(auth.loggedIn())
 
   const [page, setPage] = useState(
-    // window.location.pathname.split('/')[1]
     'bookings'
   )
   console.log(page)
