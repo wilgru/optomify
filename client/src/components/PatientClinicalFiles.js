@@ -79,10 +79,10 @@ const Patients = (props) => {
                         renderItem={(item) => (
                             <List.Item className={"patient-file-record-li"}>
                                 <div className={"patient-record"} 
-                                onClick={() => {
-                                    setSelectedClinicalFile(item)
-                                    showModal()
-                                }}>
+                                    onClick={() => {
+                                        setSelectedClinicalFile(item)
+                                        showModal()
+                                    }}>
                                     <ConditionalIcon type={item.file_type}/>
                                     <div>
                                         <h3>{`${item.title}`}</h3>

@@ -12,7 +12,7 @@ const Login = (props) => {
     const [loginMutation, { error }] = useMutation(LOGIN);
 
     const onFinish = async (values) => {
-        console.log('Success:', values);
+        // console.log('Success:', values);
 
         try {
             const { data } = await loginMutation({
