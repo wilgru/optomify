@@ -17,24 +17,12 @@ const { Header } = Layout;
 
 const AppNavbar = (props) => {
     
-    // if the current token in local storage is exired log it out
+    // if the current token in local storage is expired log it out
     if (auth.isTokenExpired(auth.getToken())) {
         localStorage.removeItem('id_token');
     }
 
-    console.log('from nav')
-    console.log(props.page)
-
-    //
-    const navItem = [
-        // {
-        //     key: 'dashboard',
-        //     label: (            
-        //         <Link to="/dashboard">
-        //             Dashboard
-        //         </Link>
-        //     ),
-        // },
+    const navItems = [
         {
             key: 'bookings',
             label: (            
@@ -50,7 +38,7 @@ const AppNavbar = (props) => {
                     Patients
                 </Link>
             ),
-        },
+        }
     ]
 
     // LOGIN MODAL
@@ -97,10 +85,9 @@ const AppNavbar = (props) => {
         <Menu 
             className="navbar" 
             mode="horizontal" 
-            // defaultSelectedKeys={[props.page]} 
             selectedKeys={[props.page]} 
             onClick={(item)=>{props.setPage(item.key); console.log(item.key)}} 
-            items={props.loggedIn ? navItem : []}
+            items={navItems}
         />
         <div className="login-signout">
             {!auth.loggedIn() ? (
@@ -109,7 +96,9 @@ const AppNavbar = (props) => {
                     <Button onClick={showModal}>Login</Button>
                 </>
             ) : (
-                <Button onClick={auth.logout}> Sign out </Button>
+                <>
+                    <Button onClick={auth.logout}> Sign out </Button>
+                </>
             )}
         </div>
     </Header>
