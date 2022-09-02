@@ -38,6 +38,7 @@ const BookBlocked = (props) => {
         })
 
         props.modalVis(false);
+        form.resetFields();
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -54,6 +55,7 @@ const BookBlocked = (props) => {
                 wrapperCol={{
                     span: 18,
                 }}
+                form={form}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
@@ -76,7 +78,10 @@ const BookBlocked = (props) => {
                     span: 16
                     }}
                 >
-                    <Button type="danger" htmlType="submit">
+                    <Button 
+                        type="danger" 
+                        htmlType="submit" 
+                    >
                         Block 
                     </Button>
                 </Form.Item>

@@ -61,6 +61,7 @@ const BookExistingForm = (props) => {
         setSelectedPatientName("")
 
         props.modalVis(false);
+        form.resetFields();
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -76,22 +77,30 @@ const BookExistingForm = (props) => {
     return (
         <>
             <Card
-                // title="Search for existing patient"
-                title={
-                    <Search
-                        placeholder="search by name, email or mobile number"
-                        allowClear
-                        onSearch={onSearch}
-                        style={{
-                            marginBottom: '10px',
-                        }}
-                    />
-                }
+                title="Search for existing patient"
+                // title={
+                //     <Search
+                //         placeholder="search by name, email or mobile number"
+                //         allowClear
+                //         onSearch={onSearch}
+                //         style={{
+                //             marginBottom: '10px',
+                //         }}
+                //     />
+                // }
                 style={{
                     marginBottom: '10px',
                     padding: '0'
                 }}
             >
+                <Search
+                    placeholder="search by name, email or mobile number"
+                    allowClear
+                    onSearch={onSearch}
+                    style={{
+                        marginBottom: '10px',
+                    }}
+                />
                 {(selectedPatientId === "" && searchTerm !== "") ? (
                     <>
                         {loading ? (
@@ -125,7 +134,6 @@ const BookExistingForm = (props) => {
                                                     data-patient-id={item._id}
                                                     data-patient-name={`${item.first_name} ${item.last_name}`}
                                                     onClick={(event)=>{
-                                                        console.log(selectedPatientId)
                                                         setSelectedPatientId(event.target.closest('li').getAttribute('data-patient-id'))
                                                         setSelectedPatientName(event.target.closest('li').getAttribute('data-patient-name'))
                                                         setSearchTerm("")
@@ -146,7 +154,6 @@ const BookExistingForm = (props) => {
                 ) : (
                     <>
                         <div>
-                            Booking for:
                             <h3>{selectedPatientName}</h3>
                         </div>
                     </>
@@ -164,6 +171,7 @@ const BookExistingForm = (props) => {
                 initialValues={{
                     remember: true,
                 }}
+                form={form}
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
@@ -185,7 +193,6 @@ const BookExistingForm = (props) => {
                 >
                     <Select
                         placeholder="Booking Reason"
-                        onChange={(value) => {}}
                     >
                         <Option value="general eye test">General eye test</Option>
                         <Option value="health concern">Health concern</Option>
@@ -213,7 +220,10 @@ const BookExistingForm = (props) => {
                     span: 16
                     }}
                 >
-                    <Button type="primary" htmlType="submit">
+                    <Button 
+                        type="primary" 
+                        htmlType="submit"
+                    >
                         Book patient
                     </Button>
                 </Form.Item>

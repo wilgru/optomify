@@ -46,6 +46,7 @@ const BookingForm = (props) => {
         });
         
         props.modalVis(false);
+        form.resetFields();
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -64,6 +65,7 @@ const BookingForm = (props) => {
             initialValues={{
                 has_medicare: true,
             }}
+            form={form}
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             autoComplete="off"
@@ -144,7 +146,7 @@ const BookingForm = (props) => {
             </Form.Item>
 
             <Form.Item
-                label="mobile_number"
+                label="mobile number"
                 name="mobile_number"
                 rules={[
                 {
@@ -232,8 +234,11 @@ const BookingForm = (props) => {
                 span: 16,
                 }}
             >
-                <Button type="primary" htmlType="submit">
-                    Submit
+                <Button 
+                    type="primary" 
+                    htmlType="submit"
+                >
+                    Book Patient
                 </Button>
             </Form.Item>
         </Form>
