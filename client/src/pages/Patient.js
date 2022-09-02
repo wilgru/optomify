@@ -33,19 +33,6 @@ const Patient = (props) => {
     fetchPolicy: "no-cache"
   });
   const patient = data?.getPatient || [];
-  
-  // MODAL
-  // const [isModalVisible, setIsModalVisible] = useState(false);
-  // const showModal = () => {
-  //   setIsModalVisible(true);
-  // };
-  // const handleOk = () => {
-  //   setIsModalVisible(false);
-  // };
-  // const handleCancel = () => {
-  //   setIsModalVisible(false);
-  // };
-  // END MODAL
 
   // sub nav options
   const subNav = [
@@ -78,32 +65,33 @@ const Patient = (props) => {
 
   return (
     <Content style={{padding: '20px'}}>
-        <Layout>
-            <Sider width={220} className="site-layout-background">
-                <Menu 
-                  mode="inline" 
-                  defaultSelectedKeys={['overview']} 
-                  defaultOpenKeys={['overview']} 
-                  style={{height: '100%'}} 
-                  items={subNav} 
-                  onClick={
-                    (item, key, keyPath)=>{
-                      setChosenContent(item.key);
-                    }
-                  }
-                />
-            </Sider>
-            <Layout style={{padding: '0 24px 24px'}}>
-                <Content className="site-layout-background" style={{ padding: 20, margin: 0, minHeight: 280 }}>
-                  {loading ? (
-                    <></>
-                  ) : (
-                    <PatientContent choice={chosenContent} />
-                  )}
-                    
-                </Content>
-            </Layout>
+      <h1>{patient.first_name + ' ' + patient.last_name}</h1>
+      <Layout>
+        <Sider width={220} className="site-layout-background">
+          <Menu 
+            mode="inline" 
+            defaultSelectedKeys={['overview']} 
+            defaultOpenKeys={['overview']} 
+            style={{height: '100%'}} 
+            items={subNav} 
+            onClick={
+              (item, key, keyPath)=>{
+                setChosenContent(item.key);
+              }
+            }
+          />
+        </Sider>
+        <Layout style={{padding: '0 24px 24px'}}>
+          <Content className="site-layout-background" style={{ padding: 20, margin: 0, minHeight: 280 }}>
+            {loading ? (
+              <></>
+            ) : (
+              <PatientContent choice={chosenContent} />
+            )}
+              
+          </Content>
         </Layout>
+      </Layout>
     </Content>
   );
 };

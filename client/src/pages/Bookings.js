@@ -324,33 +324,6 @@ const Bookings = (props) => {
         // console.log(endDate.toISOString())
     };
 
-    // listener for date range picker for a new book
-    // const onPanelChangeNewBook = (value, mode) => {
-    //     // console.log('Start date:', value[0].format('YYYY-MM-DDT00:00:00+00.00'));
-    //     // console.log('End date:', value[1].format('YYYY-MM-DDT00:00:00+00.00'));
-
-    //     // https://stackoverflow.com/questions/563406/how-to-add-days-to-date
-    //     function addDays(date, days) {
-    //         var result = new Date(date);
-    //         result.setDate(result.getDate() + days);
-    //         return result;
-    //     }
-        
-    //     // https://stackoverflow.com/questions/4413590/javascript-get-array-of-dates-between-2-dates
-    //     function getDates(startDate, stopDate) {
-    //         var dateArray = new Array();
-    //         var currentDate = startDate;
-    //         while (currentDate <= stopDate) {
-    //             dateArray.push(new Date (currentDate));
-    //             currentDate = addDays(currentDate, 1);
-    //         }
-    //         return dateArray;
-    //     }
-
-    //     // console.log(value[0].format('YYYY-MM-DD'), mode);
-    //     // console.log(value[1].format('YYYY-MM-DD'), mode);
-    // };
-
     // sub nav options
     const subNav = [
         {
@@ -472,25 +445,6 @@ const Bookings = (props) => {
     };
     // END MODAL - BLOCKED
 
-    // date working
-    // function dateWorker(date) {
-    //     // should get a date string, and is essentially just adding 10hrs. will return same type of string just 10 hours in the future.
-    //     return moment(date).add(10, 'h').toDate()
-
-    //     // let b = String(date)
-    //     // let c = b.split(" ", 5)
-    //     // let d = c.join(" ")
-    //     // let e = d+" UTC" 
-    //     // let f = new Date(e)
-    //     // let g = f.toISOString()
-
-    //     // return g
-    //     // let h = g.split(".")[0]
-    //     // let i = h+"+00.00"
-
-    //     // return i
-    // }
-
     return (
         <Content style={{padding: '20px'}}>
             <Modal title="Book new patient" visible={isModalVisibleNewPatient} onOk={handleOkNewPatient} onCancel={handleCancelNewPatient} footer={null}>
@@ -502,6 +456,7 @@ const Bookings = (props) => {
             <Modal title="Block this time out" visible={isModalVisibleBlocked} onOk={handleOkBlocked} onCancel={handleCancelBlocked} footer={null}>
                 <BookBlocked bookingDate={bookingDate} bookingStart={bookingStart} bookingEnd={bookingEnd} modalVis={setIsModalVisibleBlocked}/>
             </Modal>
+            <h1>Bookings</h1>
             <Layout>
                 <Sider width={220} className="site-layout-background">
                     <Menu mode="inline" style={{height: '100%'}} items={subNav} />
