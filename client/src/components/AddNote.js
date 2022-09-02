@@ -17,15 +17,6 @@ const AddNote = (props) => {
 
     const { loading, data } = useQuery(GET_TINYMCE_KEY);
     const tinyMceKey = data?.getTinyMCEApiKey?.key || ""
-    // if (data){
-    //     console.log(data[Object.keys(data)[0]].key)
-    //     console.log(data.getTinyMCEApiKey.key)
-    // }
-
-    // const tinyMceKey = ""
-    // useEffect(() => {
-    //     const tinyMceKey = data.getTinyMCEApiKey.key;
-    // }, [data])
 
     const [createNewClinicalFile] = useMutation(CREATE_NEW_NOTE);
 
