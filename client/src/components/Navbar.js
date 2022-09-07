@@ -82,13 +82,17 @@ const AppNavbar = (props) => {
                 src="/optomify_logo.png"
             />
         </div>
-        <Menu 
-            className="navbar" 
-            mode="horizontal" 
-            selectedKeys={[props.page]} 
-            onClick={(item)=>{props.setPage(item.key); console.log(item.key)}} 
-            items={navItems}
-        />
+        {auth.loggedIn() ? (
+                <Menu 
+                    className="navbar" 
+                    mode="horizontal" 
+                    selectedKeys={[props.page]} 
+                    onClick={(item)=>{props.setPage(item.key); console.log(item.key)}} 
+                    items={navItems}
+                />
+            ) : (
+                <></>
+        )}
         <div className="login-signout">
             {!auth.loggedIn() ? (
                 <>
