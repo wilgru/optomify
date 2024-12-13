@@ -1,21 +1,21 @@
+"use client";
+
 import { Button, Card, DatePicker, Layout, Menu } from "antd";
 import Link from "next/link";
 import SetupBook from "./SetupBook";
 import dayjs, { Dayjs } from "dayjs";
 import { PhoneOutlined, MailOutlined } from "@ant-design/icons";
+import { useSearchParams } from "next/navigation";
 
 const { Sider } = Layout;
 const { RangePicker } = DatePicker;
 
-type BookingSidebarProps = {
-  bookSetupRange: [Dayjs | null, Dayjs | null];
-  onChangeDateRange: (start: Dayjs | null, end: Dayjs | null) => void;
-};
+export const BookingSidebar = () => {
+  const searchParams = useSearchParams();
+  const bookSetupRange: [Dayjs, Dayjs] = JSON.parse(
+    searchParams.get("bookSetupRange") ?? ""
+  );
 
-export const BookingSidebar = ({
-  bookSetupRange,
-  onChangeDateRange,
-}: BookingSidebarProps) => {
   // const nextPatient = useNextPatient(bookSetups);
   const nextPatient = {
     id: "1",
@@ -42,7 +42,16 @@ export const BookingSidebar = ({
                 format={["DD MMM", "YYYY-MM-DDTHH:mm:ss"]}
                 value={bookSetupRange}
                 onChange={(value) => {
-                  onChangeDateRange(value?.[0] ?? null, value?.[1] ?? null);
+                  if (!value) {
+                    return;
+                  }
+
+                  const params = new URLSearchParams(searchParams);
+
+                  params.set(
+                    "bookSetupRange",
+                    JSON.stringify([value[0], value[1]])
+                  );
                 }}
               />
               <Button type="primary">Button</Button>

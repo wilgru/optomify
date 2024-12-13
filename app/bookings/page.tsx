@@ -1,41 +1,29 @@
 import { Layout } from "antd";
-import { useState } from "react";
 import { BookingSidebar } from "./components/BookingSider";
-import { useBookSetups } from "./hooks/useBookSetups";
-import { useCurrentWeek } from "../hooks/useCurrentWeek";
+import { getBookSetups } from "./actions/getBookSetups";
+import { getCurrentWeek } from "./actions/getCurrentWeek";
 import { BookList } from "./components/BookList";
 import { Dayjs } from "dayjs";
-import BookingModal from "./components/BookingModal";
-import { TimeSlot } from "./types/BookSetup.type";
 
-const Page = () => {
-  const { firstDay, lastDay } = useCurrentWeek();
-  const [bookingTimeSlot, setBookingTimeSlot] = useState<TimeSlot | null>(null);
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{
+    bookSetupRange?: [Dayjs, Dayjs];
+  }>;
+}) {
+  const bookSetupRange = await searchParams.then(
+    (params) => params.bookSetupRange ?? getCurrentWeek()
+  );
 
-  const [bookSetupRange, setBookSetupRange] = useState<
-    [Dayjs | null, Dayjs | null]
-  >([firstDay, lastDay]);
-
-  const { bookSetups } = useBookSetups(bookSetupRange[0], bookSetupRange[1]);
+  const bookSetups = await getBookSetups(bookSetupRange[0], bookSetupRange[1]);
 
   return (
     <Layout.Content style={{ padding: "20px" }}>
-      <BookingModal
-        timeSlot={bookingTimeSlot}
-        onClose={() => {
-          setBookingTimeSlot(null);
-        }}
-      />
-
       <h1>Bookings</h1>
 
       <Layout>
-        <BookingSidebar
-          bookSetupRange={bookSetupRange}
-          onChangeDateRange={(start, end) => {
-            setBookSetupRange([start, end]);
-          }}
-        />
+        <BookingSidebar />
         <Layout style={{ padding: "0 24px 24px" }}>
           <Layout.Content
             className="site-layout-background"
@@ -47,13 +35,7 @@ const Page = () => {
               }}
             >
               {bookSetups.map((bookSetup) => (
-                <BookList
-                  bookSetup={bookSetup}
-                  key={bookSetup.id}
-                  onSelectTimeSlot={(timeSlot) => {
-                    setBookingTimeSlot(timeSlot);
-                  }}
-                />
+                <BookList bookSetup={bookSetup} key={bookSetup.id} />
               ))}
             </div>
           </Layout.Content>
@@ -61,6 +43,4 @@ const Page = () => {
       </Layout>
     </Layout.Content>
   );
-};
-
-export default Page;
+}

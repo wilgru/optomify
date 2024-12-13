@@ -1,3 +1,5 @@
+"use client";
+
 import { List } from "antd";
 import { BookSetup, TimeSlot } from "../types/BookSetup.type";
 import TimeSlotPopover from "./TimeSlotPopover";
@@ -11,6 +13,8 @@ import {
   CoffeeOutlined,
   StopOutlined,
 } from "@ant-design/icons";
+import BookingModal from "./BookingModal";
+import { useState } from "react";
 
 const BookingReasonIcon = ({ reason }: { reason: BookingReason | null }) => {
   if (reason === "general") {
@@ -65,13 +69,8 @@ const generateTimeSlots = (bookSetup: BookSetup) => {
   return timeSlots;
 };
 
-export const BookList = ({
-  bookSetup,
-  onSelectTimeSlot,
-}: {
-  bookSetup: BookSetup;
-  onSelectTimeSlot: (timeSlot: TimeSlot) => void;
-}) => {
+export const BookList = ({ bookSetup }: { bookSetup: BookSetup }) => {
+  const [bookingTimeSlot, setBookingTimeSlot] = useState<TimeSlot | null>(null);
   const timeSlots: TimeSlot[] = generateTimeSlots(bookSetup);
 
   const renderItem = (timeSlot: TimeSlot) => {
@@ -79,7 +78,7 @@ export const BookList = ({
       <List.Item
         className={`${timeSlot.booking?.status} ${timeSlot.booking?.hasPassed} appt-li`}
         onClick={() => {
-          onSelectTimeSlot(timeSlot);
+          setBookingTimeSlot(timeSlot);
         }}
       >
         <TimeSlotPopover timeSlot={timeSlot}>
@@ -102,26 +101,35 @@ export const BookList = ({
   };
 
   return (
-    <List
-      key={bookSetup.id}
-      header={
-        <div
-          style={{
-            fontStyle: bookSetup.isToday ? "italic" : "initial",
-            fontWeight: bookSetup.isToday ? "bold" : "initial",
-          }}
-        >
-          {bookSetup.date.format("ddd MMM Do, YYYY")}
-        </div>
-      }
-      bordered
-      itemLayout="horizontal"
-      dataSource={timeSlots}
-      style={{
-        marginRight: "20px",
-        width: "100%",
-      }}
-      renderItem={renderItem}
-    />
+    <>
+      <List
+        key={bookSetup.id}
+        header={
+          <div
+            style={{
+              fontStyle: bookSetup.isToday ? "italic" : "initial",
+              fontWeight: bookSetup.isToday ? "bold" : "initial",
+            }}
+          >
+            {bookSetup.date.format("ddd MMM Do, YYYY")}
+          </div>
+        }
+        bordered
+        itemLayout="horizontal"
+        dataSource={timeSlots}
+        style={{
+          marginRight: "20px",
+          width: "100%",
+        }}
+        renderItem={renderItem}
+      />
+
+      <BookingModal
+        timeSlot={bookingTimeSlot}
+        onClose={() => {
+          setBookingTimeSlot(null);
+        }}
+      />
+    </>
   );
 };
