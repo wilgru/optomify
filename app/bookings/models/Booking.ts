@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import { validateBookIsSetUp } from "./validators/validateBookIsSetUp";
+// import { validateBookIsSetUp } from "./validators/validateBookIsSetUp";
 import { validateBookingType } from "./validators/validateBookingType";
 import { Booking as BookingType } from "../types/Booking.type";
 import { validateBookingStatus } from "./validators/validateBookingStatus";
@@ -14,7 +14,7 @@ const bookingSchema = new Schema<BookingType>({
   bookingTime: {
     type: Dayjs,
     required: true,
-    validate: validateBookIsSetUp,
+    // validate: validateBookIsSetUp,
   },
   type: {
     type: String,
