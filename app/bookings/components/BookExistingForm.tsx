@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Button, Form, Input, Select, List, Card } from "antd";
 import { Booking } from "../models/Booking";
 import Patient from "../../patients/models/Patient";
-import { PatientT } from "../../patients/types/patient.type";
+import { PatientT } from "../../patients/types/Patient.type";
 
 // inputs
 const { Option } = Select;
@@ -19,7 +19,7 @@ const BookExistingForm = (props) => {
   const [selectedPatientName, setSelectedPatientName] = useState("");
 
   // get patients
-  const { loading, patients } = usePatients(searchTerm);
+  const { loading, patients } = useGetPatients(searchTerm);
 
   // on form submit
   const onFinish = async (values) => {

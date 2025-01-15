@@ -1,13 +1,13 @@
 import React from "react";
 import { Button, Form, Modal } from "antd";
 import BookNewForm from "./BookNewForm";
-import { TimeSlot } from "../types/BookSetup.type";
+import { TimeSlotT } from "../types/BookSetup.type";
 
 const BookingModal = ({
   timeSlot,
   onClose,
 }: {
-  timeSlot: TimeSlot | null;
+  timeSlot: TimeSlotT | null;
   onClose: () => void;
 }) => {
   const [form] = Form.useForm();

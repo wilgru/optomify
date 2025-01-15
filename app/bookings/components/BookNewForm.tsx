@@ -9,7 +9,7 @@ import {
   Card,
   FormInstance,
 } from "antd";
-import { PatientT } from "../../patients/types/patient.type";
+import { PatientT } from "../../patients/types/Patient.type";
 import { TimeSlot } from "../types/BookSetup.type";
 import { createPatientAndBooking } from "../actions/createPatientAndBooking";
 

@@ -1,11 +1,11 @@
 import { Card, Popover, Radio } from "antd";
 import Link from "next/link";
 import { PhoneOutlined, MailOutlined } from "@ant-design/icons";
-import { TimeSlot } from "../types/BookSetup.type";
+import { TimeSlotT } from "../types/BookSetup.type";
 import { Booking } from "../types/Booking.type";
 
 type TimeSlotPopoverProps = {
-  timeSlot: TimeSlot;
+  timeSlot: TimeSlotT;
   children: React.ReactNode;
 };
 

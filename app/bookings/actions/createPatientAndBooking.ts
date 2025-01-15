@@ -1,13 +1,13 @@
 "use server";
 
 import Patient from "../../patients/models/Patient";
-import { PatientT } from "../../patients/types/patient.type";
+import { PatientT } from "../../patients/types/Patient.type";
 import { Booking } from "../models/Booking";
-import { TimeSlot } from "../types/BookSetup.type";
+import { TimeSlotT } from "../types/BookSetup.type";
 
 export const createPatientAndBooking = async (
   values: PatientT & { bookingType: string; note: string },
-  timeSlot: TimeSlot
+  timeSlot: TimeSlotT
 ) => {
   const patient = new Patient({
     firstName: values.firstName,

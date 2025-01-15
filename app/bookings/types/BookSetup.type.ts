@@ -1,19 +1,19 @@
 import { Dayjs } from "dayjs";
-import { Booking } from "./Booking.type";
+import { BookingT } from "./Booking.type";
 
-export type BookSetup = {
+export type BookSetupT = {
   id: string;
   date: Dayjs;
   openTime: Dayjs;
   closingTime: Dayjs;
   break: Dayjs;
-  bookings: Booking[];
+  bookings: BookingT[];
   isToday: boolean; // TODO: computed property
-  timeSlots: TimeSlot[]; // TODO: computed property
+  timeSlots: TimeSlotT[]; // TODO: computed property
 };
 
-export type TimeSlot = {
+export type TimeSlotT = {
   bookSetupId: string;
   time: Dayjs;
-  booking: Booking | null;
+  booking: BookingT | null;
 };

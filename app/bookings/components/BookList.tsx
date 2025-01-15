@@ -1,9 +1,9 @@
 "use client";
 
 import { List } from "antd";
-import { BookSetup, TimeSlot } from "../types/BookSetup.type";
+import { BookSetupT, TimeSlotT } from "../types/BookSetup.type";
 import TimeSlotPopover from "./TimeSlotPopover";
-import { BookingReason } from "../types/Booking.type";
+import { BookingReasonT } from "../types/Booking.type";
 import {
   EyeOutlined,
   ExclamationCircleOutlined,
@@ -16,7 +16,7 @@ import {
 import BookingModal from "./BookingModal";
 import { useState } from "react";
 
-const BookingReasonIcon = ({ reason }: { reason: BookingReason | null }) => {
+const BookingReasonIcon = ({ reason }: { reason: BookingReasonT | null }) => {
   if (reason === "general") {
     return <EyeOutlined style={{ fontSize: "20px", margin: "auto 10px" }} />;
   } else if (reason === "health concern") {
@@ -44,12 +44,12 @@ const BookingReasonIcon = ({ reason }: { reason: BookingReason | null }) => {
   );
 };
 
-const generateTimeSlots = (bookSetup: BookSetup) => {
+const generateTimeSlots = (bookSetup: BookSetupT) => {
   const { openTime, closingTime } = bookSetup;
   const startDate = openTime;
   const endDate = closingTime;
 
-  const timeSlots: TimeSlot[] = [];
+  const timeSlots: TimeSlotT[] = [];
 
   let currentDate = startDate;
 
@@ -69,11 +69,13 @@ const generateTimeSlots = (bookSetup: BookSetup) => {
   return timeSlots;
 };
 
-export const BookList = ({ bookSetup }: { bookSetup: BookSetup }) => {
-  const [bookingTimeSlot, setBookingTimeSlot] = useState<TimeSlot | null>(null);
-  const timeSlots: TimeSlot[] = generateTimeSlots(bookSetup);
+export const BookList = ({ bookSetup }: { bookSetup: BookSetupT }) => {
+  const [bookingTimeSlot, setBookingTimeSlot] = useState<TimeSlotT | null>(
+    null
+  );
+  const timeSlots: TimeSlotT[] = generateTimeSlots(bookSetup);
 
-  const renderItem = (timeSlot: TimeSlot) => {
+  const renderItem = (timeSlot: TimeSlotT) => {
     return (
       <List.Item
         className={`${timeSlot.booking?.status} ${timeSlot.booking?.hasPassed} appt-li`}

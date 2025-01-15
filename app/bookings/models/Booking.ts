@@ -1,11 +1,11 @@
 import { Schema, model } from "mongoose";
 // import { validateBookIsSetUp } from "./validators/validateBookIsSetUp";
-import { validateBookingType } from "./validators/validateBookingType";
-import { Booking as BookingType } from "../types/Booking.type";
-import { validateBookingStatus } from "./validators/validateBookingStatus";
+// import { validateBookingType } from "./validators/validateBookingType";
+import { BookingT } from "../types/Booking.type";
+// import { validateBookingStatus } from "./validators/validateBookingStatus";
 import { Dayjs } from "dayjs";
 
-const bookingSchema = new Schema<BookingType>({
+const bookingSchema = new Schema<BookingT>({
   created: {
     type: Date,
     required: true,
@@ -18,7 +18,7 @@ const bookingSchema = new Schema<BookingType>({
   },
   type: {
     type: String,
-    validate: validateBookingType,
+    // validate: validateBookingType,
     required: true,
   },
   note: {
@@ -27,7 +27,7 @@ const bookingSchema = new Schema<BookingType>({
   status: {
     type: String,
     default: "booked",
-    validate: validateBookingStatus,
+    // validate: validateBookingStatus,
     required: true,
   },
   patient: {
@@ -39,4 +39,4 @@ const bookingSchema = new Schema<BookingType>({
   },
 });
 
-export const Booking = model<BookingType>("Booking", bookingSchema);
+export const Booking = model<BookingT>("Booking", bookingSchema);
