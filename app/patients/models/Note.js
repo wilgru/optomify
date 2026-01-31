@@ -1,0 +1,26 @@
+import { Schema, model } from "mongoose";
+
+const note = new Schema({
+  title: {
+    type: String,
+    required: true,
+  },
+  date_created: {
+    type: Date,
+    required: true,
+    default: Date.now(),
+  },
+  text_field: {
+    type: String,
+    required: true,
+  },
+  created_by: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+});
+
+const Note = model("Note", note);
+
+export default Note;

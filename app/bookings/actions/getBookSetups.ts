@@ -1,11 +1,11 @@
 import { Dayjs } from "dayjs";
-import { BookSetup } from "../models/BookSetup";
+import BookSetup from "../models/BookSetup";
 import { BookSetupT } from "../types/BookSetup.type";
 import { HydratedDocument } from "mongoose";
 
 export const getBookSetups = async (
   startDate: Dayjs | null,
-  endDate: Dayjs | null
+  endDate: Dayjs | null,
 ): Promise<HydratedDocument<BookSetupT>[]> => {
   const bookSetups = await BookSetup.find({
     date: {

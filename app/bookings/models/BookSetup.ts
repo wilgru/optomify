@@ -1,27 +1,26 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, models } from "mongoose";
 // import { validate30MinBlock } from "./validators/validate30MinBlock";
-import { Dayjs } from "dayjs";
 import { BookSetupT } from "../types/BookSetup.type";
 
 const bookSetupSchema = new Schema<BookSetupT>({
   date: {
-    type: Dayjs,
+    type: Date,
     required: true,
     unique: true,
     // validate: validate30MinBlock,
   },
   openTime: {
-    type: Dayjs,
+    type: Date,
     required: true,
     // validate: validate30MinBlock,
   },
   closingTime: {
-    type: Dayjs,
+    type: Date,
     required: true,
     // validate: validate30MinBlock,
   },
   break: {
-    type: Dayjs,
+    type: Date,
     required: true,
     // validate: validate30MinBlock,
   },
@@ -35,4 +34,7 @@ const bookSetupSchema = new Schema<BookSetupT>({
 
 // uses hook to make sure a made booking falls within the 30 min blocks. otherwise return error and do not allow booking to be made
 
-export const BookSetup = model<BookSetupT>("BookSetup", bookSetupSchema);
+const BookSetup =
+  models.BookSetup || model<BookSetupT>("BookSetup", bookSetupSchema);
+
+export default BookSetup;

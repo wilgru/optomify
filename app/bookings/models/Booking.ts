@@ -1,9 +1,8 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, models } from "mongoose";
 // import { validateBookIsSetUp } from "./validators/validateBookIsSetUp";
 // import { validateBookingType } from "./validators/validateBookingType";
 import { BookingT } from "../types/Booking.type";
 // import { validateBookingStatus } from "./validators/validateBookingStatus";
-import { Dayjs } from "dayjs";
 
 const bookingSchema = new Schema<BookingT>({
   created: {
@@ -12,7 +11,7 @@ const bookingSchema = new Schema<BookingT>({
     default: Date.now(),
   },
   bookingTime: {
-    type: Dayjs,
+    type: Date,
     required: true,
     // validate: validateBookIsSetUp,
   },
@@ -39,4 +38,7 @@ const bookingSchema = new Schema<BookingT>({
   },
 });
 
-export const Booking = model<BookingT>("Booking", bookingSchema);
+const Booking =
+  models.Booking || mongoose.model<BookingT>("Booking", bookingSchema);
+
+export default Booking;

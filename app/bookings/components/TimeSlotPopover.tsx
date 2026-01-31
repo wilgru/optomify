@@ -1,8 +1,10 @@
+"use client";
+
 import { Card, Popover, Radio } from "antd";
 import Link from "next/link";
 import { PhoneOutlined, MailOutlined } from "@ant-design/icons";
 import { TimeSlotT } from "../types/BookSetup.type";
-import { Booking } from "../types/Booking.type";
+import { BookingT } from "../types/Booking.type";
 
 type TimeSlotPopoverProps = {
   timeSlot: TimeSlotT;
@@ -10,7 +12,7 @@ type TimeSlotPopoverProps = {
 };
 
 const TimeSlotPopover = ({ timeSlot, children }: TimeSlotPopoverProps) => {
-  const handleUpdateBooking = (id: string, booking: Booking) => {
+  const handleUpdateBooking = (id: string, booking: BookingT) => {
     console.log("handleUpdateBooking", id, booking);
   };
 

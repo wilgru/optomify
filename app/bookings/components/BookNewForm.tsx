@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import {
   Button,
@@ -10,7 +12,7 @@ import {
   FormInstance,
 } from "antd";
 import { PatientT } from "../../patients/types/Patient.type";
-import { TimeSlot } from "../types/BookSetup.type";
+import { TimeSlotT } from "../types/BookSetup.type";
 import { createPatientAndBooking } from "../actions/createPatientAndBooking";
 
 const { Option } = Select;
@@ -22,7 +24,7 @@ const BookNewForm = ({
   onFinishSuccess,
 }: {
   form: FormInstance;
-  timeSlot: TimeSlot;
+  timeSlot: TimeSlotT;
   onFinishSuccess: () => void;
 }) => {
   const [hasMedicare, setHasMedicare] = useState(true);

@@ -1,7 +1,16 @@
+"use client";
+
 import React, { useState } from "react";
 import { Button, TimePicker, Form, DatePicker } from "antd";
 import dayjs from "dayjs";
 import { BookSetup } from "../models/BookSetup";
+
+type CreateBookSetupForm = {
+  date: dayjs.Dayjs;
+  opening: dayjs.Dayjs;
+  closing: dayjs.Dayjs;
+  break: dayjs.Dayjs;
+};
 
 const SetupBook = () => {
   const [form] = Form.useForm();
@@ -10,12 +19,12 @@ const SetupBook = () => {
   const [closing, setClosing] = useState(dayjs("19:00", "HH:mm"));
   const [optomBreak, setOptomBreak] = useState(dayjs("13:00", "HH:mm"));
 
-  const onFinish = async (values) => {
-    const date = values.date.format("YYYY-MM-DD");
-    const fullDate = values.date.format("YYYY-MM-DDT00:00:00+00:00");
-    const openTime = date + values.opening.format("THH:mm:00+00:00");
-    const closingTime = date + values.closing.format("THH:mm:00+00:00");
-    const breakTime = date + values.break.format("THH:mm:00+00:00");
+  const onFinish = async (formValues: CreateBookSetupForm) => {
+    const date = formValues.date.format("YYYY-MM-DD");
+    const fullDate = formValues.date.format("YYYY-MM-DDT00:00:00+00:00");
+    const openTime = date + formValues.opening.format("THH:mm:00+00:00");
+    const closingTime = date + formValues.closing.format("THH:mm:00+00:00");
+    const breakTime = date + formValues.break.format("THH:mm:00+00:00");
 
     const bookSetup = new BookSetup({
       date: fullDate,

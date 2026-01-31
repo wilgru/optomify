@@ -1,20 +1,35 @@
 "use client";
 
-import { Button, Card, DatePicker, Layout, Menu } from "antd";
+import { Button, Card, DatePicker, Menu } from "antd";
 import Link from "next/link";
 import SetupBook from "./SetupBook";
 import dayjs, { Dayjs } from "dayjs";
 import { PhoneOutlined, MailOutlined } from "@ant-design/icons";
-import { useSearchParams } from "next/navigation";
-
-const { Sider } = Layout;
-const { RangePicker } = DatePicker;
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const BookingSidebar = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
-  const bookSetupRange: [Dayjs, Dayjs] = JSON.parse(
-    searchParams.get("bookSetupRange") ?? ""
-  );
+
+  const bookSetupRange: [Dayjs, Dayjs] = (() => {
+    const bookStartDate = searchParams.get("bookStartDate");
+    const bookEndDate = searchParams.get("bookEndDate");
+    if (!bookStartDate || !bookEndDate)
+      return [dayjs().startOf("week"), dayjs().endOf("week")];
+
+    try {
+      return [dayjs(bookStartDate), dayjs(bookEndDate)];
+    } catch {
+      return [dayjs().startOf("week"), dayjs().endOf("week")];
+    }
+  })();
+
+  const handleDateChange = (value: [Dayjs, Dayjs] | null) => {
+    if (!value) return;
+    router.push(
+      `?bookStartDate=${value[0].toISOString()}&bookEndDate=${value[1].toISOString()}`,
+    );
+  };
 
   // const nextPatient = useNextPatient(bookSetups);
   const nextPatient = {
@@ -37,22 +52,11 @@ export const BookingSidebar = () => {
           key: "sub1option1",
           label: (
             <div>
-              <RangePicker
+              <DatePicker.RangePicker
                 size={"small"}
                 format={["DD MMM", "YYYY-MM-DDTHH:mm:ss"]}
                 value={bookSetupRange}
-                onChange={(value) => {
-                  if (!value) {
-                    return;
-                  }
-
-                  const params = new URLSearchParams(searchParams);
-
-                  params.set(
-                    "bookSetupRange",
-                    JSON.stringify([value[0], value[1]])
-                  );
-                }}
+                onChange={handleDateChange}
               />
               <Button type="primary">Button</Button>
             </div>
@@ -91,15 +95,11 @@ export const BookingSidebar = () => {
       children: [
         {
           key: "sub3option1",
-          label: <SetupBook />,
+          // label: <SetupBook />,
         },
       ],
     },
   ];
 
-  return (
-    <Sider width={220} className="site-layout-background">
-      <Menu mode="inline" style={{ height: "100%" }} items={subNav} />
-    </Sider>
-  );
+  return <Menu mode="inline" style={{ height: "100%" }} items={subNav} />;
 };
