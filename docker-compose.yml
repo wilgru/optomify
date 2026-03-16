@@ -1,0 +1,33 @@
+# version: "3.8" version is now obsolete
+
+services:
+  mongodb:
+    # container_name: mongodb
+    image: mongodb/mongodb-community-server:6.0-ubi8
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=user
+      - MONGO_INITDB_ROOT_PASSWORD=pass
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  # TODO need to wait for mongodb to be accepting connections, which is why we use sleep cos depends_on doesnt necessarily mean the service is ready to accept connections
+  # TODO may need to make modifications to the Dockerfile to ensure the app is ready to accept connections
+  nextjs:
+    # container_name: nextjs
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # volumes:
+    # - ./nextjs:/app
+    depends_on:
+      mongodb:
+        condition: service_healthy
+
+volumes:
+  mongo_data:
