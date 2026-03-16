@@ -2,6 +2,8 @@ import React from "react";
 import { getPatients } from "./actions/getPatients";
 import PatientList from "./components/PatientList";
 import { ContainedLayout } from "../components/ContainedLayout";
+import { PatientListFilterBar } from "./components/PatientListFilterBar";
+import { Button } from "antd";
 
 export default async function Page() {
   // check if logged in first
@@ -15,7 +17,12 @@ export default async function Page() {
   return (
     <ContainedLayout
       crumbs={["Patients", "All Patients"]}
-      filterBar={<h1>Patients</h1>}
+      actions={[
+        <Button key="add-patient" type="primary">
+          Add Patient
+        </Button>,
+      ]}
+      filterBar={<PatientListFilterBar />}
     >
       <PatientList patients={patients} />
     </ContainedLayout>

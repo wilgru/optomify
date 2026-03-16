@@ -1,5 +1,5 @@
 import { Layout } from "antd";
-import { BookingSidebar } from "./components/BookingSider";
+import { BookingFilterBar } from "./components/BookingFilterBar";
 import { getBookSetups } from "./actions/getBookSetups";
 import { getCurrentWeek } from "./actions/getCurrentWeek";
 import { BookList } from "./components/BookList";
@@ -28,7 +28,7 @@ export default async function Page({
         "Bookings",
         `${bookSetupRange[0].format("DD MMM YYYY")} - ${bookSetupRange[1].format("DD MMM YYYY")}`,
       ]}
-      sider={<BookingSidebar />}
+      filterBar={<BookingFilterBar />}
     >
       <Layout hasSider style={{ display: "flex", gap: "24px" }}>
         <Content>
