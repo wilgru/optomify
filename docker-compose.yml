@@ -18,16 +18,23 @@ services:
       retries: 5
   # TODO need to wait for mongodb to be accepting connections, which is why we use sleep cos depends_on doesnt necessarily mean the service is ready to accept connections
   # TODO may need to make modifications to the Dockerfile to ensure the app is ready to accept connections
-  nextjs:
-    # container_name: nextjs
+  app:
+    # container_name: app
     build:
       context: .
       dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - MONGODB_URI=mongodb://user:pass@mongodb:27017/optomify?authSource=admin
     # volumes:
     # - ./nextjs:/app
     depends_on:
       mongodb:
         condition: service_healthy
+    restart: unless-stopped
 
 volumes:
   mongo_data:

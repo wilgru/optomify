@@ -6,7 +6,7 @@
 ![Apollo](https://img.shields.io/badge/node-Apollo-orange)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Optomify is a booking system web application built for use in optometry practices. Unlike other generic booking systems, Optomify is optimised to include features and workflows that tailor specifically towards the day to day book and patient management one would undertake, and in effect will improve efficiency and overall user satisfaction when running their clinic. 
+Optomify is a booking system web application built for use in optometry practices. Unlike other generic booking systems, Optomify is optimised to include features and workflows that tailor specifically towards the day to day book and patient management one would undertake, and in effect will improve efficiency and overall user satisfaction when running their clinic.
 
 ![image](https://github.com/wilgru/Optomify/blob/main/img_1.png)
 
@@ -15,7 +15,7 @@ Optomify is a booking system web application built for use in optometry practice
 [Functionality](#functionality)  
 [Technologies Used](#technologies-used)  
 [Installation and Usage](#installation-and-usage)  
-[Testing](#testing)  
+[Testing](#testing)
 
 ## Functionality
 
@@ -26,10 +26,12 @@ Here are some of Optomify's key features:
 THe dashboard is a place where you can find general information about your clinic.
 
 ### Bookings
-Here is where you can see all the bookings for a given date range. You can hover over each booking to see the patient's details, booking notes, as well as some actions for that booking. The sidebar provides some useful tools, like a date range picker to see past/future weeks, a quick view of the next patients details, and the ability to add new booking setups. You can book a patient simply by clicking an empty slot, and selecting either new patient or existing patient. 
+
+Here is where you can see all the bookings for a given date range. You can hover over each booking to see the patient's details, booking notes, as well as some actions for that booking. The sidebar provides some useful tools, like a date range picker to see past/future weeks, a quick view of the next patients details, and the ability to add new booking setups. You can book a patient simply by clicking an empty slot, and selecting either new patient or existing patient.
 
 ### Patients
-From here you can get a view fo all the patients in your system. Get some instant information, like their name and contact details, or use the search bar to find the patient you are looking for. By clicking on a patient form the list, you can see their file where you can view, add or update their details, prescriptions or notes. You can also view their past and upcoming bookings from this page too 
+
+From here you can get a view fo all the patients in your system. Get some instant information, like their name and contact details, or use the search bar to find the patient you are looking for. By clicking on a patient form the list, you can see their file where you can view, add or update their details, prescriptions or notes. You can also view their past and upcoming bookings from this page too
 
 ## Technologies Used
 
@@ -69,34 +71,28 @@ git clone
 
 ### Development
 
-To run ant react scripts or start any servers, first change directory to the Optomify folder and run 'npm install'. This will install all dependencies for the server and client in one command:
- 
+To run the app, first change directory to the Optomify folder and install dependencies:
+
 ```
 cd Optomify && npm install
 ```
 
-From there you can run and build the app. To build the app run:
+From there you can run and build the app. To run in development mode:
+
+```
+npm run dev
+```
+
+To build the app run:
 
 ```
 npm run build
 ```
 
-To run the back-end server only:
+To preview the production build locally:
 
 ```
-npm run start
-```
-
-React development server:
-
-```
-cd client && npm run start
-```
-
-Run the app in development (both backend server and React development server):
-
-```
-npm run develop
+npm run preview
 ```
 
 ## Testing
@@ -111,6 +107,7 @@ pass: password123
 ```
 
 Medicare Details
+
 ```
 Medicare number: 1234 1234 1234 5
 medicare ref: 1
@@ -118,6 +115,7 @@ medicare expiry: (any date in the future)
 ```
 
 Prescriptions
+
 ```
 -1.25/-0.75x82
 -0.50/-1.00x105
@@ -139,5 +137,6 @@ medicare item codes
 ```
 
 ## Guides
+
 MongoDB with Docker
 https://www.mongodb.com/resources/products/compatibilities/docker
